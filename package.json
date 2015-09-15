@@ -1,0 +1,25 @@
+{
+  "name": "qfang-dot",
+  "version": "0.0.1",
+  "scripts": {
+    "webpack": "webpack",
+    "build": "webpack -p",
+    "start": "webpack-dev-server --colors --content-base ./ --hot"
+  },
+  "dependencies": {
+    "jquery": "^1.11.3"
+  },
+  "devDependencies": {
+    "dot-loader": "^0.1.1",
+    "webpack": "^1.12.1",
+    "webpack-dev-server": "^1.10.1"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "keywords": [
+    "qfang"
+  ],
+  "author": "cheft",
+  "license": "ISC"
+}

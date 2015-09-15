@@ -1,0 +1,5 @@
+<ul>
+{{~it.menus :value:index}}
+  <li><a href="#">{{=value}}</a></li>
+{{~}}
+</ul>

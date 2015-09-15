@@ -1,0 +1,4 @@
+<div>Hi {{= it.name}}!</div>
+<div>{{= it.age || ''}}</div>
+<div>{{= 1 + 11}}</div>
+<div>{{= it.tt}}</div>

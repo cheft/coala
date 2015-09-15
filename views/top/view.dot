@@ -1,0 +1,4 @@
+<div>
+  欢迎 {{= it.name}}
+  <button id="js-test">测试</button>
+</div>

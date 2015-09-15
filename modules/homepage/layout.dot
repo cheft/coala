@@ -1,0 +1,34 @@
+<style>
+  #top {
+    background-color: #2B28E2;
+    color: #FFF;
+    padding: 10px;
+    text-align: center;
+  }
+
+  #menu {
+    float: left;
+    width: 200px;
+    height: 1000px;
+    background-color: #4785FF;
+  }
+  #menu li {
+    list-style: none;
+    padding: 10px;
+  }
+
+  #menu a {
+    color: #FFF;
+    text-decoration: none;
+    padding: 10px;
+  }
+
+  #test {
+    float: right;
+    width: 100%;
+  }
+</style>
+
+<div id="top"></div>
+<div id="menu"></div>
+<div id="content"></div>
