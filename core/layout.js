@@ -1,12 +1,14 @@
 function Layout(opts) {
+  this.el = opts.el;
   this.data = opts.data || {};
+  this.tpl = opts.tpl;
   this.opts = opts;
   this.views = {};
 }
 
 Layout.prototype.mount = function(el) {
-  var el = el || this.opts.el;
-  el.innerHTML = this.template();
+  this.el = el || this.el;
+  this.el.html(this.template());
   this._mountViews();
 };
 
@@ -18,13 +20,13 @@ Layout.prototype._mountViews = function() {
     }
 
     view.viewName = p;
-    view.mount();
+    view.mount($('#' + p));
     this.views[p] = view;
   }
 };
 
 Layout.prototype.template = function() {
-  return this.opts.tpl(this.data);
+  return this.tpl(this.data);
 };
 
 module.exports = Layout;

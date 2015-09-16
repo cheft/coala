@@ -6,17 +6,21 @@ module.exports = {
     entry: {
         homepage: [
             'webpack/hot/dev-server',
-            path.resolve('./modules/homepage/index.js')
+            path.resolve('./app/homepage/index.js')
+        ],
+        login: [
+            'webpack/hot/dev-server',
+            path.resolve('./app/login/index.js')
         ]
     },
     output: {
         path: path.resolve(__dirname, 'assets/js'),
-        filename: 'homepage.js',
+        filename: '[name].js',
         publicPath: "/assets/js/"
     },
 	module: {
 	    loaders: [
-          { test: /\.dot$/, loader: "dot-loader" }
+          { test: /\.html$/, loader: "dot-loader" }
         ]
 	}
 };
