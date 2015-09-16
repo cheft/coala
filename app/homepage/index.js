@@ -4,7 +4,7 @@ var menuView = require('../_views/menu');
 var contentView = require('../_views/content');
 var tpl = require('./view.html');
 
-var indexView = quite.view({
+var indexView = {
   tpl: tpl,
   views: {
     top: {
@@ -21,8 +21,6 @@ var indexView = quite.view({
       view: contentView
     }
   }
-});
+};
 
-indexView.mount('#app');
-
-window.indexView = indexView;
+window.indexView = quite.mount(indexView, '#app');

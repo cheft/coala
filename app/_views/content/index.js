@@ -2,7 +2,7 @@ var quite = require('../../../quite');
 var tpl = require('./view.html');
 var topView = require('../top');
 
-module.exports = quite.view({
+module.exports = {
   listen: {
     init: function() {
       this.tpl = tpl;
@@ -16,4 +16,4 @@ module.exports = quite.view({
       view: topView
     }
   }
-});
+};

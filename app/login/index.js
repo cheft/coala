@@ -2,7 +2,7 @@ var quite = require('../../quite');
 var formView = require('../_views/login-form');
 var tpl = require('./view.html');
 
-var loginView = quite.view({
+var loginView = {
   tpl: tpl,
   views: {
     login: {
@@ -10,7 +10,7 @@ var loginView = quite.view({
       view: formView
     }
   }
-});
+};
 
-loginView.mount('#app');
+quite.mount(loginView, '#app');
 

@@ -1,7 +1,7 @@
 var quite = require('../../../quite');
 var tpl = require('./view.html');
 
-var view = quite.view({
+module.exports = {
   listen: {
     init: function() {
       console.log(' init!');
@@ -40,6 +40,4 @@ var view = quite.view({
       console.log(e, this);
     }
   }
-});
-
-module.exports = view;
+};

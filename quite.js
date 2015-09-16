@@ -4,8 +4,8 @@ var quite = {
     return (prefix || '') + (++counter);
   },
 
-  view: function(opts) {
-    return new View(opts);
+  mount: function(opts, el) {
+    return new View(opts).mount(el);
   }
 };
 
@@ -49,7 +49,7 @@ View.prototype._mountViews = function(parent) {
   }
 
   for (var p in this.opts.views) {
-    var view = this.opts.views[p].view;
+    var view = new View(this.opts.views[p].view);
     if (this.opts.views[p].data) {
       view.data = this.opts.views[p].data;
     }
@@ -69,7 +69,10 @@ View.prototype._bindEvents = function() {
   for (var e in this.dispatcher) {
     var actionName = this.dispatcher[e];
     var $el = $(e.split('&')[0]);
-    $el.on(e.split('&')[1], this.actions[actionName]);
+    var _this = this;
+    $el.on(e.split('&')[1], function(e) {
+      _this.actions[actionName].call(_this, e);
+    });
   }
 };
 
