@@ -1,0 +1,22 @@
+<style>
+  li.todo {
+    list-style: none;
+  }
+  .complete {
+    text-decoration: line-through;
+  }
+</style>
+
+<div>
+  <h3>您总共有 {{= it.length}} 条任务</h3>
+  <input name="name" />
+  <button id="create">增加</button>
+</div>
+<ul>
+  {{~it :todo:index}}
+  <li class="todo {{?todo.complete}}complete{{?}}" id="complete-{{=index}}">
+    <button class="remove" id="remove-{{=index}}">X</button>
+    {{=todo.name}}
+  </li>
+  {{~}}
+</ul>

@@ -69,11 +69,8 @@ View.prototype._bindEvents = function() {
 
   for (var e in this.dispatcher) {
     var actionName = this.dispatcher[e];
-    var $el = $(e.split(' ')[1]);
-    var _this = this;
-    $el.on(e.split(' ')[0], function(e) {
-      _this.actions[actionName].call(_this, e);
-    });
+    var $el = this.el.find(e.split(' ')[1]);
+    $el.on(e.split(' ')[0], {view: this}, this.actions[actionName]);
   }
 };
 

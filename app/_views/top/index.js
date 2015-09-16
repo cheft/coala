@@ -1,4 +1,3 @@
-var quite = require('../../../quite');
 var tpl = require('./view.html');
 
 module.exports = {
