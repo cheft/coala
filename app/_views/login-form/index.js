@@ -1,7 +1,7 @@
-var View = require('../../../core/view');
+var quite = require('../../../quite');
 var tpl = require('./view.html');
 
-module.exports = new View({
+module.exports = quite.view({
   listen: {
     init: function() {
       this.tpl = tpl;

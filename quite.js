@@ -1,3 +1,14 @@
+var counter = 0;
+var quite = {
+  uniqueId: function(prefix) {
+    return (prefix || '') + (++counter);
+  },
+
+  view: function(opts) {
+    return new View(opts);
+  }
+};
+
 function View(opts) {
   this.opts = opts;
   this.tpl = opts.tpl || {};
@@ -10,6 +21,7 @@ function View(opts) {
   this.views = {};
   this._buildListener();
   this.listen.init.call(this);
+  this.id = quite.uniqueId('view');
 }
 
 View.prototype.template = function() {
@@ -69,4 +81,4 @@ View.prototype._buildListener = function() {
   };
 };
 
-module.exports = View;
+module.exports = quite;

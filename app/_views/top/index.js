@@ -1,37 +1,38 @@
-var View = require('../../../core/view');
+var quite = require('../../../quite');
 var tpl = require('./view.html');
 
-var view = new View({
+var view = quite.view({
   listen: {
     init: function() {
-      console.log(this, ' init!');
+      console.log(' init!');
       this.tpl = tpl;
       this.data = {name: 'Jake'};
     },
 
     mount: function() {
-      console.log(this, ' mount!');
+      console.log(' mount!');
       var _this = this;
       $.ajax({
         url: 'http://localhost:3000/users/1',
         type: 'get',
         // async: false,
       }).done(function(user) {
+        console.log(_this);
         _this.update(user);
       });
     },
 
     update: function() {
-      console.log(this, ' update!');
+      console.log(' update!');
     },
 
     updated: function() {
-      console.log(this, ' updated!');
+      console.log(' updated!');
     }
   },
 
   dispatcher: {
-    '#js-test&click': 'test'
+    '.js-test&click': 'test'
   },
 
   actions: {

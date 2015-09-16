@@ -1,8 +1,8 @@
-var View = require('../../core/view');
+var quite = require('../../quite');
 var formView = require('../_views/login-form');
 var tpl = require('./view.html');
 
-var loginView = new View({
+var loginView = quite.view({
   tpl: tpl,
   views: {
     login: {
