@@ -6,10 +6,11 @@ var loginView = new View({
   tpl: tpl,
   views: {
     login: {
+      el: '#login',
       view: formView
     }
   }
 });
 
-loginView.mount($('#app'));
+loginView.mount('#app');
 

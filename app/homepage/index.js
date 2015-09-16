@@ -8,18 +8,21 @@ var indexView = new View({
   tpl: tpl,
   views: {
     top: {
+      el: '#top',
       view: topView,
       data: {name: '陈海峰'}
     },
     menu: {
+      el: '#menu',
       view: menuView
     },
     content: {
+      el: '#content',
       view: contentView
     }
   }
 });
 
-indexView.mount($('#app'));
+indexView.mount('#app');
 
 window.indexView = indexView;

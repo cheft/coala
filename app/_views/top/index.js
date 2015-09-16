@@ -1,11 +1,35 @@
 var View = require('../../../core/view');
 var tpl = require('./view.html');
 
-var data = {name: 'Jake'};
-
 var view = new View({
-  tpl: tpl,
-  data: data,
+  listen: {
+    init: function() {
+      console.log(this, ' init!');
+      this.tpl = tpl;
+      this.data = {name: 'Jake'};
+    },
+
+    mount: function() {
+      console.log(this, ' mount!');
+      var _this = this;
+      $.ajax({
+        url: 'http://localhost:3000/users/1',
+        type: 'get',
+        // async: false,
+      }).done(function(user) {
+        _this.update(user);
+      });
+    },
+
+    update: function() {
+      console.log(this, ' update!');
+    },
+
+    updated: function() {
+      console.log(this, ' updated!');
+    }
+  },
+
   dispatcher: {
     '#js-test&click': 'test'
   },
@@ -14,28 +38,7 @@ var view = new View({
     test: function(e) {
       console.log(e, this);
     }
-  },
-
-  onInit: function() {
-    var _this = this;
-    $.ajax({
-      url: 'http://localhost:3000/users/1',
-      type: 'get',
-      // async: false,
-    }).done(function(user) {
-      _this.update(user);
-    });
-  },
-
-  onUpdate: function() {
-    console.log(this);
-    console.log('top update!');
   }
-
-  // dispatch
-  // actions
-  // 
-
 });
 
 module.exports = view;
