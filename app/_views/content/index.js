@@ -12,7 +12,7 @@ module.exports = {
 
   views: {
     test: {
-      el: '#top',
+      el: '#content-top',
       view: topView
     }
   }

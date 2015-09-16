@@ -39,7 +39,6 @@ View.prototype.mount = function(el) {
 View.prototype.update = function(data) {
   this.listen.update.call(this);
   this.data = data || this.data;
-  this._replaceId();
   this.el.html(this.template());
   this._bindEvents();
   this.listen.updated.call(this);
@@ -61,13 +60,6 @@ View.prototype._mountViews = function(parent) {
     view.mount();
     this.views[p] = view;
   }
-};
-
-View.prototype._replaceId = function() {
-  var elId = this.el.attr('id');
-  if (elId) {
-    this.el.attr('id', this.id + '-' + elId.replace(this.id + '-', ''));
-  };
 };
 
 View.prototype._bindEvents = function() {

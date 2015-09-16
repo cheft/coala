@@ -5,6 +5,10 @@ module.exports = {
   listen: {
     init: function() {
       this.tpl = tpl;
+    },
+
+    mount: function() {
+      console.log(pwd);
     }
   },
 
