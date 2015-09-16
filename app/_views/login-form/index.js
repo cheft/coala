@@ -9,7 +9,7 @@ module.exports = {
   },
 
   dispatcher: {
-    '#js-submit&click': 'submit'
+    'click #js-submit': 'submit'
   },
 
   actions: {

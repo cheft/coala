@@ -11,7 +11,7 @@ module.exports = {
   },
 
   dispatcher: {
-    '.js-menu&click': 'test'
+    'click .js-menu': 'test'
   },
 
   actions: {

@@ -33,11 +33,13 @@ View.prototype.mount = function(el) {
   this.update();
   this._mountViews(this);
   this.listen.mount.call(this);
+  return this;
 };
 
 View.prototype.update = function(data) {
   this.listen.update.call(this);
   this.data = data || this.data;
+  this._replaceId();
   this.el.html(this.template());
   this._bindEvents();
   this.listen.updated.call(this);
@@ -61,6 +63,13 @@ View.prototype._mountViews = function(parent) {
   }
 };
 
+View.prototype._replaceId = function() {
+  var elId = this.el.attr('id');
+  if (elId) {
+    this.el.attr('id', this.id + '-' + elId.replace(this.id + '-', ''));
+  };
+};
+
 View.prototype._bindEvents = function() {
   if (!this.dispatcher) {
     return;
@@ -68,9 +77,9 @@ View.prototype._bindEvents = function() {
 
   for (var e in this.dispatcher) {
     var actionName = this.dispatcher[e];
-    var $el = $(e.split('&')[0]);
+    var $el = $(e.split(' ')[1]);
     var _this = this;
-    $el.on(e.split('&')[1], function(e) {
+    $el.on(e.split(' ')[0], function(e) {
       _this.actions[actionName].call(_this, e);
     });
   }
