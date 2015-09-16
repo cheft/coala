@@ -3,7 +3,7 @@ var tpl = require('./view.html');
 module.exports = {
   listen: {
     init: function() {
-      console.log('初始化');
+      console.log('初始化 view' + this.id);
       this.tpl = tpl;
       this.data = [
         {name: '做自己的前端框架', complete: true}
@@ -11,15 +11,15 @@ module.exports = {
     },
 
     update: function() {
-      console.log('正准备更新');
+      console.log('正准备更新 view' + this.id);
     },
 
     updated: function() {
-      console.log('已经更新');
+      console.log('已经更新 view' + this.id);
     },
 
     mount: function() {
-      console.log('挂载');
+      console.log('挂载 view' + this.id);
     }
   },
 

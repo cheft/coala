@@ -20,8 +20,8 @@ function View(opts) {
   this.parent = {};
   this.views = {};
   this._buildListener();
-  this.listen.init.call(this);
   this.id = quite.uniqueId('view');
+  this.listen.init.call(this);
 }
 
 View.prototype.template = function() {
