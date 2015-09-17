@@ -52,10 +52,10 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var quite = __webpack_require__(2);
-	var topView = __webpack_require__(3);
-	var menuView = __webpack_require__(5);
-	var contentView = __webpack_require__(7);
-	var tpl = __webpack_require__(9);
+	var topView = __webpack_require__(6);
+	var menuView = __webpack_require__(8);
+	var contentView = __webpack_require__(10);
+	var tpl = __webpack_require__(12);
 
 	var indexView = {
 	  tpl: tpl,
@@ -81,32 +81,50 @@
 
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	var counter = 0;
+	var View = __webpack_require__(3);
+	var observable = __webpack_require__(5);
+
 	var quite = {
-	  uniqueId: function(prefix) {
-	    return (prefix || '') + (++counter);
-	  },
+	  observable: observable,
 
 	  mount: function(opts, el) {
-	    return new View(opts).mount(el);
+	    return this.view(opts).mount(el);
+	  },
+
+	  view: function(opts) {
+	    return new View(opts);
 	  }
 	};
+
+	observable(quite);
+
+	module.exports = quite;
+
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var util = __webpack_require__(4);
+	var observable = __webpack_require__(5);
 
 	function View(opts) {
 	  this.opts = opts;
 	  this.tpl = opts.tpl || {};
 	  this.el = opts.el ? $(opts.el) : undefined;
 	  this.data = opts.data || {};
-	  this.dispatcher = opts.dispatcher;
 	  this.listen = opts.listen || {};
+	  this.dispatcher = opts.dispatcher;
 	  this.actions = opts.actions || {};
 	  this.parent = {};
 	  this.views = {};
-	  this._buildListener();
-	  this.listen.init.call(this);
-	  this.id = quite.uniqueId('view');
+	  this.id = util.uniqueId('view');
+
+	  observable(this);
+	  this._listenTo();
+	  this.trigger('init');
 	}
 
 	View.prototype.template = function() {
@@ -116,18 +134,17 @@
 	View.prototype.mount = function(el) {
 	  this.el = el ? $(el) : this.el;
 	  this.update();
-	  this._mountViews(this);
-	  this.listen.mount.call(this);
+	  this.trigger('mount');
 	  return this;
 	};
 
 	View.prototype.update = function(data) {
-	  this.listen.update.call(this);
+	  this.trigger('update');
 	  this.data = data || this.data;
-	  this._replaceId();
 	  this.el.html(this.template());
+	  this._mountViews(this);
 	  this._bindEvents();
-	  this.listen.updated.call(this);
+	  this.trigger('updated');
 	};
 
 	View.prototype._mountViews = function(parent) {
@@ -148,13 +165,6 @@
 	  }
 	};
 
-	View.prototype._replaceId = function() {
-	  var elId = this.el.attr('id');
-	  if (elId) {
-	    this.el.attr('id', this.id + '-' + elId.replace(this.id + '-', ''));
-	  };
-	};
-
 	View.prototype._bindEvents = function() {
 	  if (!this.dispatcher) {
 	    return;
@@ -162,31 +172,121 @@
 
 	  for (var e in this.dispatcher) {
 	    var actionName = this.dispatcher[e];
-	    var $el = $(e.split(' ')[1]);
-	    var _this = this;
-	    $el.on(e.split(' ')[0], function(e) {
-	      _this.actions[actionName].call(_this, e);
-	    });
+	    var $el = this.el.find(e.split(' ')[1]);
+	    $el.on(e.split(' ')[0], $.proxy(this.actions[actionName], this));
 	  }
 	};
 
-	View.prototype._buildListener = function() {
-	  var listeners = ['init', 'mount', 'update', 'updated'];
-	  for (var i = 0; i < listeners.length; i++) {
-	    var l = listeners[i];
-	    this.listen[l] = this.listen[l] || function() {};
-	  };
+	View.prototype._listenTo = function() {
+	  for (var l in this.listen) {
+	    var fn = this.listen[l];
+	    this.on(l, fn);
+	  }
 	};
 
-	module.exports = quite;
+	module.exports = View;
 
 
 /***/ },
-/* 3 */
+/* 4 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  counter: 0,
+	  uniqueId: function(prefix) {
+	    return (prefix || '') + (++this.counter);
+	  }
+	};
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	module.exports = function(el) {
+	  el = el || {};
+	  var callbacks = {};
+	  var _id = 0;
+
+	  el.on = function(events, fn) {
+	    // :todo isFunction
+	    if (typeof fn == 'function') {
+	      if (typeof fn.id == 'undefined') {
+	        fn._id = _id++;
+	      }
+
+	      events.replace(/\S+/g, function(name, pos) {
+	        (callbacks[name] = callbacks[name] || []).push(fn);
+	        fn.typed = pos > 0;
+	      });
+	    }
+
+	    return el;
+	  };
+
+	  el.off = function(events, fn) {
+	    if (events == '*') {
+	      callbacks = {};
+	    }else {
+	      events.replace(/\S+/g, function(name) {
+	        if (fn) {
+	          var arr = callbacks[name];
+	          for (var i = 0, cb; (cb = arr && arr[i]); ++i) {
+	            if (cb._id == fn._id) {
+	              arr.splice(i--, 1);
+	            }
+	          }
+	        } else {
+	          callbacks[name] = [];
+	        }
+	      });
+	    }
+
+	    return el;
+	  };
+
+	  // only single event supported
+	  el.one = function(name, fn) {
+	    function on() {
+	      el.off(name, on);
+	      fn.apply(el, arguments);
+	    }
+
+	    return el.on(name, on);
+	  };
+
+	  el.trigger = function(name) {
+	    var args = [].slice.call(arguments, 1);
+	    var fns = callbacks[name] || [];
+
+	    for (var i = 0, fn; (fn = fns[i]); ++i) {
+	      if (!fn.busy) {
+	        fn.busy = 1;
+	        fn.apply(el, fn.typed ? [name].concat(args) : args);
+	        if (fns[i] !== fn) {
+	          i--;
+	        }
+
+	        fn.busy = 0;
+	      }
+	    }
+
+	    if (callbacks.all && name != 'all') {
+	      el.trigger.apply(el, ['all', name].concat(args));
+	    }
+
+	    return el;
+	  };
+
+	  return el;
+	};
+
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var quite = __webpack_require__(2);
-	var tpl = __webpack_require__(4);
+	var tpl = __webpack_require__(7);
 
 	module.exports = {
 	  listen: {
@@ -198,15 +298,15 @@
 
 	    mount: function() {
 	      // console.log(' mount!');
-	      var _this = this;
-	      $.ajax({
-	        url: 'http://localhost:3000/users/1',
-	        type: 'get'
-	        // async: false,
-	      }).done(function(user) {
-	        console.log(_this);
-	        _this.update(user);
-	      });
+	      // var _this = this;
+	      // $.ajax({
+	      //   url: 'http://localhost:3000/users/1',
+	      //   type: 'get'
+	      //   // async: false,
+	      // }).done(function(user) {
+	      //   console.log(_this);
+	      //   _this.update(user);
+	      // });
 	    },
 
 	    update: function() {
@@ -231,7 +331,7 @@
 
 
 /***/ },
-/* 4 */
+/* 7 */
 /***/ function(module, exports) {
 
 	module.exports = function anonymous(it
@@ -240,11 +340,11 @@
 	}
 
 /***/ },
-/* 5 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var quite = __webpack_require__(2);
-	var tpl = __webpack_require__(6);
+	var tpl = __webpack_require__(9);
 
 	module.exports = {
 	  listen: {
@@ -268,7 +368,7 @@
 
 
 /***/ },
-/* 6 */
+/* 9 */
 /***/ function(module, exports) {
 
 	module.exports = function anonymous(it
@@ -277,12 +377,11 @@
 	}
 
 /***/ },
-/* 7 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var quite = __webpack_require__(2);
-	var tpl = __webpack_require__(8);
-	var topView = __webpack_require__(3);
+	var tpl = __webpack_require__(11);
+	var topView = __webpack_require__(6);
 
 	module.exports = {
 	  listen: {
@@ -294,7 +393,7 @@
 
 	  views: {
 	    test: {
-	      el: '#top',
+	      el: '#content-top',
 	      view: topView
 	    }
 	  }
@@ -302,16 +401,16 @@
 
 
 /***/ },
-/* 8 */
+/* 11 */
 /***/ function(module, exports) {
 
 	module.exports = function anonymous(it
 	/**/) {
-	var out='<div>Hi '+( it.name)+'!</div><div>'+( it.age || '')+'</div><div>'+( 1 + 11)+'</div><div>'+( it.tt)+'</div><div class="top" id="top"></div>';return out;
+	var out='<div>Hi '+( it.name)+'!</div><div>'+( it.age || '')+'</div><div>'+( 1 + 11)+'</div><div>'+( it.tt)+'</div><div class="top" id="content-top"></div>';return out;
 	}
 
 /***/ },
-/* 9 */
+/* 12 */
 /***/ function(module, exports) {
 
 	module.exports = function anonymous(it

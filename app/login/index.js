@@ -1,6 +1,6 @@
 var quite = require('../../quite');
-var topView = require('../_views/top');
-var formView = require('../_views/login-form');
+var topView = require('../homepage/top');
+var formView = require('./login-form');
 var tpl = require('./view.html');
 
 var loginView = {

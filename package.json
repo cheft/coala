@@ -2,6 +2,7 @@
   "name": "qfang-dot",
   "version": "0.0.1",
   "scripts": {
+    "watch": "webpack -w",
     "webpack": "webpack",
     "build": "webpack -p",
     "start": "webpack-dev-server --colors --content-base ./ --hot"

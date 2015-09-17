@@ -44,7 +44,8 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(13);
+	__webpack_require__(2);
+	(function webpackMissingModule() { throw new Error("Cannot find module \"bundle.js\""); }());
 
 
 /***/ },
@@ -63,7 +64,8 @@
 	  },
 
 	  view: function(opts) {
-	    return new View(opts);
+	    var v = new View(opts);
+	    return observable(v);
 	  }
 	};
 
@@ -84,16 +86,14 @@
 	  this.tpl = opts.tpl || {};
 	  this.el = opts.el ? $(opts.el) : undefined;
 	  this.data = opts.data || {};
-	  this.listen = opts.listen || {};
 	  this.dispatcher = opts.dispatcher;
+	  this.listen = opts.listen || {};
 	  this.actions = opts.actions || {};
 	  this.parent = {};
 	  this.views = {};
 	  this.id = util.uniqueId('view');
-
-	  observable(this);
-	  this._listenTo();
-	  this.trigger('init');
+	  this._buildListener();
+	  this.listen.init.call(this);
 	}
 
 	View.prototype.template = function() {
@@ -103,17 +103,17 @@
 	View.prototype.mount = function(el) {
 	  this.el = el ? $(el) : this.el;
 	  this.update();
-	  this.trigger('mount');
+	  this.listen.mount.call(this);
 	  return this;
 	};
 
 	View.prototype.update = function(data) {
-	  this.trigger('update');
+	  this.listen.update.call(this);
 	  this.data = data || this.data;
 	  this.el.html(this.template());
 	  this._mountViews(this);
 	  this._bindEvents();
-	  this.trigger('updated');
+	  this.listen.updated.call(this);
 	};
 
 	View.prototype._mountViews = function(parent) {
@@ -122,7 +122,7 @@
 	  }
 
 	  for (var p in this.opts.views) {
-	    var view = new View(this.opts.views[p].view);
+	    var view = observable(new View(this.opts.views[p].view));
 	    if (this.opts.views[p].data) {
 	      view.data = this.opts.views[p].data;
 	    }
@@ -146,11 +146,12 @@
 	  }
 	};
 
-	View.prototype._listenTo = function() {
-	  for (var l in this.listen) {
-	    var fn = this.listen[l];
-	    this.on(l, fn);
-	  }
+	View.prototype._buildListener = function() {
+	  var listeners = ['init', 'mount', 'update', 'updated'];
+	  for (var i = 0; i < listeners.length; i++) {
+	    var l = listeners[i];
+	    this.listen[l] = this.listen[l] || function() {};
+	  };
 	};
 
 	module.exports = View;
@@ -250,142 +251,6 @@
 	  return el;
 	};
 
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var tpl = __webpack_require__(7);
-
-	module.exports = {
-	  listen: {
-	    init: function() {
-	      // console.log(' init!');
-	      this.tpl = tpl;
-	      this.data = {name: 'Jake'};
-	    },
-
-	    mount: function() {
-	      // console.log(' mount!');
-	      // var _this = this;
-	      // $.ajax({
-	      //   url: 'http://localhost:3000/users/1',
-	      //   type: 'get'
-	      //   // async: false,
-	      // }).done(function(user) {
-	      //   console.log(_this);
-	      //   _this.update(user);
-	      // });
-	    },
-
-	    update: function() {
-	      // console.log(' update!');
-	    },
-
-	    updated: function() {
-	      // console.log(' updated!');
-	    }
-	  },
-
-	  dispatcher: {
-	    'click .js-test': 'test'
-	  },
-
-	  actions: {
-	    test: function(e) {
-	      console.log(e, this);
-	    }
-	  }
-	};
-
-
-/***/ },
-/* 7 */
-/***/ function(module, exports) {
-
-	module.exports = function anonymous(it
-	/**/) {
-	var out='<div> 欢迎 '+( it.name)+' <button class="js-test">测试</button></div>';return out;
-	}
-
-/***/ },
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var quite = __webpack_require__(2);
-	var topView = __webpack_require__(6);
-	var formView = __webpack_require__(14);
-	var tpl = __webpack_require__(16);
-
-	var loginView = {
-	  tpl: tpl,
-	  views: {
-	    top: {
-	      el: '#top',
-	      view: topView
-	    },
-	    login: {
-	      el: '#login',
-	      view: formView
-	    }
-	  }
-	};
-
-	quite.mount(loginView, '#app');
-
-
-
-/***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var tpl = __webpack_require__(15);
-
-	module.exports = {
-	  listen: {
-	    init: function() {
-	      this.tpl = tpl;
-	    },
-
-	    mount: function() {
-	      console.log(pwd);
-	    }
-	  },
-
-	  dispatcher: {
-	    'click #js-submit': 'submit'
-	  },
-
-	  actions: {
-	    submit: function(e) {
-	      console.log(this, e);
-	    }
-	  }
-	};
-
-
-/***/ },
-/* 15 */
-/***/ function(module, exports) {
-
-	module.exports = function anonymous(it
-	/**/) {
-	var out='<form> <div><input /></div> <div><input type="password" name="username" /></div></form><button id="js-submit">登录</button>';return out;
-	}
-
-/***/ },
-/* 16 */
-/***/ function(module, exports) {
-
-	module.exports = function anonymous(it
-	/**/) {
-	var out='<div id="top"></div><div id="login"></div>';return out;
-	}
 
 /***/ }
 /******/ ]);

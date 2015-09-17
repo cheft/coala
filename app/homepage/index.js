@@ -1,7 +1,7 @@
 var quite = require('../../quite');
-var topView = require('../_views/top');
-var menuView = require('../_views/menu');
-var contentView = require('../_views/content');
+var topView = require('./top');
+var menuView = require('./menu');
+var contentView = require('./content');
 var tpl = require('./view.html');
 
 var indexView = {

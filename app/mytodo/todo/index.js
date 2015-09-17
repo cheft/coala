@@ -3,7 +3,7 @@ var tpl = require('./view.html');
 module.exports = {
   listen: {
     init: function() {
-      console.log('初始化 view' + this.id);
+      // alert('初始化 ' + this.id);
       this.tpl = tpl;
       this.data = [
         {name: '做自己的前端框架', complete: true}
@@ -11,15 +11,19 @@ module.exports = {
     },
 
     update: function() {
-      console.log('正准备更新 view' + this.id);
+      // alert('正准备更新 ' + this.id);
     },
 
     updated: function() {
-      console.log('已经更新 view' + this.id);
+      // alert('已经更新 ' + this.id);
     },
 
     mount: function() {
-      console.log('挂载 view' + this.id);
+      // alert('挂载 ' + this.id);
+    },
+
+    test: function(name) {
+      alert(name + ' 任务已增加!');
     }
   },
 
@@ -31,24 +35,22 @@ module.exports = {
 
   actions: {
     create: function(e) {
-      var view = e.data.view;
-      var name = view.el.find('input[name="name"]').val();
-      view.data.push({name: name, complete: false});
-      view.update();
+      var name = this.el.find('input[name="name"]').val();
+      this.data.push({name: name, complete: false});
+      this.update();
+      this.trigger('test', name);
     },
 
     remove: function(e) {
-      var view = e.data.view;
       var id = e.target.id.split('-')[1];
-      view.data.splice(id, 1);
-      view.update();
+      this.data.splice(id, 1);
+      this.update();
     },
 
     toggle: function(e) {
-      var view = e.data.view;
       var id = e.target.id.split('-')[1];
-      view.data[id].complete = !view.data[id].complete;
-      view.update();
+      this.data[id].complete = !this.data[id].complete;
+      this.update();
     }
   }
 };

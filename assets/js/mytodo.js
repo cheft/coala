@@ -44,7 +44,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(13);
+	module.exports = __webpack_require__(17);
 
 
 /***/ },
@@ -252,139 +252,130 @@
 
 
 /***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var tpl = __webpack_require__(7);
-
-	module.exports = {
-	  listen: {
-	    init: function() {
-	      // console.log(' init!');
-	      this.tpl = tpl;
-	      this.data = {name: 'Jake'};
-	    },
-
-	    mount: function() {
-	      // console.log(' mount!');
-	      // var _this = this;
-	      // $.ajax({
-	      //   url: 'http://localhost:3000/users/1',
-	      //   type: 'get'
-	      //   // async: false,
-	      // }).done(function(user) {
-	      //   console.log(_this);
-	      //   _this.update(user);
-	      // });
-	    },
-
-	    update: function() {
-	      // console.log(' update!');
-	    },
-
-	    updated: function() {
-	      // console.log(' updated!');
-	    }
-	  },
-
-	  dispatcher: {
-	    'click .js-test': 'test'
-	  },
-
-	  actions: {
-	    test: function(e) {
-	      console.log(e, this);
-	    }
-	  }
-	};
-
-
-/***/ },
-/* 7 */
-/***/ function(module, exports) {
-
-	module.exports = function anonymous(it
-	/**/) {
-	var out='<div> 欢迎 '+( it.name)+' <button class="js-test">测试</button></div>';return out;
-	}
-
-/***/ },
+/* 6 */,
+/* 7 */,
 /* 8 */,
 /* 9 */,
 /* 10 */,
 /* 11 */,
 /* 12 */,
-/* 13 */
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var quite = __webpack_require__(2);
-	var topView = __webpack_require__(6);
-	var formView = __webpack_require__(14);
-	var tpl = __webpack_require__(16);
+	var todo = __webpack_require__(18);
+	var tpl = __webpack_require__(20);
 
-	var loginView = {
+	var mytodo = {
 	  tpl: tpl,
 	  views: {
-	    top: {
-	      el: '#top',
-	      view: topView
+	    todo1: {
+	      el: '#todo1',
+	      view: todo
 	    },
-	    login: {
-	      el: '#login',
-	      view: formView
+
+	    todo2: {
+	      el: '#todo2',
+	      view: todo
+	    },
+
+	    todo3: {
+	      el: '#todo3',
+	      view: todo
+	    },
+
+	    todo4: {
+	      el: '#todo4',
+	      view: todo
 	    }
 	  }
 	};
 
-	quite.mount(loginView, '#app');
-
+	quite.mount(mytodo, '#app');
 
 
 /***/ },
-/* 14 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var tpl = __webpack_require__(15);
+	var tpl = __webpack_require__(19);
 
 	module.exports = {
 	  listen: {
 	    init: function() {
+	      alert('初始化 ' + this.id);
 	      this.tpl = tpl;
+	      this.data = [
+	        {name: '做自己的前端框架', complete: true}
+	      ];
+	    },
+
+	    update: function() {
+	      alert('正准备更新 ' + this.id);
+	    },
+
+	    updated: function() {
+	      alert('已经更新 ' + this.id);
 	    },
 
 	    mount: function() {
-	      console.log(pwd);
+	      alert('挂载 ' + this.id);
+	    },
+
+	    test: function(name) {
+	      alert(name + ' 任务已增加!');
 	    }
 	  },
 
 	  dispatcher: {
-	    'click #js-submit': 'submit'
+	    'click #create': 'create',
+	    'click .remove': 'remove',
+	    'click .todo': 'toggle'
 	  },
 
 	  actions: {
-	    submit: function(e) {
-	      console.log(this, e);
+	    create: function(e) {
+	      var name = this.el.find('input[name="name"]').val();
+	      this.data.push({name: name, complete: false});
+	      this.update();
+	      this.trigger('test', name);
+	    },
+
+	    remove: function(e) {
+	      var id = e.target.id.split('-')[1];
+	      this.data.splice(id, 1);
+	      this.update();
+	    },
+
+	    toggle: function(e) {
+	      var id = e.target.id.split('-')[1];
+	      this.data[id].complete = !this.data[id].complete;
+	      this.update();
 	    }
 	  }
 	};
 
 
 /***/ },
-/* 15 */
+/* 19 */
 /***/ function(module, exports) {
 
 	module.exports = function anonymous(it
 	/**/) {
-	var out='<form> <div><input /></div> <div><input type="password" name="username" /></div></form><button id="js-submit">登录</button>';return out;
+	var out='<style> li.todo { list-style: none; } .complete { text-decoration: line-through; }</style><div> <h3>您总共有 '+( it.length)+' 条任务</h3> <input name="name" /> <button id="create">增加</button></div><ul> ';var arr1=it;if(arr1){var todo,index=-1,l1=arr1.length-1;while(index<l1){todo=arr1[index+=1];out+=' <li class="todo ';if(todo.complete){out+='complete';}out+='" id="complete-'+(index)+'"> <button class="remove" id="remove-'+(index)+'">X</button> '+(todo.name)+' </li> ';} } out+='</ul>';return out;
 	}
 
 /***/ },
-/* 16 */
+/* 20 */
 /***/ function(module, exports) {
 
 	module.exports = function anonymous(it
 	/**/) {
-	var out='<div id="top"></div><div id="login"></div>';return out;
+	var out='<style> .width50 { float: left; width: 48%; margin-left: 1%; }</style><div> <div class="width50" id="todo1"></div> <div class="width50" id="todo2"></div> <div class="width50" id="todo3"></div> <div class="width50" id="todo4"></div></div>';return out;
 	}
 
 /***/ }

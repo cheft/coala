@@ -7,7 +7,7 @@ module.exports = {
     },
 
     mount: function() {
-      console.log(pwd);
+
     }
   },
 

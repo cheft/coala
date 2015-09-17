@@ -1,5 +1,5 @@
 var quite = require('../../quite');
-var todo = require('../_views/todo');
+var todo = require('./todo');
 var tpl = require('./view.html');
 
 var mytodo = {
