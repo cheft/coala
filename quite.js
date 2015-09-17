@@ -5,7 +5,11 @@ var quite = {
   },
 
   mount: function(opts, el) {
-    return new View(opts).mount(el);
+    return this.view(opts).mount(el);
+  },
+
+  view: function(opts) {
+    return new View(opts);
   }
 };
 
@@ -31,7 +35,6 @@ View.prototype.template = function() {
 View.prototype.mount = function(el) {
   this.el = el ? $(el) : this.el;
   this.update();
-  this._mountViews(this);
   this.listen.mount.call(this);
   return this;
 };
@@ -40,6 +43,7 @@ View.prototype.update = function(data) {
   this.listen.update.call(this);
   this.data = data || this.data;
   this.el.html(this.template());
+  this._mountViews(this);
   this._bindEvents();
   this.listen.updated.call(this);
 };
@@ -70,9 +74,7 @@ View.prototype._bindEvents = function() {
   for (var e in this.dispatcher) {
     var actionName = this.dispatcher[e];
     var $el = this.el.find(e.split(' ')[1]);
-    $el.on(e.split(' ')[0], {
-      view: this
-    }, this.actions[actionName].bind(this));
+    $el.on(e.split(' ')[0], $.proxy(this.actions[actionName], this));
   }
 };
 
