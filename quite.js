@@ -5,11 +5,7 @@ var quite = {
   observable: observable,
 
   mount: function(opts, el) {
-    return this.view(opts).mount(el);
-  },
-
-  view: function(opts) {
-    return new View(opts);
+    return new View(opts).mount(el);
   }
 };
 

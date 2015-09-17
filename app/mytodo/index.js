@@ -1,18 +1,14 @@
 var quite = require('../../quite');
-var todo = require('./todo');
+var github = require('./github');
+var githubDynamic = require('./github-dynamic');
 var tpl = require('./view.html');
 
 var mytodo = {
   tpl: tpl,
   views: {
-    todo1: {
-      el: '#todo1',
-      view: todo
-    },
-    '#todo2': todo,
-    '#todo3': todo,
-    '#todo4': todo
+    '#todo1': github,
+    '#todo2': githubDynamic
   }
 };
 
-quite.mount(mytodo, '#app');
+window.todo = quite.mount(mytodo, '#app');

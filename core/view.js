@@ -7,9 +7,8 @@ function View(opts) {
   this.el = opts.el ? $(opts.el) : undefined;
   this.data = opts.data || {};
   this.listen = opts.listen || {};
-  this.dispatcher = opts.dispatcher;
+  this.dispatcher = opts.dispatcher || {};
   this.actions = opts.actions || {};
-  this.parent = {};
   this.views = {};
   this.id = util.uniqueId('view');
 
@@ -32,7 +31,15 @@ View.prototype.mount = function(el) {
 View.prototype.update = function(data) {
   this.trigger('update');
   this.data = data || this.data;
-  this.el.html(this.template());
+  if (this.tagId) {
+    var parentEl = this.el;
+    parentEl.append('<div id="' + this.tagId + '">' + this.template() + '</div>');
+    this.el = parentEl.find('#' + this.tagId);
+    delete this.tagId;
+  }else {
+    this.el.empty().html(this.template());
+  }
+
   this._mountViews(this);
   this._bindEvents();
   this.trigger('updated');
@@ -52,6 +59,10 @@ View.prototype._mountViews = function(parent) {
         view.data = value.data;
       }
 
+      if (value.tagId) {
+        view.tagId = value.tagId;
+      }
+
       view.el = $(value.el);
     }else {
       view = new View(value);
@@ -65,10 +76,6 @@ View.prototype._mountViews = function(parent) {
 };
 
 View.prototype._bindEvents = function() {
-  if (!this.dispatcher) {
-    return;
-  }
-
   for (var e in this.dispatcher) {
     var actionName = this.dispatcher[e];
     var $el = this.el.find(e.split(' ')[1]);
