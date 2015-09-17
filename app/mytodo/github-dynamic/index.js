@@ -25,9 +25,9 @@ module.exports = {
             view: item,
             data: data.items[i],
             el: '#repositories',
-            tagId: 'item_' + data.items[i].id
+            vid: 'item_' + data.items[i].id
           };
-          _this.opts.views[v.tagId] = v;
+          _this.opts.views[v.vid] = v;
         }
 
         _this.update();

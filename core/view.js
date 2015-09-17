@@ -31,11 +31,13 @@ View.prototype.mount = function(el) {
 View.prototype.update = function(data) {
   this.trigger('update');
   this.data = data || this.data;
-  if (this.tagId) {
+  if (this.vid) {
     var parentEl = this.el;
-    parentEl.append('<div id="' + this.tagId + '">' + this.template() + '</div>');
-    this.el = parentEl.find('#' + this.tagId);
-    delete this.tagId;
+    var template = this.template();
+    var $template = $(template).attr('vid', this.vid);
+    parentEl.append($template[0].outerHTML);
+    this.el = parentEl.find('[vid=' + this.vid + ']');
+    delete this.vid;
   }else {
     this.el.empty().html(this.template());
   }
@@ -59,8 +61,8 @@ View.prototype._mountViews = function(parent) {
         view.data = value.data;
       }
 
-      if (value.tagId) {
-        view.tagId = value.tagId;
+      if (value.vid) {
+        view.vid = value.vid;
       }
 
       view.el = $(value.el);

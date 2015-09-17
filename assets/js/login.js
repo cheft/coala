@@ -129,11 +129,7 @@
 	  observable: observable,
 
 	  mount: function(opts, el) {
-	    return this.view(opts).mount(el);
-	  },
-
-	  view: function(opts) {
-	    return new View(opts);
+	    return new View(opts).mount(el);
 	  }
 	};
 
@@ -155,9 +151,8 @@
 	  this.el = opts.el ? $(opts.el) : undefined;
 	  this.data = opts.data || {};
 	  this.listen = opts.listen || {};
-	  this.dispatcher = opts.dispatcher;
+	  this.dispatcher = opts.dispatcher || {};
 	  this.actions = opts.actions || {};
-	  this.parent = {};
 	  this.views = {};
 	  this.id = util.uniqueId('view');
 
@@ -180,7 +175,17 @@
 	View.prototype.update = function(data) {
 	  this.trigger('update');
 	  this.data = data || this.data;
-	  this.el.html(this.template());
+	  if (this.vid) {
+	    var parentEl = this.el;
+	    var template = this.template();
+	    var $template = $(template).attr('vid', this.vid);
+	    parentEl.append($template[0].outerHTML);
+	    this.el = parentEl.find('[vid=' + this.vid + ']');
+	    delete this.vid;
+	  }else {
+	    this.el.empty().html(this.template());
+	  }
+
 	  this._mountViews(this);
 	  this._bindEvents();
 	  this.trigger('updated');
@@ -200,6 +205,10 @@
 	        view.data = value.data;
 	      }
 
+	      if (value.vid) {
+	        view.vid = value.vid;
+	      }
+
 	      view.el = $(value.el);
 	    }else {
 	      view = new View(value);
@@ -213,10 +222,6 @@
 	};
 
 	View.prototype._bindEvents = function() {
-	  if (!this.dispatcher) {
-	    return;
-	  }
-
 	  for (var e in this.dispatcher) {
 	    var actionName = this.dispatcher[e];
 	    var $el = this.el.find(e.split(' ')[1]);

@@ -4,7 +4,7 @@ module.exports = {
   tpl: tpl,
   listen: {
     updated: function() {
-      console.log(this.el.attr('id') + ' item updated');
+      // console.log(this.el.attr('id') + ' item updated');
     }
   },
 

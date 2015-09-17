@@ -15,4 +15,13 @@
 
   npm start
 
+
+## data
+  
+  npm install -g json-server
+
+  cd quite
+
+  json-server data/db.json
+
 > 浏览器访问 http://localhost:8080/todo.html
