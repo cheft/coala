@@ -44,16 +44,86 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(13);
+	__webpack_require__(1);
+	module.exports = __webpack_require__(14);
 
 
 /***/ },
-/* 1 */,
-/* 2 */
+/* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var View = __webpack_require__(3);
-	var observable = __webpack_require__(5);
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	/*globals window __webpack_hash__ */
+	if(false) {
+		var lastData;
+		var upToDate = function upToDate() {
+			return lastData.indexOf(__webpack_hash__) >= 0;
+		};
+		var check = function check() {
+			module.hot.check(true, function(err, updatedModules) {
+				if(err) {
+					if(module.hot.status() in {
+							abort: 1,
+							fail: 1
+						}) {
+						console.warn("[HMR] Cannot apply update. Need to do a full reload!");
+						console.warn("[HMR] " + err.stack || err.message);
+						window.location.reload();
+					} else {
+						console.warn("[HMR] Update failed: " + err.stack || err.message);
+					}
+					return;
+				}
+
+				if(!updatedModules) {
+					console.warn("[HMR] Cannot find update. Need to do a full reload!");
+					console.warn("[HMR] (Probably because of restarting the webpack-dev-server)");
+					window.location.reload();
+					return;
+				}
+
+				if(!upToDate()) {
+					check();
+				}
+
+				require("./log-apply-result")(updatedModules, updatedModules);
+
+				if(upToDate()) {
+					console.log("[HMR] App is up to date.");
+				}
+
+			});
+		};
+		var addEventListener = window.addEventListener ? function(eventName, listener) {
+			window.addEventListener(eventName, listener, false);
+		} : function(eventName, listener) {
+			window.attachEvent("on" + eventName, listener);
+		};
+		addEventListener("message", function(event) {
+			if(typeof event.data === "string" && event.data.indexOf("webpackHotUpdate") === 0) {
+				lastData = event.data;
+				if(!upToDate() && module.hot.status() === "idle") {
+					console.log("[HMR] Checking for updates on the server...");
+					check();
+				}
+			}
+		});
+		console.log("[HMR] Waiting for update signal from WDS...");
+	} else {
+		throw new Error("[HMR] Hot Module Replacement is disabled.");
+	}
+
+
+/***/ },
+/* 2 */,
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var View = __webpack_require__(4);
+	var observable = __webpack_require__(6);
 
 	var quite = {
 	  observable: observable,
@@ -73,11 +143,11 @@
 
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var util = __webpack_require__(4);
-	var observable = __webpack_require__(5);
+	var util = __webpack_require__(5);
+	var observable = __webpack_require__(6);
 
 	function View(opts) {
 	  this.opts = opts;
@@ -122,12 +192,20 @@
 	  }
 
 	  for (var p in this.opts.views) {
-	    var view = new View(this.opts.views[p].view);
-	    if (this.opts.views[p].data) {
-	      view.data = this.opts.views[p].data;
+	    var view;
+	    var value = this.opts.views[p];
+	    if (value.view) {
+	      var view = new View(value.view);
+	      if (value.data) {
+	        view.data = value.data;
+	      }
+
+	      view.el = $(value.el);
+	    }else {
+	      view = new View(value);
+	      view.el = $(p);
 	    }
 
-	    view.el = $(this.opts.views[p].el);
 	    view.parent = parent;
 	    view.mount();
 	    this.views[p] = view;
@@ -157,20 +235,31 @@
 
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports) {
 
 	module.exports = {
 	  counter: 0,
 	  uniqueId: function(prefix) {
 	    return (prefix || '') + (++this.counter);
+	  },
+
+	  isUndefined: function(obj) {
+	    return typeof obj == 'undefined';
+	  },
+
+	  isFunction: function(obj) {
+	    return typeof obj == 'function';
 	  }
 	};
 
 
+
 /***/ },
-/* 5 */
-/***/ function(module, exports) {
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var util = __webpack_require__(5);
 
 	module.exports = function(el) {
 	  el = el || {};
@@ -178,9 +267,8 @@
 	  var _id = 0;
 
 	  el.on = function(events, fn) {
-	    // :todo isFunction
-	    if (typeof fn == 'function') {
-	      if (typeof fn.id == 'undefined') {
+	    if (util.isFunction(fn)) {
+	      if (util.isUndefined(fn.id)) {
 	        fn._id = _id++;
 	      }
 
@@ -252,10 +340,10 @@
 
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var tpl = __webpack_require__(7);
+	var tpl = __webpack_require__(8);
 
 	module.exports = {
 	  listen: {
@@ -300,7 +388,7 @@
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 	module.exports = function anonymous(it
@@ -309,18 +397,18 @@
 	}
 
 /***/ },
-/* 8 */,
 /* 9 */,
 /* 10 */,
 /* 11 */,
 /* 12 */,
-/* 13 */
+/* 13 */,
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var quite = __webpack_require__(2);
-	var topView = __webpack_require__(6);
-	var formView = __webpack_require__(14);
-	var tpl = __webpack_require__(16);
+	var quite = __webpack_require__(3);
+	var topView = __webpack_require__(7);
+	var formView = __webpack_require__(15);
+	var tpl = __webpack_require__(17);
 
 	var loginView = {
 	  tpl: tpl,
@@ -341,10 +429,10 @@
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var tpl = __webpack_require__(15);
+	var tpl = __webpack_require__(16);
 
 	module.exports = {
 	  listen: {
@@ -370,7 +458,7 @@
 
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports) {
 
 	module.exports = function anonymous(it
@@ -379,7 +467,7 @@
 	}
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports) {
 
 	module.exports = function anonymous(it

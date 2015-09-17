@@ -44,12 +44,20 @@ View.prototype._mountViews = function(parent) {
   }
 
   for (var p in this.opts.views) {
-    var view = new View(this.opts.views[p].view);
-    if (this.opts.views[p].data) {
-      view.data = this.opts.views[p].data;
+    var view;
+    var value = this.opts.views[p];
+    if (value.view) {
+      var view = new View(value.view);
+      if (value.data) {
+        view.data = value.data;
+      }
+
+      view.el = $(value.el);
+    }else {
+      view = new View(value);
+      view.el = $(p);
     }
 
-    view.el = $(this.opts.views[p].el);
     view.parent = parent;
     view.mount();
     this.views[p] = view;

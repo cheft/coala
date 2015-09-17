@@ -9,21 +9,9 @@ var mytodo = {
       el: '#todo1',
       view: todo
     },
-
-    todo2: {
-      el: '#todo2',
-      view: todo
-    },
-
-    todo3: {
-      el: '#todo3',
-      view: todo
-    },
-
-    todo4: {
-      el: '#todo4',
-      view: todo
-    }
+    '#todo2': todo,
+    '#todo3': todo,
+    '#todo4': todo
   }
 };
 
