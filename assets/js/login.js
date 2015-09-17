@@ -353,7 +353,7 @@
 	    },
 
 	    mount: function() {
-	      console.log(pwd);
+
 	    }
 	  },
 

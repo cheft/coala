@@ -307,7 +307,7 @@
 	module.exports = {
 	  listen: {
 	    init: function() {
-	      alert('初始化 ' + this.id);
+	      // alert('初始化 ' + this.id);
 	      this.tpl = tpl;
 	      this.data = [
 	        {name: '做自己的前端框架', complete: true}
@@ -315,15 +315,15 @@
 	    },
 
 	    update: function() {
-	      alert('正准备更新 ' + this.id);
+	      // alert('正准备更新 ' + this.id);
 	    },
 
 	    updated: function() {
-	      alert('已经更新 ' + this.id);
+	      // alert('已经更新 ' + this.id);
 	    },
 
 	    mount: function() {
-	      alert('挂载 ' + this.id);
+	      // alert('挂载 ' + this.id);
 	    },
 
 	    test: function(name) {
