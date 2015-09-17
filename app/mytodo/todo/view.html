@@ -1,5 +1,5 @@
 <style>
-  li.todo {
+  .todo {
     list-style: none;
   }
   .complete {
@@ -12,10 +12,10 @@
   <input name="name" />
   <button id="create">增加</button>
 </div>
-<ul>
+<ul class="todo">
   {{~it :todo:index}}
-  <li class="todo {{?todo.complete}}complete{{?}}" id="complete-{{=index}}">
-    <button class="remove" id="remove-{{=index}}">X</button>
+  <li class="{{?todo.complete}}complete{{?}}" id="complete-{{=index}}">
+    <button id="remove-{{=index}}">X</button>
     {{=todo.name}}
   </li>
   {{~}}

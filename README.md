@@ -4,7 +4,7 @@
 
 * 内核非常小
 * 依赖 jquery, 支持 IE6+
-* 采用 [doT](http://olado.github.io/doT/) 模板引擎，渲染速度非常快
+* 默认采用 [doT](http://olado.github.io/doT/) 模板引擎；可以替换其它
 * 容易上手
 
 ### run

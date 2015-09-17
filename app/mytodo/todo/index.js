@@ -29,8 +29,8 @@ module.exports = {
 
   dispatcher: {
     'click #create': 'create',
-    'click .remove': 'remove',
-    'click .todo': 'toggle'
+    'click [id^=remove-]': 'remove',
+    'click [id^=complete-]': 'toggle'
   },
 
   actions: {
