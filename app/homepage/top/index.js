@@ -30,7 +30,7 @@ module.exports = {
     },
 
     unmount: function() {
-      console.log(' unmount');
+      // console.log(' unmount');
     }
   },
 
@@ -40,7 +40,7 @@ module.exports = {
 
   handle: {
     test: function(e) {
-      console.log(e, this);
+      alert(this);
     }
   }
 };

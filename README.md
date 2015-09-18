@@ -4,12 +4,12 @@
 
 * 内核非常小
 * 依赖 jquery, 支持 IE6+
-* 默认采用 [doT](http://olado.github.io/doT/) 模板引擎；可以替换其它
-* 容易上手
+* 默认采用 [doT](http://olado.github.io/doT/) 模板引擎；随时可以替换
+* API简单，容易上手
 
 ### run
 
-  cd quite
+  cd coala
 
   npm install
 
@@ -21,7 +21,7 @@
   
   npm install -g json-server
 
-  cd quite
+  cd coala
 
   json-server data/db.json
 

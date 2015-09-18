@@ -5,7 +5,6 @@ module.exports = {
     init: function() {
       this.tpl = tpl;
       this.data = {menus: ['首页', '管理房源', '数据分析', '个人中心'] };
-      console.log(this);
     }
   },
 
@@ -15,7 +14,7 @@ module.exports = {
 
   handle: {
     test: function(e) {
-      console.log(e, this);
+      alert(this);
     }
   }
 };
