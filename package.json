@@ -2,11 +2,11 @@
   "name": "coala",
   "version": "0.0.1",
   "scripts": {
-    "coala": "webpack  --config ./webpack.coala.js",
+    "start": "webpack-dev-server --colors --content-base ./ --hot",
+    "coala": "webpack --config ./webpack.coala.js",
     "watch": "webpack -w",
     "webpack": "webpack",
-    "build": "webpack -p",
-    "start": "webpack-dev-server --colors --content-base ./ --hot"
+    "build": "webpack -p"
   },
   "dependencies": {
     "jquery": "^1.11.3"

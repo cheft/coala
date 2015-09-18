@@ -1,26 +1,20 @@
-var quite = require('../../quite');
-var topView = require('./top');
-var menuView = require('./menu');
-var contentView = require('./content');
-var tpl = require('./view.html');
+var coala = require('../../coala');
+var top = require('./top');
+var menu = require('./menu');
+var content = require('./content');
+var tpl = require('./index.html');
 
-var indexView = {
+var index = {
   tpl: tpl,
-  views: {
+  refs: {
     top: {
       el: '.top',
-      view: topView,
+      component: top,
       data: {name: '陈海峰'}
     },
-    menu: {
-      el: '#menu',
-      view: menuView
-    },
-    content: {
-      el: '#content',
-      view: contentView
-    }
+    '#menu': menu,
+    '#content': content
   }
 };
 
-window.indexView = quite.mount(indexView, '#app');
+window.index = coala.mount(index, '#app');

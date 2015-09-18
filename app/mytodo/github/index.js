@@ -4,6 +4,7 @@ module.exports = {
   tpl: tpl,
   listen: {
     mount: function() {
+      console.log(111);
       this.trigger('fetch', 'react');
     },
 
@@ -24,11 +25,11 @@ module.exports = {
     }
   },
 
-  dispatcher: {
+  events: {
     'keypress #search': 'search'
   },
 
-  actions: {
+  handle: {
     search: function(e) {
       if (e.keyCode === 13) {
         this.trigger('fetch', e.target.value);

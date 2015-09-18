@@ -1,21 +1,14 @@
-var quite = require('../../quite');
-var topView = require('../homepage/top');
-var formView = require('./login-form');
-var tpl = require('./view.html');
+var coala = require('../../coala');
+var top = require('../homepage/top');
+var form = require('./login-form');
+var tpl = require('./index.html');
 
-var loginView = {
+var login = {
   tpl: tpl,
-  views: {
-    top: {
-      el: '#top',
-      view: topView
-    },
-    login: {
-      el: '#login',
-      view: formView
-    }
+  refs: {
+    '#top': top,
+    '#login': form
   }
 };
 
-quite.mount(loginView, '#app');
-
+coala.mount(login, '#app');

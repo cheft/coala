@@ -1,14 +1,14 @@
-var quite = require('../../quite');
+var coala = require('../../coala');
 var github = require('./github');
 var githubDynamic = require('./github-dynamic');
-var tpl = require('./view.html');
+var tpl = require('./index.html');
 
 var mytodo = {
   tpl: tpl,
-  views: {
+  refs: {
     '#todo1': github,
     '#todo2': githubDynamic
   }
 };
 
-window.todo = quite.mount(mytodo, '#app');
+window.todo = coala.mount(mytodo, '#app');

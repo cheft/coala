@@ -1,5 +1,5 @@
-var tpl = require('./view.html');
-var topView = require('../top');
+var top = require('../top');
+var tpl = require('./index.html');
 
 module.exports = {
   listen: {
@@ -9,10 +9,7 @@ module.exports = {
     }
   },
 
-  views: {
-    test: {
-      el: '#content-top',
-      view: topView
-    }
+  refs: {
+    '#content-top': top
   }
 };

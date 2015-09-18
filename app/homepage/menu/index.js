@@ -1,5 +1,4 @@
-var quite = require('../../../quite');
-var tpl = require('./view.html');
+var tpl = require('./index.html');
 
 module.exports = {
   listen: {
@@ -10,11 +9,11 @@ module.exports = {
     }
   },
 
-  dispatcher: {
+  evnet: {
     'click .js-menu': 'test'
   },
 
-  actions: {
+  handle: {
     test: function(e) {
       console.log(e, this);
     }

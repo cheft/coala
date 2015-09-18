@@ -1,4 +1,4 @@
-var tpl = require('./view.html');
+var tpl = require('./index.html');
 
 module.exports = {
   listen: {
@@ -11,11 +11,11 @@ module.exports = {
     }
   },
 
-  dispatcher: {
+  events: {
     'click #js-submit': 'submit'
   },
 
-  actions: {
+  handle: {
     submit: function(e) {
       console.log(this, e);
     }

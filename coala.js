@@ -1,4 +1,14 @@
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else {
+		var a = factory();
+		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
+	}
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 
@@ -80,14 +90,13 @@
 	  this.tpl = opts.tpl || {};
 	  this.el = opts.el ? $(opts.el) : undefined;
 	  this.data = opts.data || {};
-	  this.on = opts.on || {};
+	  this.listen = opts.listen || {};
 	  this.events = opts.events || {};
 	  this.handle = opts.handle || {};
 	  this.refs = {};
 	  this.id = util.uniqueId('component');
-
 	  observable(this);
-	  this._listen();
+	  this._listenTo();
 	  this.trigger('init');
 	}
 
@@ -159,9 +168,9 @@
 	  }
 	};
 
-	Component.prototype._listen = function() {
-	  for (var l in this.on) {
-	    var fn = this.on[l];
+	Component.prototype._listenTo = function() {
+	  for (var l in this.listen) {
+	    var fn = this.listen[l];
 	    this.on(l, fn);
 	  }
 	};
@@ -275,4 +284,6 @@
 
 
 /***/ }
-/******/ ]);
+/******/ ])
+});
+;

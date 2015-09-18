@@ -1,4 +1,4 @@
-var tpl = require('./view.html');
+var tpl = require('./index.html');
 
 module.exports = {
   listen: {
@@ -27,13 +27,13 @@ module.exports = {
     }
   },
 
-  dispatcher: {
+  events: {
     'click #create': 'create',
     'click [id^=remove-]': 'remove',
     'click [id^=complete-]': 'toggle'
   },
 
-  actions: {
+  handle: {
     create: function(e) {
       var name = this.el.find('input[name="name"]').val();
       this.data.push({name: name, complete: false});

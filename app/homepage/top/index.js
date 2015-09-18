@@ -1,4 +1,4 @@
-var tpl = require('./view.html');
+var tpl = require('./index.html');
 
 module.exports = {
   listen: {
@@ -30,11 +30,11 @@ module.exports = {
     }
   },
 
-  dispatcher: {
+  events: {
     'click .js-test': 'test'
   },
 
-  actions: {
+  handle: {
     test: function(e) {
       console.log(e, this);
     }
