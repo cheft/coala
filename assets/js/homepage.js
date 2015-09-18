@@ -121,11 +121,11 @@
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var quite = __webpack_require__(3);
-	var topView = __webpack_require__(7);
-	var menuView = __webpack_require__(9);
-	var contentView = __webpack_require__(11);
-	var tpl = __webpack_require__(13);
+	var quite = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../quite\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var topView = __webpack_require__(3);
+	var menuView = __webpack_require__(5);
+	var contentView = __webpack_require__(7);
+	var tpl = __webpack_require__(9);
 
 	var indexView = {
 	  tpl: tpl,
@@ -153,233 +153,7 @@
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var View = __webpack_require__(4);
-	var observable = __webpack_require__(6);
-
-	var quite = {
-	  observable: observable,
-
-	  mount: function(opts, el) {
-	    return new View(opts).mount(el);
-	  }
-	};
-
-	observable(quite);
-
-	module.exports = quite;
-
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var util = __webpack_require__(5);
-	var observable = __webpack_require__(6);
-
-	function View(opts) {
-	  this.opts = opts;
-	  this.tpl = opts.tpl || {};
-	  this.el = opts.el ? $(opts.el) : undefined;
-	  this.data = opts.data || {};
-	  this.listen = opts.listen || {};
-	  this.dispatcher = opts.dispatcher || {};
-	  this.actions = opts.actions || {};
-	  this.views = {};
-	  this.id = util.uniqueId('view');
-
-	  observable(this);
-	  this._listenTo();
-	  this.trigger('init');
-	}
-
-	View.prototype.template = function() {
-	  return this.tpl(this.data);
-	};
-
-	View.prototype.mount = function(el) {
-	  this.el = el ? $(el) : this.el;
-	  this.update();
-	  this.trigger('mount');
-	  return this;
-	};
-
-	View.prototype.update = function(data) {
-	  this.trigger('update');
-	  this.data = data || this.data;
-	  if (this.vid) {
-	    var parentEl = this.el;
-	    var template = this.template();
-	    var $template = $(template).attr('vid', this.vid);
-	    parentEl.append($template[0].outerHTML);
-	    this.el = parentEl.find('[vid=' + this.vid + ']');
-	    delete this.vid;
-	  }else {
-	    this.el.empty().html(this.template());
-	  }
-
-	  this._mountViews(this);
-	  this._bindEvents();
-	  this.trigger('updated');
-	};
-
-	View.prototype._mountViews = function(parent) {
-	  if (!this.opts.views) {
-	    return;
-	  }
-
-	  for (var p in this.opts.views) {
-	    var view;
-	    var value = this.opts.views[p];
-	    if (value.view) {
-	      var view = new View(value.view);
-	      if (value.data) {
-	        view.data = value.data;
-	      }
-
-	      if (value.vid) {
-	        view.vid = value.vid;
-	      }
-
-	      view.el = $(value.el);
-	    }else {
-	      view = new View(value);
-	      view.el = $(p);
-	    }
-
-	    view.parent = parent;
-	    view.mount();
-	    this.views[p] = view;
-	  }
-	};
-
-	View.prototype._bindEvents = function() {
-	  for (var e in this.dispatcher) {
-	    var actionName = this.dispatcher[e];
-	    var $el = this.el.find(e.split(' ')[1]);
-	    $el.on(e.split(' ')[0], $.proxy(this.actions[actionName], this));
-	  }
-	};
-
-	View.prototype._listenTo = function() {
-	  for (var l in this.listen) {
-	    var fn = this.listen[l];
-	    this.on(l, fn);
-	  }
-	};
-
-	module.exports = View;
-
-
-/***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-	module.exports = {
-	  counter: 0,
-	  uniqueId: function(prefix) {
-	    return (prefix || '') + (++this.counter);
-	  },
-
-	  isUndefined: function(obj) {
-	    return typeof obj == 'undefined';
-	  },
-
-	  isFunction: function(obj) {
-	    return typeof obj == 'function';
-	  }
-	};
-
-
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var util = __webpack_require__(5);
-
-	module.exports = function(el) {
-	  el = el || {};
-	  var callbacks = {};
-	  var _id = 0;
-
-	  el.on = function(events, fn) {
-	    if (util.isFunction(fn)) {
-	      if (util.isUndefined(fn.id)) {
-	        fn._id = _id++;
-	      }
-
-	      events.replace(/\S+/g, function(name, pos) {
-	        (callbacks[name] = callbacks[name] || []).push(fn);
-	        fn.typed = pos > 0;
-	      });
-	    }
-
-	    return el;
-	  };
-
-	  el.off = function(events, fn) {
-	    if (events == '*') {
-	      callbacks = {};
-	    }else {
-	      events.replace(/\S+/g, function(name) {
-	        if (fn) {
-	          var arr = callbacks[name];
-	          for (var i = 0, cb; (cb = arr && arr[i]); ++i) {
-	            if (cb._id == fn._id) {
-	              arr.splice(i--, 1);
-	            }
-	          }
-	        } else {
-	          callbacks[name] = [];
-	        }
-	      });
-	    }
-
-	    return el;
-	  };
-
-	  // only single event supported
-	  el.one = function(name, fn) {
-	    function on() {
-	      el.off(name, on);
-	      fn.apply(el, arguments);
-	    }
-
-	    return el.on(name, on);
-	  };
-
-	  el.trigger = function(name) {
-	    var args = [].slice.call(arguments, 1);
-	    var fns = callbacks[name] || [];
-
-	    for (var i = 0, fn; (fn = fns[i]); ++i) {
-	      if (!fn.busy) {
-	        fn.busy = 1;
-	        fn.apply(el, fn.typed ? [name].concat(args) : args);
-	        if (fns[i] !== fn) {
-	          i--;
-	        }
-
-	        fn.busy = 0;
-	      }
-	    }
-
-	    if (callbacks.all && name != 'all') {
-	      el.trigger.apply(el, ['all', name].concat(args));
-	    }
-
-	    return el;
-	  };
-
-	  return el;
-	};
-
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var tpl = __webpack_require__(8);
+	var tpl = __webpack_require__(4);
 
 	module.exports = {
 	  listen: {
@@ -424,7 +198,7 @@
 
 
 /***/ },
-/* 8 */
+/* 4 */
 /***/ function(module, exports) {
 
 	module.exports = function anonymous(it
@@ -433,11 +207,11 @@
 	}
 
 /***/ },
-/* 9 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var quite = __webpack_require__(3);
-	var tpl = __webpack_require__(10);
+	var quite = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../../quite\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var tpl = __webpack_require__(6);
 
 	module.exports = {
 	  listen: {
@@ -461,7 +235,7 @@
 
 
 /***/ },
-/* 10 */
+/* 6 */
 /***/ function(module, exports) {
 
 	module.exports = function anonymous(it
@@ -470,11 +244,11 @@
 	}
 
 /***/ },
-/* 11 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var tpl = __webpack_require__(12);
-	var topView = __webpack_require__(7);
+	var tpl = __webpack_require__(8);
+	var topView = __webpack_require__(3);
 
 	module.exports = {
 	  listen: {
@@ -494,7 +268,7 @@
 
 
 /***/ },
-/* 12 */
+/* 8 */
 /***/ function(module, exports) {
 
 	module.exports = function anonymous(it
@@ -503,7 +277,7 @@
 	}
 
 /***/ },
-/* 13 */
+/* 9 */
 /***/ function(module, exports) {
 
 	module.exports = function anonymous(it
