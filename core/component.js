@@ -42,6 +42,11 @@ Component.prototype.update = function(data) {
   this.trigger('updated');
 };
 
+Component.prototype.unmount = function() {
+  this.el.empty();
+  this.trigger('unmount');
+};
+
 Component.prototype._html = function() {
   return this.tpl(this.data);
 };

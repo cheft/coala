@@ -27,6 +27,10 @@ module.exports = {
 
     updated: function() {
       // console.log(' updated!');
+    },
+
+    unmount: function() {
+      console.log(' unmount');
     }
   },
 

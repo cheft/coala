@@ -2,8 +2,8 @@
   "name": "coala",
   "version": "0.0.1",
   "scripts": {
+    "coala": "webpack --config ./webpack.coala.js && uglifyjs coala.js -o coala.min.js -m -c --screw-ie8",
     "start": "webpack-dev-server --colors --content-base ./ --hot",
-    "coala": "webpack --config ./webpack.coala.js",
     "watch": "webpack -w",
     "webpack": "webpack",
     "build": "webpack -p"
@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "dot-loader": "^0.1.1",
+    "uglifyjs": "^2.4.10",
     "webpack": "^1.12.1",
     "webpack-dev-server": "^1.10.1"
   },

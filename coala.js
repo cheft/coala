@@ -66,10 +66,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  mount: function(opts, el) {
 	    return new Component(opts).mount(el);
-	  },
-
-	  unmount: function(el) {
-	    // :TODO
 	  }
 	};
 
@@ -124,6 +120,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this._mountRefs(this);
 	  this._bindEvents();
 	  this.trigger('updated');
+	};
+
+	Component.prototype.unmount = function() {
+	  this.el.empty();
+	  this.trigger('unmount');
 	};
 
 	Component.prototype._html = function() {

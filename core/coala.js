@@ -10,10 +10,6 @@ var coala = {
 
   mount: function(opts, el) {
     return new Component(opts).mount(el);
-  },
-
-  unmount: function(el) {
-    // :TODO
   }
 };
 
