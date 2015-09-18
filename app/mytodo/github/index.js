@@ -15,8 +15,8 @@ module.exports = {
     fetch: function(keyword) {
       var _this = this;
       $.ajax({
-        // url: 'https://api.github.com/search/repositories?q=' + keyword + '&sort=start',
-        url: 'http://localhost:3000/github',
+        url: 'https://api.github.com/search/repositories?q=' + keyword + '&sort=start',
+        // url: 'http://localhost:3000/github',
         type: 'get'
       }).done(function(data) {
         _this.data = data;
