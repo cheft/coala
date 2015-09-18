@@ -109,9 +109,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (this.rid) {
 	    var parentEl = this.el;
 	    var html = this._html();
-	    var $html = $(html).attr('rid', this.rid);
-	    parentEl.append($html[0].outerHTML);
-	    this.el = parentEl.find('[rid=' + this.rid + ']');
+	    this.el = $(html).attr('rid', this.rid);
+	    parentEl.append(this.el);
 	    delete this.rid;
 	  }else {
 	    this.el.empty().html(this._html());
