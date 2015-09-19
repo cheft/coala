@@ -10,6 +10,9 @@ module.exports = {
   },
 
   refs: {
-    '#content-top': top
+    top: {
+      el: '#content-top',
+      component: top
+    },
   }
 };

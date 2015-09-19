@@ -1,3 +1,4 @@
+require('./index.css');
 var tpl = require('./index.html');
 
 module.exports = {

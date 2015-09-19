@@ -13,7 +13,9 @@
     "jquery": "^1.11.3"
   },
   "devDependencies": {
+    "css-loader": "^0.18.0",
     "dot-loader": "^0.1.1",
+    "style-loader": "^0.12.4",
     "uglifyjs": "^2.4.10",
     "webpack": "^1.12.1",
     "webpack-dev-server": "^1.10.1"

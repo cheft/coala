@@ -12,8 +12,14 @@ var index = {
       component: top,
       data: {name: '陈海峰'}
     },
-    '#menu': menu,
-    '#content': content
+    menu: {
+      el: '.menu',
+      component: menu
+    },
+    content: {
+      el: '#content',
+      component: content
+    }
   }
 };
 

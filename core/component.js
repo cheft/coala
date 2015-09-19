@@ -46,6 +46,10 @@ Component.prototype.unmount = function() {
   this.trigger('unmount');
 };
 
+Component.prototype.$ = function(el) {
+  return this.el.find(el);
+};
+
 Component.prototype._html = function() {
   return this.tpl(this.data);
 };
@@ -56,24 +60,17 @@ Component.prototype._mountRefs = function(parent) {
   }
 
   for (var p in this.opts.refs) {
-    var component;
     var value = this.opts.refs[p];
-    if (value.component) {
-      var component = new Component(value.component);
-      if (value.data) {
-        component.data = value.data;
-      }
-
-      if (value.rid) {
-        component.rid = value.rid;
-      }
-
-      component.el = $(value.el);
-    }else {
-      component = new Component(value);
-      component.el = $(p);
+    var component = new Component(value.component);
+    if (value.data) {
+      component.data = value.data;
     }
 
+    if (value.rid) {
+      component.rid = value.rid;
+    }
+
+    component.el = $(value.el);
     component.parent = parent;
     component.mount();
     this.refs[p] = component;

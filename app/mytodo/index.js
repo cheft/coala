@@ -6,8 +6,14 @@ var tpl = require('./index.html');
 var mytodo = {
   tpl: tpl,
   refs: {
-    '#todo1': github,
-    '#todo2': githubDynamic
+  	todo1: {
+  	  component: github,
+  	  el: '#todo1'
+  	},
+  	todo2: {
+  	  component: githubDynamic,
+  	  el: '#todo2'
+  	}
   }
 };
 

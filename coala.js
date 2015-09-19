@@ -55,7 +55,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
-	  Version: 0.0.1
+	  Version: 0.0.3
 	  Author: Cheft
 	*/
 	var Component = __webpack_require__(1);
@@ -65,7 +65,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  observable: observable,
 
 	  mount: function(opts, el) {
-	    return new Component(opts).mount(el);
+	    return this.component(opts).mount(el);
+	  },
+
+	  unmount: function(component) {
+	  	component.unmount();
+	  },
+
+	  component: function(opts) {
+	  	return new Component(opts);
 	  }
 	};
 
@@ -126,6 +134,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.trigger('unmount');
 	};
 
+	Component.prototype.$ = function(el) {
+	  return this.el.find(el);
+	};
+
 	Component.prototype._html = function() {
 	  return this.tpl(this.data);
 	};
@@ -136,24 +148,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  for (var p in this.opts.refs) {
-	    var component;
 	    var value = this.opts.refs[p];
-	    if (value.component) {
-	      var component = new Component(value.component);
-	      if (value.data) {
-	        component.data = value.data;
-	      }
-
-	      if (value.rid) {
-	        component.rid = value.rid;
-	      }
-
-	      component.el = $(value.el);
-	    }else {
-	      component = new Component(value);
-	      component.el = $(p);
+	    var component = new Component(value.component);
+	    if (value.data) {
+	      component.data = value.data;
 	    }
 
+	    if (value.rid) {
+	      component.rid = value.rid;
+	    }
+
+	    component.el = $(value.el);
 	    component.parent = parent;
 	    component.mount();
 	    this.refs[p] = component;

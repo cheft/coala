@@ -27,6 +27,10 @@ module.exports = {
     loaders: [{
       test: /\.html$/,
       loader: 'dot-loader'
+    },
+    {
+      test: /\.css$/,
+      loader: 'style!css'
     }]
   }
 };
