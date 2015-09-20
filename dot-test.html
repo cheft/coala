@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="pragma" content="no-cache" />
+  <meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+  <meta http-equiv="expires" content="Thu, 01 Jan 1970 00:00:01 GMT" />
+  <meta http-equiv="expires" content="0" />
+  <title>DOT TEST</title>
+</head>
+
+<body>
+	<button id="reverse" onclick="reverse();">reverse list</button>
+	<div id="reversalArea"></div>
+  <script>
+  var data = {items: []};
+  for(var i = 0; i < 10000; i++){
+    data.items.push(i);
+  }
+  document.getElementById('reversalArea').innerHTML = anonymous(data);
+
+	function anonymous(it) {
+		var out='<span id="time"></span>';var arr1=it.items;if(arr1){var value,i1=-1,l1=arr1.length-1;while(i1<l1){value=arr1[i1+=1];out+='<h2>Line # '+(value)+'</h2>';} } return out;
+	}
+
+	function reverse() {
+		var x = new Date().getTime();
+		data.items = data.items.reverse();
+		var html = anonymous(data);
+		document.getElementById('reversalArea').innerHTML = html;
+		document.getElementById('time').innerHTML = '- Reversing took ' + (new Date().getTime() - x) + ' ms';
+	}
+	
+</script>
+</body>
+
+</html>

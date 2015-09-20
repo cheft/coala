@@ -9,7 +9,7 @@ module.exports = {
     },
 
     updated: function() {
-      this.$('#time').text('- Reversing took ' + (new Date().getTime() - this.data.timeTaken) + ' ms')
+      this.$('#time').text('- Reversing took ' + (new Date().getTime() - this.data.timeTaken) + ' ms');
     },
 
     fill: function() {
