@@ -1,4 +1,4 @@
-var top = require('../top');
+var reversal = require('../reversal');
 var tpl = require('./index.html');
 
 module.exports = {
@@ -10,9 +10,19 @@ module.exports = {
   },
 
   refs: {
-    top: {
-      el: '#content-top',
-      component: top
+    reversal: {
+      el: '#reversalArea',
+      component: reversal
     },
+  },
+
+  events: {
+    'click #reverse': 'reverse'
+  },
+
+  handle: {
+    reverse: function() {
+      this.refs.reversal.trigger('reverse');
+    }
   }
 };
