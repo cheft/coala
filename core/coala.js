@@ -13,11 +13,11 @@ var coala = {
   },
 
   unmount: function(component) {
-  	component.unmount();
+    component.unmount();
   },
 
   component: function(opts) {
-  	return new Component(opts);
+    return new Component(opts);
   }
 };
 

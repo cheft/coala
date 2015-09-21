@@ -593,14 +593,15 @@
 	    },
 	
 	    updated: function() {
-	      this.$('#time').text('- Reversing took ' + (new Date().getTime() - this.data.timeTaken) + ' ms')
+	      this.$('#time').text('- Reversing took ' + (new Date().getTime() - this.data.timeTaken) + ' ms');
 	    },
 	
 	    fill: function() {
 	      this.data.items = [];
-	      for(var i = 0; i < 10000; i++){
+	      for (var i = 0; i < 10000; i++) {
 	        this.data.items.push(i);
 	      }
+	
 	      this.update();
 	    },
 	
@@ -628,7 +629,7 @@
 
 	module.exports = function anonymous(it
 	/**/) {
-	var out='<div>Hi '+( it.name)+'!</div><div>'+( it.age || '')+'</div><div>'+( 1 + 11)+'</div><div>'+( it.tt)+'</div><hr /><h1><a href="https://github.com/riot/riot/issues/484 ">riot</a> <a href="http://jsfiddle.net/gianlucaguarini/cbjuek58/">性能对比</a> </h1><button id="reverse">reverse list</button><div id="reversalArea"></div>';return out;
+	var out='<div>Hi '+( it.name)+'!</div><div>'+( it.age || '')+'</div><div>'+( 1 + 11)+'</div><div>'+( it.tt)+'</div><hr /><h1> <a href="https://github.com/riot/riot/issues/484 ">riot</a> <a href="http://jsfiddle.net/gianlucaguarini/cbjuek58/">性能对比</a> | <a href="/dot-test.html">dot原生</a></h1><button id="reverse">reverse list</button><div id="reversalArea"></div>';return out;
 	}
 
 /***/ },

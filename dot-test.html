@@ -17,9 +17,11 @@
 	<div id="reversalArea"></div>
   <script>
   var data = {items: []};
-  for(var i = 0; i < 10000; i++){
+  
+  for (var i = 0; i < 10000; i++) {
     data.items.push(i);
   }
+
   document.getElementById('reversalArea').innerHTML = anonymous(data);
 
 	function anonymous(it) {
