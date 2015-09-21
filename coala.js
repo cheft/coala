@@ -121,6 +121,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    parentEl.append(this.el);
 	    delete this.rid;
 	  }else {
+	    if (this.el.attr('rid')) {
+	      this.el.empty().html($(this._html()).html());
+	      return;
+	    }
+
 	    this.el.empty().html(this._html());
 	  }
 
