@@ -1,6 +1,6 @@
 {
   "name": "coala",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "coala.js",
   "scripts": {
     "coala": "webpack --config ./webpack.coala.js && uglifyjs coala.js -o coala.min.js -m -c --screw-ie8",
@@ -20,13 +20,18 @@
     "webpack": "^1.12.1",
     "webpack-dev-server": "^1.10.1"
   },
-  "repository": {
-    "type": "git"
-  },
   "keywords": [
     "coala",
     "qfang"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Qfang-FrontEnd/coala.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Qfang-FrontEnd/coala/issues"
+  },
+  "homepage": "https://github.com/Qfang-FrontEnd/coala",
   "author": "cheft",
   "license": "ISC"
 }

@@ -1,5 +1,5 @@
 /*
-  Version: 0.0.3
+  Version: 0.0.4
   Author: Cheft
 */
 var Component = require('./component');

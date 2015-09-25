@@ -3,7 +3,8 @@ var observable = require('./observable');
 
 function Component(opts) {
   this.opts = opts;
-  this.tpl = opts.tpl || {};
+  this.tpl = opts.tpl || function() {};
+
   this.el = opts.el ? $(opts.el) : undefined;
   this.data = opts.data || {};
   this.listen = opts.listen || {};
@@ -66,19 +67,23 @@ Component.prototype._mountRefs = function(parent) {
 
   for (var p in this.opts.refs) {
     var value = this.opts.refs[p];
-    var component = new Component(value.component);
+    var c = new Component(value.component);
+    c.refOpts = $.extend(false, {}, value);
+    delete c.refOpts.component;
+    delete c.refOpts.el;
     if (value.data) {
-      component.data = value.data;
+      c.data = $.extend(false, c.data, value.data);
+      delete c.refOpts.data;
     }
 
     if (value.rid) {
-      component.rid = value.rid;
+      c.rid = value.rid;
+      delete c.refOpts.rid;
     }
 
-    component.el = $(value.el);
-    component.parent = parent;
-    component.mount();
-    this.refs[p] = component;
+    c.parent = parent;
+    this.refs[p] = c;
+    c.mount(value.el);
   }
 };
 
