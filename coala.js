@@ -182,8 +182,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	Component.prototype._bindEvents = function() {
 	  for (var e in this.events) {
 	    var handleName = this.events[e];
-	    var $el = this.el.find(e.split(' ')[1]);
-	    $el.on(e.split(' ')[0], $.proxy(this.handle[handleName], this));
+	    var index = e.indexOf(' ');
+	    if (index === -1) {
+	      throw 'Event separated by a space.';
+	    }
+
+	    var $el = this.el.find(e.substr(index + 1, e.length));
+	    $el.on(e.substr(0, index), $.proxy(this.handle[handleName], this));
 	  }
 	};
 

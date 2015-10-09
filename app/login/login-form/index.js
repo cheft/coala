@@ -13,12 +13,17 @@ module.exports = {
   },
 
   events: {
-    'click #js-submit': 'submit'
+    'click #js-submit': 'submit',
+    'focus .login-form input': 'focus'
   },
 
   handle: {
     submit: function(e) {
       console.log(this, e);
+    },
+
+    focus: function(e) {
+      console.log(e.target + ' focus.');
     }
   }
 };
