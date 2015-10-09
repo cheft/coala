@@ -1,0 +1,16 @@
+app
+assets
+core
+data
+doc
+node_modules
+.git
+.gitignore
+.jscsrc
+dot-test.html
+index.html
+issue.md
+login.html
+todo.html
+webpack.coala.js
+webpack.config.js

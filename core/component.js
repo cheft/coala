@@ -29,22 +29,20 @@ Component.prototype.update = function(data) {
   this.trigger('update');
   this.data = data || this.data;
   var template = this._html();
-  if (!template) {
-    return;
-  }
+  if (template) {
+    if (this.rid) {
+      var parentEl = this.el;
+      this.el = $(template).attr('rid', this.rid);
+      parentEl.append(this.el);
+      delete this.rid;
+    }else {
+      if (this.el.attr('rid')) {
+        this.el.empty().html($(template).html());
+        return;
+      }
 
-  if (this.rid) {
-    var parentEl = this.el;
-    this.el = $(template).attr('rid', this.rid);
-    parentEl.append(this.el);
-    delete this.rid;
-  }else {
-    if (this.el.attr('rid')) {
-      this.el.empty().html($(template).html());
-      return;
+      this.el.empty().html(template);
     }
-
-    this.el.empty().html(template);
   }
 
   this._mountRefs(this);
