@@ -101,6 +101,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.refs = {};
 	  this.id = util.uniqueId('component');
 	  observable(this);
+	  this._mixin(opts.mixins);
 	  this._listenTo();
 	  this.trigger('init');
 	}
@@ -189,6 +190,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var $el = this.el.find(e.substr(index + 1, e.length));
 	    $el.on(e.substr(0, index), $.proxy(this.handle[handleName], this));
+	  }
+	};
+
+	Component.prototype._mixin = function(arr) {
+	  if (arr) {
+	    arr.unshift(false);
+	    var obj = $.extend.apply($, arr);
+	    for (var o in obj) {
+	      this[o] = obj[o];
+	    }
 	  }
 	};
 

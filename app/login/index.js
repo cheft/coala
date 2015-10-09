@@ -7,14 +7,14 @@ var tpl = require('./index.html');
 var login = {
   tpl: tpl,
   refs: {
-  	top: {
-  	  component: top,
-  	  el: '#top'
-  	},
-  	login: {
-  	  component: form,
-  	  el: '#login'
-  	},
+    top: {
+      component: top,
+      el: '#top'
+    },
+    login: {
+      component: form,
+      el: '#login'
+    },
     empty: {
       component: empty,
       el: '#empty'
