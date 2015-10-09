@@ -55,7 +55,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
-	  Version: 0.0.4
+	  Version: 0.0.5
 	  Author: Cheft
 	*/
 	var Component = __webpack_require__(1);
@@ -115,19 +115,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	Component.prototype.update = function(data) {
 	  this.trigger('update');
 	  this.data = data || this.data;
+	  var template = this._html();
+	  if (!template) {
+	    return;
+	  }
+
 	  if (this.rid) {
 	    var parentEl = this.el;
-	    var html = this._html();
-	    this.el = $(html).attr('rid', this.rid);
+	    this.el = $(template).attr('rid', this.rid);
 	    parentEl.append(this.el);
 	    delete this.rid;
 	  }else {
 	    if (this.el.attr('rid')) {
-	      this.el.empty().html($(this._html()).html());
+	      this.el.empty().html($(template).html());
 	      return;
 	    }
 
-	    this.el.empty().html(this._html());
+	    this.el.empty().html(template);
 	  }
 
 	  this._mountRefs(this);

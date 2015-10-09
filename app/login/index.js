@@ -1,6 +1,7 @@
 var coala = require('../../coala');
 var top = require('../homepage/top');
 var form = require('./login-form');
+var empty = require('./empty');
 var tpl = require('./index.html');
 
 var login = {
@@ -13,8 +14,12 @@ var login = {
   	login: {
   	  component: form,
   	  el: '#login'
-  	}
+  	},
+    empty: {
+      component: empty,
+      el: '#empty'
+    }
   }
 };
 
-coala.mount(login, '#app');
+window.app = coala.mount(login, '#app');
