@@ -55,7 +55,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
-	  Version: 0.0.5
+	  Version: 0.0.6
 	  Author: Cheft
 	*/
 	var Component = __webpack_require__(1);
@@ -114,8 +114,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	Component.prototype.update = function(data) {
-	  this.trigger('update');
 	  this.data = data || this.data;
+	  this.trigger('update');
 	  var template = this._html();
 	  if (template) {
 	    if (this.rid) {
@@ -133,8 +133,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }
 
-	  this._mountRefs(this);
 	  this._bindEvents();
+	  this._mountRefs(this);
 	  this.trigger('updated');
 	};
 
@@ -186,8 +186,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      throw 'Event separated by a space.';
 	    }
 
-	    var $el = this.el.find(e.substr(index + 1, e.length));
-	    $el.on(e.substr(0, index), $.proxy(this.handle[handleName], this));
+	    var selector = e.substr(index + 1, e.length);
+	    this.el.on(e.substr(0, index), selector, $.proxy(this.handle[handleName], this));
 	  }
 	};
 

@@ -26,8 +26,8 @@ Component.prototype.mount = function(el) {
 };
 
 Component.prototype.update = function(data) {
-  this.trigger('update');
   this.data = data || this.data;
+  this.trigger('update');
   var template = this._html();
   if (template) {
     if (this.rid) {
@@ -45,8 +45,8 @@ Component.prototype.update = function(data) {
     }
   }
 
-  this._mountRefs(this);
   this._bindEvents();
+  this._mountRefs(this);
   this.trigger('updated');
 };
 
@@ -98,8 +98,8 @@ Component.prototype._bindEvents = function() {
       throw 'Event separated by a space.';
     }
 
-    var $el = this.el.find(e.substr(index + 1, e.length));
-    $el.on(e.substr(0, index), $.proxy(this.handle[handleName], this));
+    var selector = e.substr(index + 1, e.length);
+    this.el.on(e.substr(0, index), selector, $.proxy(this.handle[handleName], this));
   }
 };
 
