@@ -1,5 +1,6 @@
 var util = require('./util');
 var observable = require('./observable');
+var ref = require('./ref');
 
 function Component(opts) {
   this.opts = opts;
@@ -53,10 +54,15 @@ Component.prototype.update = function(data) {
 Component.prototype.unmount = function() {
   this.el.empty();
   this.trigger('unmount');
+  this.off('*');
 };
 
 Component.prototype.$ = function(el) {
   return this.el.find(el);
+};
+
+Component.prototype.ref = function(exp) {
+  return ref(this, exp);
 };
 
 Component.prototype._html = function() {

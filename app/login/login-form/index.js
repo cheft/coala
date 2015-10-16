@@ -13,7 +13,7 @@ module.exports = {
     },
 
     mount: function() {
-
+      console.log(this.ref('^top'));
     }
   },
 

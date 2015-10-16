@@ -88,6 +88,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var util = __webpack_require__(2);
 	var observable = __webpack_require__(3);
+	var ref = __webpack_require__(4);
 
 	function Component(opts) {
 	  this.opts = opts;
@@ -141,10 +142,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	Component.prototype.unmount = function() {
 	  this.el.empty();
 	  this.trigger('unmount');
+	  this.off('*');
 	};
 
 	Component.prototype.$ = function(el) {
 	  return this.el.find(el);
+	};
+
+	Component.prototype.ref = function(exp) {
+	  return ref(this, exp);
 	};
 
 	Component.prototype._html = function() {
@@ -314,6 +320,90 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  return el;
 	};
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	function children(c, name) {
+	  if (c.refs[name]) {
+	    return c.refs[name];
+	  }
+
+	  for (var r in c.refs) {
+	    return children(c.refs[r], name);
+	  }
+	};
+
+	function root(c) {
+	  if (c.parent) {
+	    return root(c.parent);
+	  }
+
+	  return c;
+	};
+
+	function parent(c, deep) {
+	  var d = deep < 0 ? 0 - deep : deep;
+	  var obj = c.parent;
+	  for (var i = 1; i < d; i++) {
+	    if (!obj) {
+	      return;
+	    }
+
+	    obj = obj.parent;
+	  }
+
+	  return obj;
+	};
+
+	module.exports = function(c, exp) {
+	  var legalVar = /^[a-z|A-Z|_|$]/;
+	  var regExp = /(\^\d?|>|\/)/g;
+	  exp = exp.replace(regExp, ' $1 ').substr(1);
+	  var arr = exp.split(/\s+/);
+	  for (var i = 0; i < arr.length; i++) {
+	    if (!c) {
+	      return;
+	    }
+
+	    if (arr[i] === '/') {
+	      c = root(c);
+	    }else if (legalVar.test(arr[i])) {
+	      if (!c.refs) {
+	        return;
+	      }
+
+	      c = children(c, arr[i]);
+
+	    // > 后面必须接组件名
+	    }else if (arr[i] === '>') {
+	      if (arr[i + 1] && legalVar.test(arr[i + 1])) {
+	        c = c.refs[arr[i + 1]];
+	        i++;
+	      }else {
+	        continue;
+	      }
+	    }else if (arr[i].indexOf('^') !== -1) {
+	      var deep = 1;
+	      if (d = arr[i].substr(1)) {
+	        deep = parseInt(d);
+	      }
+
+	      c = parent(c, deep);
+	    }else {
+	      if (regExp.test(arr[i])) {
+	        continue;
+	      }else {
+	        return;
+	      }
+	    }
+	  }
+
+	  return c;
+	};
+
 
 
 /***/ }
