@@ -17,9 +17,8 @@ function root(c) {
 };
 
 function parent(c, deep) {
-  var d = deep < 0 ? 0 - deep : deep;
   var obj = c.parent;
-  for (var i = 1; i < d; i++) {
+  for (var i = 1; i < deep; i++) {
     if (!obj) {
       return;
     }
@@ -32,7 +31,7 @@ function parent(c, deep) {
 
 module.exports = function(c, exp) {
   var legalVar = /^[a-z|A-Z|_|$]/;
-  var regExp = /(\^\d?|>|\/)/g;
+  var regExp = /(\^\d?|>|\/)/;
   exp = exp.replace(regExp, ' $1 ').substr(1);
   var arr = exp.split(/\s+/);
   for (var i = 0; i < arr.length; i++) {
@@ -42,14 +41,6 @@ module.exports = function(c, exp) {
 
     if (arr[i] === '/') {
       c = root(c);
-    }else if (legalVar.test(arr[i])) {
-      if (!c.refs) {
-        return;
-      }
-
-      c = children(c, arr[i]);
-
-    // > 后面必须接组件名
     }else if (arr[i] === '>') {
       if (arr[i + 1] && legalVar.test(arr[i + 1])) {
         c = c.refs[arr[i + 1]];
@@ -64,6 +55,12 @@ module.exports = function(c, exp) {
       }
 
       c = parent(c, deep);
+    }else if (legalVar.test(arr[i])) {
+      if (!c.refs) {
+        return;
+      }
+
+      c = children(c, arr[i]);
     }else {
       if (regExp.test(arr[i])) {
         continue;

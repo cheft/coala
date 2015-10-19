@@ -13,9 +13,9 @@ module.exports = {
   mixins: [{
       testRef: function() {
         var x = new Date().getTime();
-        for (var i = 0; i < 10000; i++) {
-          var c5 = this.ref('^2 > c2 > c3 >c4> c5');
-          // var c5 = this.ref('/ c5');
+        for (var i = 0; i < 100000; i++) {
+          // var c5 = this.ref('^2 > c2 > c3 >c4> c5');
+          var c5 = this.ref('/c5');
           // console.log(c5);
         }
 
@@ -26,7 +26,7 @@ module.exports = {
     {
       test: function() {
         var x = new Date().getTime();
-        for (var i = 0; i < 100000; i++) {
+        for (var i = 0; i < 1000000; i++) {
           var c5 = this.parent.parent.refs.c2.refs.c3.refs.c4.refs.c5;
           // console.log(c5);
         }
