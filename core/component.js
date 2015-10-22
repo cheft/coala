@@ -31,6 +31,7 @@ Component.prototype.update = function(data) {
   this.trigger('update');
   var template = this._html();
   if (template) {
+    this.el.off();
     if (this.rid) {
       var parentEl = this.el;
       this.el = $(template).attr('rid', this.rid);
