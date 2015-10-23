@@ -62,11 +62,7 @@ module.exports = function(c, exp) {
 
       c = children(c, arr[i]);
     }else {
-      if (regExp.test(arr[i])) {
-        continue;
-      }else {
-        return;
-      }
+      continue;
     }
   }
 

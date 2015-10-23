@@ -1,6 +1,5 @@
 var util = require('./util');
 var observable = require('./observable');
-var ref = require('./ref');
 
 function Component(opts) {
   this.opts = opts;
@@ -60,10 +59,6 @@ Component.prototype.unmount = function() {
 
 Component.prototype.$ = function(el) {
   return this.el.find(el);
-};
-
-Component.prototype.ref = function(exp) {
-  return ref(this, exp);
 };
 
 Component.prototype._html = function() {
