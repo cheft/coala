@@ -55,7 +55,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
-	  Version: 0.0.7
+	  Version: 0.0.8
 	  Author: Cheft
 	*/
 	var Component = __webpack_require__(1);
@@ -107,7 +107,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	Component.prototype.mount = function(el) {
-	  this.el = el ? $(el) : this.el;
+	  this.el = typeof el === 'string' ? $(el) : this.el;
 	  this.update();
 	  this.trigger('mount');
 	  return this;
@@ -160,11 +160,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  for (var p in this.opts.refs) {
 	    var value = this.opts.refs[p];
+	    value.component.el = this.$(value.el);
 	    var c = new Component(value.component);
 	    c.refOpts = $.extend(false, {}, value);
 	    delete c.refOpts.component;
 	    delete c.refOpts.el;
-	    if (value.data) {
+	    if (value.data) {
 	      c.data = $.extend(false, c.data, value.data);
 	      delete c.refOpts.data;
 	    }
@@ -176,7 +177,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    c.parent = parent;
 	    this.refs[p] = c;
-	    c.mount(value.el);
+	    c.mount(c.el);
 	  }
 	};
 
@@ -211,7 +212,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	module.exports = Component;
-
 
 /***/ },
 /* 2 */
