@@ -19,7 +19,7 @@ function Component(opts) {
 }
 
 Component.prototype.mount = function(el) {
-  this.el = el ? $(el) : this.el;
+  this.el = typeof el === 'string' ? $(el) : this.el;
   this.update();
   this.trigger('mount');
   return this;
@@ -72,11 +72,12 @@ Component.prototype._mountRefs = function(parent) {
 
   for (var p in this.opts.refs) {
     var value = this.opts.refs[p];
+    value.component.el = this.$(value.el);
     var c = new Component(value.component);
     c.refOpts = $.extend(false, {}, value);
     delete c.refOpts.component;
     delete c.refOpts.el;
-    if (value.data) {
+    if (value.data) {
       c.data = $.extend(false, c.data, value.data);
       delete c.refOpts.data;
     }
@@ -88,7 +89,7 @@ Component.prototype._mountRefs = function(parent) {
 
     c.parent = parent;
     this.refs[p] = c;
-    c.mount(value.el);
+    c.mount(c.el);
   }
 };
 
