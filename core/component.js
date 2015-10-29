@@ -44,7 +44,6 @@ Component.prototype.update = function(data) {
     });
   }else {
     this.el.empty().html(this.dom.html());
-    this._bindEvents();
   }
 
   this.trigger('updated');
