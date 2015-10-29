@@ -13,7 +13,9 @@ var coala = {
   },
 
   render: function(opts) {
-    return this.mount(opts, '<div>').dom.html();
+    var node = $('<div>');
+    this.mount(opts, node);
+    return node.html();
   },
 
   unmount: function(component) {

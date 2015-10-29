@@ -69,7 +69,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  render: function(opts) {
-	    return this.mount(opts, '<div>').dom.html();
+	    var node = $('<div>');
+	    this.mount(opts, node);
+	    return node.html();
 	  },
 
 	  unmount: function(component) {
@@ -92,6 +94,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var morphdom = __webpack_require__(2);
 	var observable = __webpack_require__(3);
+	var util = __webpack_require__(4);
 
 	function Component(opts) {
 	  this.opts = opts || {};
@@ -181,6 +184,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	Component.prototype._bindEvents = function() {
+	  if (util.isServer()) {
+	    return;
+	  }
+
 	  if (!this.opts.events) {
 	    return;
 	  }
@@ -718,6 +725,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  isFunction: function(obj) {
 	    return typeof obj == 'function';
+	  },
+
+	  isServer: function() {
+	    return typeof window == 'undefined';
 	  }
 	};
 

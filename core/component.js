@@ -1,5 +1,6 @@
 var morphdom = require('morphdom');
 var observable = require('./observable');
+var util = require('./util');
 
 function Component(opts) {
   this.opts = opts || {};
@@ -89,6 +90,10 @@ Component.prototype._initRefs = function(parent) {
 };
 
 Component.prototype._bindEvents = function() {
+  if (util.isServer()) {
+    return;
+  }
+
   if (!this.opts.events) {
     return;
   }
