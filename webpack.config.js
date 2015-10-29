@@ -16,10 +16,6 @@ module.exports = {
     mytodo: [
       'webpack/hot/dev-server',
       path.resolve('./app/mytodo/index.js')
-    ],
-    reftest: [
-      'webpack/hot/dev-server',
-      path.resolve('./app/ref-test/index.js')
     ]
   },
   output: {

@@ -21,6 +21,7 @@ module.exports = {
       }).done(function(data) {
         _this.data = data;
         _this.update();
+        console.log(1111);
       });
     }
   },

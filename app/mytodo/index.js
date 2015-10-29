@@ -10,10 +10,10 @@ var mytodo = {
   	  component: github,
   	  el: '#todo1'
   	},
-  	todo2: {
-  	  component: githubDynamic,
-  	  el: '#todo2'
-  	}
+  	// todo2: {
+  	//   component: githubDynamic,
+  	//   el: '#todo2'
+  	// }
   }
 };
 

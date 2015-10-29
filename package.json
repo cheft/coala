@@ -10,7 +10,8 @@
     "build": "webpack -p"
   },
   "dependencies": {
-    "jquery": "^1.11.3"
+    "jquery": "^1.11.3",
+    "morphdom": "^1.0.2"
   },
   "devDependencies": {
     "css-loader": "^0.18.0",

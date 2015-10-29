@@ -1,15 +1,15 @@
 var tpl = require('./index.html');
 
 module.exports = {
+  tpl: tpl,
+  data: {name: 'Jake'},
   listen: {
     init: function() {
-      // console.log(' init!');
-      this.tpl = tpl;
-      this.data = {name: 'Jake'};
+      console.log(' init!');
     },
 
     mount: function() {
-      // console.log(' mount!');
+      console.log(' mount!');
       // var _this = this;
       // $.ajax({
       //   url: 'http://localhost:3000/users/1',
@@ -22,25 +22,31 @@ module.exports = {
     },
 
     update: function() {
-      // console.log(' update!');
+      console.log(' update!');
     },
 
     updated: function() {
-      // console.log(' updated!');
+      console.log(' updated!');
     },
 
     unmount: function() {
-      // console.log(' unmount');
+      console.log(' unmount');
     }
   },
 
   events: {
-    'click .js-test': 'test'
+    'click .js-test': 'test',
+    'keyup #name': 'inputName'
   },
 
   handle: {
     test: function(e) {
       alert(this);
+    },
+
+    inputName: function(e) {
+      this.data.name = $(e.target).val();
+      this.update();
     }
   }
 };

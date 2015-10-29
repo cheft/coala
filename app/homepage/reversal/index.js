@@ -9,7 +9,6 @@ module.exports = {
     },
 
     updated: function() {
-      this.$('#time').text('- Reversing took ' + (new Date().getTime() - this.data.timeTaken) + ' ms');
     },
 
     fill: function() {
@@ -26,5 +25,23 @@ module.exports = {
       this.data.items = this.data.items.reverse();
       this.update();
     }
-  }
+  },
+
+  events: {
+    'click .line': 'clickline'
+  },
+
+  handle: {
+    clickline: function(e) {
+      console.log(e.target.innerHTML);
+    }
+  },
+
+  mixins: [
+  {
+    reverse: function() {
+      this.data.items = this.data.items.reverse();
+      this.update();
+    }
+  }]
 };

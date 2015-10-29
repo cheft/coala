@@ -2,10 +2,10 @@ var reversal = require('../reversal');
 var tpl = require('./index.html');
 
 module.exports = {
+  tpl: tpl,
+  data: {name:'Jake', age:31, tt: '<div style="color:red">sdfsdf</div>'},
   listen: {
     init: function() {
-      this.tpl = tpl;
-      this.data = {name:'Jake', age:31, tt: '<div style="color:red">sdfsdf</div>'};
     }
   },
 
@@ -13,7 +13,7 @@ module.exports = {
     reversal: {
       el: '#reversalArea',
       component: reversal
-    },
+    }
   },
 
   events: {
@@ -22,7 +22,9 @@ module.exports = {
 
   handle: {
     reverse: function() {
-      this.refs.reversal.trigger('reverse');
+      var timeTaken = new Date().getTime();
+      this.refs.reversal.reverse();
+      this.$('#time').text('- Reversing took ' + (new Date().getTime() - timeTaken) + ' ms');
     }
   }
 };

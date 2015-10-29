@@ -1,5 +1,5 @@
 /*
-  Version: 0.0.7
+  Version: 0.1.0
   Author: Cheft
 */
 var Component = require('./component');
@@ -10,6 +10,10 @@ var coala = {
 
   mount: function(opts, el) {
     return this.component(opts).mount(el);
+  },
+
+  render: function(opts) {
+    return this.mount(opts, '<div>').dom.html();
   },
 
   unmount: function(component) {

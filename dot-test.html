@@ -17,8 +17,8 @@
 	<div id="reversalArea"></div>
   <script>
   var data = {items: []};
-  
-  for (var i = 0; i < 10000; i++) {
+
+  for (var i = 0; i < 100000; i++) {
     data.items.push(i);
   }
 
@@ -35,7 +35,7 @@
 		document.getElementById('reversalArea').innerHTML = html;
 		document.getElementById('time').innerHTML = '- Reversing took ' + (new Date().getTime() - x) + ' ms';
 	}
-	
+
 </script>
 </body>
 
