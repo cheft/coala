@@ -1,6 +1,5 @@
 var morphdom = require('morphdom');
 var observable = require('./observable');
-var util = require('./util');
 
 function Component(opts) {
   this.opts = opts || {};
@@ -9,30 +8,34 @@ function Component(opts) {
   this._mixin();
   observable(this);
   this._listenTo();
-  this.trigger('init');
-  this.trigger('update');
-  this._getDom();
+  this.trigger('init').trigger('update');
+  this._dom();
   this._initRefs(this);
 }
 
 Component.prototype.mount = function(el) {
-  this.el = el ? $(el) : this.el;
+  if (el) {
+    this.el = $(el);
+  }
+
   this.el.append(this.dom.children());
   this._bindEvents();
-  this.trigger('updated');
-  this.trigger('mount');
+  this.trigger('updated').trigger('mount');
   return this;
 };
 
 Component.prototype.update = function(data) {
-  this.data = data ? $.extend(false, this.data, data) : this.data;
+  if (data) {
+    this.data = $.extend(false, this.data, data);
+  }
+
   this.trigger('update');
-  this._getDom();
+  this._dom();
   this._initRefs(this);
   if (document.createRange) {
-    var newDom = this.el.clone();
-    newDom.html(this.dom.html());
-    morphdom(this.el[0], newDom[0], {
+    var newDom = this.el[0].cloneNode(false);
+    newDom.innerHTML = this.dom.html();
+    morphdom(this.el[0], newDom, {
       onBeforeMorphEl: function(fromEl, toEl) {
         if (fromEl.tagName === 'TEXTAREA' || fromEl.tagName === 'INPUT') {
           toEl.checked = fromEl.checked;
@@ -43,7 +46,9 @@ Component.prototype.update = function(data) {
       }
     });
   }else {
+    this.off();
     this.el.empty().html(this.dom.html());
+    this._bindEvents();
   }
 
   this.trigger('updated');
@@ -51,6 +56,7 @@ Component.prototype.update = function(data) {
 
 Component.prototype.unmount = function() {
   this.el.empty();
+  this.el.off();
   this.trigger('unmount');
   this.off('*');
 };
@@ -59,7 +65,7 @@ Component.prototype.$ = function(el) {
   return this.el.find(el);
 };
 
-Component.prototype._getDom = function() {
+Component.prototype._dom = function() {
   if (this.opts.tpl) {
     this.dom = $('<div>' + this.opts.tpl(this.data) + '</div>');
     return;
@@ -89,10 +95,6 @@ Component.prototype._initRefs = function(parent) {
 };
 
 Component.prototype._bindEvents = function() {
-  if (util.isServer()) {
-    return;
-  }
-
   if (!this.opts.events) {
     return;
   }
@@ -100,10 +102,6 @@ Component.prototype._bindEvents = function() {
   for (var e in this.opts.events) {
     var handleName = this.opts.events[e];
     var index = e.indexOf(' ');
-    if (index === -1) {
-      throw 'Event separated by a space.';
-    }
-
     var selector = e.substr(index + 1, e.length);
     this.el.on(e.substr(0, index), selector, $.proxy(this.opts.handle[handleName], this));
   }

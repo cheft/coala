@@ -1,13 +1,11 @@
-var util = require('./util');
-
 module.exports = function(el) {
   el = el || {};
   var callbacks = {};
   var _id = 0;
 
   el.on = function(events, fn) {
-    if (util.isFunction(fn)) {
-      if (util.isUndefined(fn.id)) {
+    if (typeof fn == 'function') {
+      if (typeof fn.id == 'undefined') {
         fn._id = _id++;
       }
 

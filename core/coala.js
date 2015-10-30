@@ -13,6 +13,7 @@ var coala = {
   },
 
   render: function(opts) {
+    // :TODO 单独写服务端Component
     var node = $('<div>');
     this.mount(opts, node);
     return node.html();
