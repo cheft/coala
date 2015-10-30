@@ -21,15 +21,14 @@ module.exports = {
     },
 
     reverse: function() {
-      this.data.timeTaken = new Date().getTime();
       this.data.items = this.data.items.reverse();
       this.update();
     }
   },
 
-  events: {
-    'click .line': 'clickline'
-  },
+  // events: {
+  //   'click .line': 'clickline'
+  // },
 
   handle: {
     clickline: function(e) {
@@ -37,8 +36,7 @@ module.exports = {
     }
   },
 
-  mixins: [
-  {
+  mixins: [{
     reverse: function() {
       this.data.items = this.data.items.reverse();
       this.update();
