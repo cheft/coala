@@ -52,7 +52,7 @@ Component.prototype.update = function(data) {
 };
 
 Component.prototype.unmount = function() {
-  this.el.empty();
+  this.el.empty().off();
   this.trigger('unmount');
   this.off('*');
 };
@@ -74,11 +74,11 @@ Component.prototype._mountRefs = function(parent) {
     var value = this.opts.refs[p];
     value.component.el = this.$(value.el);
     var c = new Component(value.component);
-    c.refOpts = $.extend(false, {}, value);
+    c.refOpts = $.extend(true, {}, value);
     delete c.refOpts.component;
     delete c.refOpts.el;
     if (value.data) {
-      c.data = $.extend(false, c.data, value.data);
+      c.data = $.extend(true, c.data, value.data);
       delete c.refOpts.data;
     }
 
