@@ -1,6 +1,5 @@
 var coala = require('../../coala');
 var github = require('./github');
-var githubDynamic = require('./github-dynamic');
 var tpl = require('./index.html');
 
 var mytodo = {

@@ -13,14 +13,17 @@ function Component(opts) {
   this._initRefs(this);
 }
 
-Component.prototype.mount = function(el) {
+Component.prototype.mount = function(el, isUpdate) {
   if (el) {
     this.el = $(el);
   }
 
   this.el.append(this.dom.children());
-  this._bindEvents();
-  this.trigger('updated').trigger('mount');
+  if (!isUpdate) {
+    this._bindEvents();
+    this.trigger('updated').trigger('mount');
+  }
+
   return this;
 };
 
@@ -31,7 +34,7 @@ Component.prototype.update = function(data) {
 
   this.trigger('update');
   this._dom();
-  this._initRefs(this);
+  this._initRefs(this, true);
   if (document.createRange) {
     var newDom = this.el[0].cloneNode(false);
     newDom.innerHTML = this.dom.html();
@@ -46,8 +49,7 @@ Component.prototype.update = function(data) {
       }
     });
   }else {
-    this.off();
-    this.el.empty().html(this.dom.html());
+    this.el.off().empty().html(this.dom.html());
     this._bindEvents();
   }
 
@@ -55,10 +57,8 @@ Component.prototype.update = function(data) {
 };
 
 Component.prototype.unmount = function() {
-  this.el.empty();
-  this.el.off();
-  this.trigger('unmount');
-  this.off('*');
+  this.el.empty().off();
+  this.trigger('unmount').off('*');
 };
 
 Component.prototype.$ = function(el) {
@@ -74,7 +74,7 @@ Component.prototype._dom = function() {
   this.dom = $('<div></div>');
 };
 
-Component.prototype._initRefs = function(parent) {
+Component.prototype._initRefs = function(parent, isUpdate) {
   if (!this.opts.refs) {
     return;
   }
@@ -82,15 +82,15 @@ Component.prototype._initRefs = function(parent) {
   for (var p in this.opts.refs) {
     var value = this.opts.refs[p];
     if (value.data) {
-      value.component.data = $.extend(false, value.component.data, value.data);
+      value.component.data = $.extend(true, value.component.data, value.data);
     }
 
     var c = new Component(value.component);
-    c.refOpts = $.extend(false, {}, value);
+    c.refOpts = $.extend(true, {}, value);
     c.parent = parent;
     this.refs[p] = c;
     c.el = parent.dom.find(value.el);
-    c.mount();
+    c.mount(undefined, isUpdate);
   }
 };
 
