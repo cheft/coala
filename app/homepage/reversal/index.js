@@ -13,7 +13,7 @@ module.exports = {
 
     fill: function() {
       this.data.items = [];
-      for (var i = 0; i < 10000; i++) {
+      for (var i = 0; i < 1000; i++) {
         this.data.items.push(i);
       }
 

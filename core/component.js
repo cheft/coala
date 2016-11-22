@@ -31,29 +31,22 @@ Component.prototype.update = function(data) {
   if (data) {
     this.data = $.extend(false, this.data, data);
   }
-
   this.trigger('update');
   this._dom();
   this._initRefs(this, true);
-  if (document.createRange) {
-    var newDom = this.el[0].cloneNode(false);
-    newDom.innerHTML = this.dom.html();
-    morphdom(this.el[0], newDom, {
-      onBeforeMorphEl: function(fromEl, toEl) {
-        if (fromEl.tagName === 'TEXTAREA' || fromEl.tagName === 'INPUT') {
-          toEl.checked = fromEl.checked;
-          toEl.value = fromEl.value;
-        } else if (fromEl.tagName === 'OPTION') {
-          toEl.selected = fromEl.selected;
-        }
+  var newDom = this.el[0].cloneNode(false);
+  newDom.innerHTML = this.dom.html();
+  morphdom(this.el[0], newDom, {
+    onBeforeElUpdated: function(fromEl, toEl) {
+      if (fromEl.tagName === 'TEXTAREA' || fromEl.tagName === 'INPUT') {
+        toEl.checked = fromEl.checked;
+        toEl.value = fromEl.value;
+      } else if (fromEl.tagName === 'OPTION') {
+        toEl.selected = fromEl.selected;
       }
-    });
-  }else {
-    this.el.off().empty().html(this.dom.html());
-    this._bindEvents();
-  }
-
-  this.trigger('updated');
+    }
+  });
+  return this.trigger('updated');
 };
 
 Component.prototype.unmount = function() {

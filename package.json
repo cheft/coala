@@ -1,16 +1,16 @@
 {
   "name": "coala",
-  "version": "0.1.0",
+  "version": "1.0.0-beta",
   "main": "coala.js",
   "scripts": {
     "coala": "webpack --config ./webpack.coala.js && uglifyjs coala.js -o coala.min.js -m -c --screw-ie8",
-    "start": "webpack-dev-server --colors --content-base ./ --hot",
+    "start": "webpack-dev-server --colors --content-base ./ --hot --host 0.0.0.0",
     "watch": "webpack -w",
     "webpack": "webpack",
     "build": "webpack -p"
   },
   "dependencies": {
-    "morphdom": "^1.0.2"
+    "morphdom": "^2.2.0"
   },
   "devDependencies": {
     "cheerio": "^0.19.0",
