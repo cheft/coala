@@ -55,7 +55,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
-	  Version: 0.1.0
+	  Version: 1.0.0-beta
 	  Author: Cheft
 	*/
 	var Component = __webpack_require__(1);
@@ -131,16 +131,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this._initRefs(this, true);
 	  var newDom = this.el[0].cloneNode(false);
 	  newDom.innerHTML = this.dom.html();
-	  morphdom(this.el[0], newDom, {
-	    onBeforeElUpdated: function(fromEl, toEl) {
-	      if (fromEl.tagName === 'TEXTAREA' || fromEl.tagName === 'INPUT') {
-	        toEl.checked = fromEl.checked;
-	        toEl.value = fromEl.value;
-	      } else if (fromEl.tagName === 'OPTION') {
-	        toEl.selected = fromEl.selected;
-	      }
-	    }
-	  });
+	  morphdom(this.el[0], newDom);
 	  return this.trigger('updated');
 	};
 

@@ -55,7 +55,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
-	  Version: 0.1.0
+	  Version: 1.0.0-beta
 	  Author: Cheft
 	*/
 	var Component = __webpack_require__(1);
@@ -97,50 +97,57 @@ return /******/ (function(modules) { // webpackBootstrap
 	var observable = __webpack_require__(3);
 
 	function Component(opts) {
+	  observable(this);
 	  this.opts = opts || {};
-	  this.data = opts.data || {};
+	  if ($.isFunction(opts.data)) {
+	    this.data = opts.data.call(this);
+	  } else {
+	    this.data = opts.data || {};
+	  }
+	  if (this.data.$url) {
+	    this.resource = $.get(this.data.$url);
+	    delete this.data.$url
+	  }
+
 	  this.refs = {};
 	  this._mixin();
-	  observable(this);
 	  this._listenTo();
 	  this.trigger('init').trigger('update');
-	  this._dom();
-	  this._initRefs(this);
 	}
 
 	Component.prototype.mount = function(el, isUpdate) {
-	  if (el) {
-	    this.el = $(el);
+	  var _this = this
+	  if (this.resource) {
+	    this.resource.done(function(resource) {
+	      _this.data.resource = resource;
+	      _this._render(el, isUpdate);
+	    })
+	    return this
+	  } else {
+	    return this._render(el, isUpdate);
 	  }
+	};
 
+	Component.prototype._render = function(el, isUpdate) {
+	  this._dom();
+	  this._initRefs(this);
+	  if (el) this.el = $(el);
 	  this.el.append(this.dom.children());
 	  if (!isUpdate) {
 	    this._bindEvents();
 	    this.trigger('updated').trigger('mount');
 	  }
-
-	  return this;
-	};
+	  return this
+	}
 
 	Component.prototype.update = function(data) {
-	  if (data) {
-	    this.data = $.extend(false, this.data, data);
-	  }
+	  if (data) this.data = $.extend(false, this.data, data);
 	  this.trigger('update');
 	  this._dom();
 	  this._initRefs(this, true);
 	  var newDom = this.el[0].cloneNode(false);
 	  newDom.innerHTML = this.dom.html();
-	  morphdom(this.el[0], newDom, {
-	    onBeforeElUpdated: function(fromEl, toEl) {
-	      if (fromEl.tagName === 'TEXTAREA' || fromEl.tagName === 'INPUT') {
-	        toEl.checked = fromEl.checked;
-	        toEl.value = fromEl.value;
-	      } else if (fromEl.tagName === 'OPTION') {
-	        toEl.selected = fromEl.selected;
-	      }
-	    }
-	  });
+	  morphdom(this.el[0], newDom);
 	  return this.trigger('updated');
 	};
 
@@ -154,25 +161,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	Component.prototype._dom = function() {
-	  if (this.opts.tpl) {
-	    this.dom = $('<div>' + this.opts.tpl(this.data) + '</div>');
-	    return;
-	  }
-
+	  if (this.opts.tpl) return this.dom = $('<div>' + this.opts.tpl(this.data) + '</div>');
 	  this.dom = $('<div></div>');
 	};
 
 	Component.prototype._initRefs = function(parent, isUpdate) {
-	  if (!this.opts.refs) {
-	    return;
-	  }
-
+	  if (!this.opts.refs) return;
 	  for (var p in this.opts.refs) {
 	    var value = this.opts.refs[p];
-	    if (value.data) {
-	      value.component.data = $.extend(true, value.component.data, value.data);
-	    }
-
+	    if (value.data) value.component.data = $.extend(true, value.component.data, value.data);
 	    var c = new Component(value.component);
 	    c.refOpts = $.extend(true, {}, value);
 	    c.parent = parent;
@@ -183,10 +180,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	Component.prototype._bindEvents = function() {
-	  if (!this.opts.events) {
-	    return;
-	  }
-
+	  if (!this.opts.events) return;
 	  for (var e in this.opts.events) {
 	    var handleName = this.opts.events[e];
 	    var index = e.indexOf(' ');
@@ -196,22 +190,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	Component.prototype._mixin = function() {
-	  if (!this.opts.mixins) {
-	    return;
-	  }
-
-	  this.opts.mixins.unshift(false);
+	  if (!this.opts.mixins) return;
+	  if (!$.isArray(this.opts.mixins)) this.opts.mixins = [this.opts.mixins]
+	  this.opts.mixins.unshift(this);
 	  var obj = $.extend.apply($, this.opts.mixins);
-	  for (var o in obj) {
-	    this[o] = obj[o];
-	  }
 	};
 
 	Component.prototype._listenTo = function() {
-	  if (!this.opts.listen) {
-	    return;
-	  }
-
+	  if (!this.opts.listen) return;
 	  for (var l in this.opts.listen) {
 	    var fn = this.opts.listen[l];
 	    this.on(l, fn);
