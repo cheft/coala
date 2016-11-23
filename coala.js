@@ -100,13 +100,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  observable(this);
 	  this.opts = opts || {};
 	  if ($.isFunction(opts.data)) {
-	    this.data = opts.data.call(this);
-	  } else {
-	    this.data = opts.data || {};
+	    var result = opts.data.call(this);
+	    if (result && result.promise) {
+	      this.promise = result
+	    } else {
+	      this.data = result
+	    }
 	  }
+	  this.data = opts.data || {};
 	  if (this.data.$url) {
-	    this.resource = $.get(this.data.$url);
-	    delete this.data.$url
+	    this.promise = $.get(this.data.$url);
+	    delete this.data.$url;
 	  }
 
 	  this.refs = {};
@@ -115,10 +119,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.trigger('init').trigger('update');
 	}
 
+
 	Component.prototype.mount = function(el, isUpdate) {
 	  var _this = this
-	  if (this.resource) {
-	    this.resource.done(function(resource) {
+	  if (this.promise) {
+	    this.promise.done(function(resource) {
 	      _this.data.resource = resource;
 	      _this._render(el, isUpdate);
 	    })
