@@ -102,9 +102,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if ($.isFunction(opts.data)) {
 	    var result = opts.data.call(this);
 	    if (result && result.promise) {
-	      this.promise = result
+	      this.promise = result;
 	    } else {
-	      this.data = result
+	      this.data = result;
 	    }
 	  }
 	  this.data = opts.data || {};
@@ -116,18 +116,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.refs = {};
 	  this._mixin();
 	  this._listenTo();
-	  this.trigger('init').trigger('update');
+	  this.trigger('init');
 	}
 
 
 	Component.prototype.mount = function(el, isUpdate) {
+	  this.trigger('update');
 	  var _this = this
 	  if (this.promise) {
 	    this.promise.done(function(resource) {
 	      _this.data.resource = resource;
 	      _this._render(el, isUpdate);
 	    })
-	    return this
+	    return this;
 	  } else {
 	    return this._render(el, isUpdate);
 	  }
@@ -140,8 +141,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.el.append(this.dom.children());
 	  if (!isUpdate) {
 	    this._bindEvents();
-	    this.trigger('updated').trigger('mount');
+	    this.trigger('mount');
 	  }
+	  this.trigger('updated');
 	  return this
 	}
 
@@ -173,14 +175,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	Component.prototype._initRefs = function(parent, isUpdate) {
 	  if (!this.opts.refs) return;
 	  for (var p in this.opts.refs) {
-	    var value = this.opts.refs[p];
-	    if (value.data) value.component.data = $.extend(true, value.component.data, value.data);
-	    var c = new Component(value.component);
-	    c.refOpts = $.extend(true, {}, value);
-	    c.parent = parent;
-	    this.refs[p] = c;
-	    c.el = parent.dom.find(value.el);
-	    c.mount(undefined, isUpdate);
+	    if (isUpdate) {
+	      this.refs[p].mount(undefined, isUpdate)
+	    } else {
+	      var value = this.opts.refs[p];
+	      if (value.data) value.component.data = $.extend(true, value.component.data, value.data);
+	      var c = new Component(value.component);
+	      c.refOpts = $.extend(true, {}, value);
+	      c.parent = parent;
+	      this.refs[p] = c;
+	      c.el = parent.dom.find(value.el);
+	      c.mount(undefined, isUpdate);
+	    }
 	  }
 	};
 
