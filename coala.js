@@ -99,6 +99,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function Component(opts) {
 	  observable(this);
 	  this.opts = opts || {};
+	  this.data = opts.data || {};
 	  if ($.isFunction(opts.data)) {
 	    var result = opts.data.call(this);
 	    if (result && result.promise) {
@@ -107,43 +108,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.data = result;
 	    }
 	  }
-	  this.data = opts.data || {};
 	  if (this.data.$url) {
 	    this.promise = $.get(this.data.$url);
 	    delete this.data.$url;
 	  }
-
 	  this.refs = {};
 	  this._mixin();
 	  this._listenTo();
 	  this.trigger('init');
 	}
 
-
-	Component.prototype.mount = function(el, isUpdate) {
-	  this.trigger('update');
+	Component.prototype.mount = function(el) {
 	  var _this = this
+	  this.trigger('update');
 	  if (this.promise) {
 	    this.promise.done(function(resource) {
 	      _this.data.resource = resource;
-	      _this._render(el, isUpdate);
+	      _this._render(el);
+	      delete _this.promise;
 	    })
 	    return this;
 	  } else {
-	    return this._render(el, isUpdate);
+	    return this._render(el);
 	  }
 	};
 
-	Component.prototype._render = function(el, isUpdate) {
-	  this._dom();
-	  this._initRefs(this);
+	Component.prototype._render = function(el) {
 	  if (el) this.el = $(el);
+	  this._dom();
+	  this._initRefs();
 	  this.el.append(this.dom.children());
-	  if (!isUpdate) {
-	    this._bindEvents();
-	    this.trigger('mount');
-	  }
-	  this.trigger('updated');
+	  this._bindEvents();
+	  this.trigger('updated').trigger('mount');
 	  return this
 	}
 
@@ -151,10 +147,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (data) this.data = $.extend(false, this.data, data);
 	  this.trigger('update');
 	  this._dom();
-	  this._initRefs(this, true);
 	  var newDom = this.el[0].cloneNode(false);
 	  newDom.innerHTML = this.dom.html();
 	  morphdom(this.el[0], newDom);
+	  this._updateRefs();
 	  return this.trigger('updated');
 	};
 
@@ -172,23 +168,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.dom = $('<div></div>');
 	};
 
-	Component.prototype._initRefs = function(parent, isUpdate) {
+	Component.prototype._initRefs = function() {
 	  if (!this.opts.refs) return;
 	  for (var p in this.opts.refs) {
-	    if (isUpdate) {
-	      this.refs[p].mount(undefined, isUpdate)
-	    } else {
-	      var value = this.opts.refs[p];
-	      if (value.data) value.component.data = $.extend(true, value.component.data, value.data);
-	      var c = new Component(value.component);
-	      c.refOpts = $.extend(true, {}, value);
-	      c.parent = parent;
-	      this.refs[p] = c;
-	      c.el = parent.dom.find(value.el);
-	      c.mount(undefined, isUpdate);
-	    }
+	    var value = this.opts.refs[p];
+	    if (value.data) value.component.data = $.extend(true, value.component.data, value.data);
+	    var c = new Component(value.component);
+	    c.refOpts = $.extend(true, {}, value);
+	    c.parent = this;
+	    this.refs[p] = c;
+	    c.el = this.dom.find(value.el);
+	    c.mount();
 	  }
 	};
+
+	Component.prototype._updateRefs = function() {
+	  if (!this.refs) return;
+	  for (var p in this.refs) {
+	    this.refs[p].update()
+	  }
+	}
 
 	Component.prototype._bindEvents = function() {
 	  if (!this.opts.events) return;
@@ -204,7 +203,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!this.opts.mixins) return;
 	  if (!$.isArray(this.opts.mixins)) this.opts.mixins = [this.opts.mixins]
 	  this.opts.mixins.unshift(this);
-	  var obj = $.extend.apply($, this.opts.mixins);
+	  $.extend.apply($, this.opts.mixins);
 	};
 
 	Component.prototype._listenTo = function() {
