@@ -1,5 +1,6 @@
 var morphdom = require('morphdom');
 var observable = require('./observable');
+require('./scoped');
 
 function Component(opts) {
   observable(this);
@@ -20,11 +21,11 @@ function Component(opts) {
   this.refs = {};
   this._mixin();
   this._listenTo();
-  this.trigger('init');
 }
 
 Component.prototype.mount = function(el) {
   var _this = this
+  this.trigger('init');
   this.trigger('update');
   if (this.promise) {
     this.promise.done(function(resource) {
@@ -45,6 +46,7 @@ Component.prototype._render = function(el) {
   this.el.append(this.dom.children());
   this._bindEvents();
   this.trigger('updated').trigger('mount');
+  this.$('style[scoped]').scopedPolyFill();
   return this
 }
 
@@ -55,8 +57,10 @@ Component.prototype.update = function(data) {
   var newDom = this.el[0].cloneNode(false);
   newDom.innerHTML = this.dom.html();
   morphdom(this.el[0], newDom);
+  this.trigger('updated');
+  this.$('style[scoped]').scopedPolyFill();
   this._updateRefs();
-  return this.trigger('updated');
+  return this
 };
 
 Component.prototype.unmount = function() {
