@@ -60,6 +60,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	*/
 	var Component = __webpack_require__(1);
 	var observable = __webpack_require__(3);
+	var Router = __webpack_require__(5);
 
 	var coala = {
 	  observable: observable,
@@ -68,24 +69,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return this.component(opts).mount(el);
 	  },
 
-	  render: function(opts) {
-	    // :TODO 单独写服务端Component
-	    var node = $('<div>');
-	    this.mount(opts, node);
-	    return node.html();
-	  },
-
-	  unmount: function(component) {
-	    component.unmount();
-	  },
-
 	  component: function(opts) {
 	    return new Component(opts);
-	  }
+	  },
+
+	  router: function(opts) {
+	    return new Router(opts).start();
+	  },
+
+	  // :TODO 异步数据有问题，需单独实现服务端Component
+	  // render: function(opts) {
+	  //   var node = $('<div>');
+	  //   this.mount(opts, node);
+	  //   return node.html();
+	  // }
 	};
 
 	observable(coala);
-
 	module.exports = coala;
 
 
@@ -95,23 +95,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var morphdom = __webpack_require__(2);
 	var observable = __webpack_require__(3);
-	__webpack_require__(4);
+	var scoped = __webpack_require__(4);
 
 	function Component(opts) {
-	  observable(this);
 	  this.opts = opts || {};
-	  this.data = opts.data || {};
+	  observable(this);
 	  if ($.isFunction(opts.data)) {
 	    var result = opts.data.call(this);
 	    if (result && result.promise) {
 	      this.promise = result;
+	      this.data = {};
 	    } else {
 	      this.data = result;
 	    }
-	  }
-	  if (this.data.$url) {
-	    this.promise = $.get(this.data.$url);
-	    delete this.data.$url;
+	  } else {
+	    this.data = opts.data || {};
 	  }
 	  this.refs = {};
 	  this._mixin();
@@ -140,8 +138,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this._initRefs();
 	  this.el.append(this.dom.children());
 	  this._bindEvents();
+	  scoped(this);
 	  this.trigger('updated').trigger('mount');
-	  this.$('style[scoped]').scopedPolyFill();
 	  return this
 	}
 
@@ -152,8 +150,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var newDom = this.el[0].cloneNode(false);
 	  newDom.innerHTML = this.dom.html();
 	  morphdom(this.el[0], newDom);
+	  scoped(this);
 	  this.trigger('updated');
-	  this.$('style[scoped]').scopedPolyFill();
 	  this._updateRefs();
 	  return this
 	};
@@ -964,221 +962,127 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ function(module, exports) {
 
-	var scopedPolyFill = (function (doc, undefined) {
+	function scoper(css, prefix) {
+	  var re = new RegExp('([^\r\n,{}]+)(,(?=[^}]*{)|\s*{)', 'g');
+	  css = css.replace(re, function(g0, g1, g2) {
+	    if (g1.match(/^\s*(@media|@keyframes|to|from|@font-face)/)) {
+	      return g1 + g2;
+	    }
 
-	    // check for support of scoped and certain option
-	    var compat = (function () {
-	        var check = doc.createElement('style')
-	        , DOMStyle = 'undefined' !== typeof check.sheet ? 'sheet' : 'undefined' !== typeof check.getSheet ? 'getSheet' : 'styleSheet'
-	        , scopeSupported = undefined !== check.scoped
-	        , testSheet
-	        , DOMRules
-	        , testStyle
-	        ;
+	    if (g1.match(/:scope/)) {
+	      g1 = g1.replace(/([^\s]*):scope/, function(h0, h1) {
+	        if (h1 === '') {
+	          return '> *';
+	        } else {
+	          return '> ' + h1;
+	        }
+	      });
+	    }
 
-	        // we need to append it to the DOM because the DOM element at least FF keeps NULL as a sheet utill appended
-	        // and we can't check for the rules / cssRules and changeSelectorText untill we have that
-	        doc.body.appendChild(check);
-	        testSheet = check[DOMStyle];
+	    g1 = g1.replace(/^(\s*)/, '$1' + prefix + ' ');
+	    return g1 + g2;
+	  });
+	  return css;
+	}
 
-	        // add a test styleRule to be able to test selectorText changing support
-	        // IE doesn't allow inserting of '' as a styleRule
-	        testSheet.addRule ? testSheet.addRule('c', 'blink') : testSheet.insertRule('c{}', 0);
+	module.exports = function (c) {
+	  if ('scoped' in document.createElement('style')) return;
+	  var styles = c.$('style[scoped]');
+	  if (styles.length === 0) return;
+	  for (var i = 0; i < styles.length; i++) {
+	    styles[i].innerHTML = scoper(styles[i].innerHTML, c.el.selector);
+	  }
+	}
 
-	        // store the way to get to the list of rules
-	        DOMRules = testSheet.rules ? 'rules' : 'cssRules';
 
-	        // cache the test rule (its allways the first since we didn't add any other thing inside this <style>
-	        testStyle = testSheet[DOMRules][0];
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
 
-	        // try catch it to prevent IE from throwing errors
-	        // can't check the read-only flag since IE just throws errors when setting it and Firefox won't allow setting it (and has no read-only flag
-	        try {
-	            testStyle.selectorText = 'd';
-	        } catch (e) { }
+	var _this,
+	regexps = [
+	  /[\-{}\[\]+?.,\\\^$|#\s]/g,
+	  /\((.*?)\)/g,
+	  /(\(\?)?:\w+/g,
+	  /\*\w+/g,
+	],
+	getRegExp = function(route) {
+	  route = route.replace(regexps[0], '\\$&')
+	    .replace(regexps[1], '(?:$1)?')
+	    .replace(regexps[2], function(match, optional) {
+	      return optional ? match : '([^/?]+)'
+	    }).replace(regexps[3], '([^?]*?)');
+	  return new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
+	},
+	extractParams = function(route, fragment) {
+	  var params = route.exec(fragment).slice(1);
+	  var results = [],
+	    i;
+	  for (i = 0; i < params.length; i++) {
+	    results.push(decodeURIComponent(params[i]) || null);
+	  }
+	  return results;
+	};
 
-	        // check if the selectorText has changed to the value we tried to set it to
-	        // toLowerCase() it to account for browsers who change the text
-	        var changeSelectorTextAllowed = 'd' === testStyle.selectorText.toLowerCase();
+	function Router(opts) {
+	  _this = this
+	  this.opts = opts;
+	  this.routes = opts.routes;
+	  this.go(location.pathname);
+	}
 
-	        // remove the <style> to clean up
-	        check.parentNode.removeChild(check);
-
-	        // return the object with the appropriate flags
-	        return {
-	            scopeSupported: scopeSupported
-	        , rules: DOMRules
-	        , sheet: DOMStyle
-	        , changeSelectorTextAllowed: changeSelectorTextAllowed
-	        };
-	    })();
-
-	    // scope is supported? just return a function which returns "this" when scoped support is found to make it chainable for jQuery
-	    if (compat.scopeSupported)
-	        return function () { return this };
-
-	    //window.console && console.log( "No support for <style scoped> found, commencing jumping through hoops in 3, 2, 1..." );
-
-	    // this was called so we "scope" all the <style> nodes which need to be scoped now
-	    var scopedSheets
-	    , i
-	    , idCounter = 0
-	    ;
-
-	    if (doc.querySelectorAll) {
-
-	        scopedSheets = doc.querySelectorAll('style[scoped]');
-
+	Router.prototype._exec = function(path, e) {
+	  for (var r in this.routes) {
+	    var route = getRegExp(r);
+	    if (!route.test(path)) {
+	      continue;
+	    }
+	    if (typeof this.routes[r] === 'function') {
+	      this.routes[r].apply(e, extractParams(route, path));
 	    } else {
-
-	        var tempSheets = [], scopedAttr;
-	        scopedSheets = doc.getElementsByTagName('style');
-	        i = scopedSheets.length;
-
-	        while (i--) {
-	            scopedAttr = scopedSheets[i].getAttribute('scoped');
-
-	            if ("scoped" === scopedAttr || "" === scopedAttr)
-	                tempSheets.push(scopedSheets[i]);
-	            // Array.prototype.apply doen't work in the browsers this is eecuted for so we have to use array.push()
-
-	        }
-
-	        scopedSheets = tempSheets;
-
+	      var fn = this.opts[this.routes[r]];
+	      fn ? fn.apply(e, extractParams(route, path)) : void 0;
 	    }
+	  }
+	};
 
-	    i = scopedSheets.length;
-	    while (i--)
-	        scopeIt(scopedSheets[i]);
+	Router.prototype._emit = function(e) {
+	  var path = location.href.split('#')[1] || '';
+	  _this._exec(path, e);
+	}
 
-	    // make a function so we can return it to enable the "scoping" of other <styles> which are inserted later on for instance
-	    function scopeIt(styleNode, jQueryItem) {
+	Router.prototype.start = function() {
+	  window.addEventListener ? window.addEventListener('hashchange', this._emit, false) : window.attachEvent('onhashchange', this._emit);
+	  return this;
+	};
 
-	        // catch the second argument if this was called via the $.each
-	        if (jQueryItem)
-	            styleNode = jQueryItem;
+	Router.prototype.stop = function() {
+	  window.removeEventListener ? window.removeEventListener('hashchange', this._emit, false) : window.detachEvent('onhashchange', this._emit);
+	};
 
-	        // check if we received a <style> node
-	        // if not chcek if it's a jQuery object and go from there
-	        // if no <style> and no jQuery? return to avoid errors
-	        if (!styleNode.nodeName) {
+	Router.prototype.go = function(path) {
+	  location.hash = path;
+	  this._emit();
+	  return this;
+	};
 
-	            if (!styleNode.jquery)
-	                return;
-	            else
-	                return styleNode.each(scopeIt);
+	Router.prototype.back = function() {
+	  history.back();
+	  return this;
+	};
 
-	        }
+	Router.prototype.add = function(route, fn) {
+	  this.routes[route] = fn
+	  return this;
+	};
 
-	        if ('STYLE' !== styleNode.nodeName)
-	            return;
+	Router.prototype.remove = function(route) {
+	  delete this.routes[route]
+	  return this;
+	};
 
-	        // init some vars
-	        var parentSheet = styleNode[compat.sheet]
-	        , allRules = parentSheet[compat.rules]
-	        , par = styleNode.parentNode
-	        , id = par.id || (par.id = 'coala_scoped_' + ++idCounter)
-	        , glue = ''
-	        , index = allRules.length || 0
-	        , rule
-	        ;
+	module.exports = Router;
 
-	        // get al the ids from the parents so we are as specific as possible
-	        // if no ids are found we always have the id which is placed on the <style>'s parentNode
-	        while (par) {
-
-	            if (par.id)
-	                //if id begins with a number, we have to apply css escaping
-	                if (parseInt(par.id.slice(0, 1))) {
-	                    glue = '#\\3' + par.id.slice(0, 1) + ' ' + par.id.slice(1) + ' ' + glue;
-	                } else {
-	                    glue = '#' + par.id + ' ' + glue;
-	                }
-
-	            par = par.parentNode;
-
-	        }
-
-	        // iterate over the collection from the end back to account for IE's inability to insert a styleRule at a certain point
-	        // it can only add them to the end...
-	        while (index--) {
-
-	            rule = allRules[index];
-	            processCssRules(rule, index);
-
-	        }
-
-	        //recursively process cssRules
-	        function processCssRules(parentRule, index) {
-	            var sheet = parentRule.cssRules ? parentRule : parentSheet
-	            , allRules = parentRule.cssRules || [parentRule]
-	            , i = allRules.length || 0
-	            , ruleIndex = parentRule.cssRules ? i : index
-	            , rule
-	            , selector
-	            , styleRule
-	            ;
-
-	            // iterate over the collection from the end back to account for IE's inability to insert a styleRule at a certain point
-	            // it can only add them to the end...
-	            while (i--) {
-
-	                rule = allRules[i];
-	                if (rule.selectorText) {
-
-	                    selector = glue + ' ' + rule.selectorText.split(',').join(', ' + glue);
-
-	                    // replace :root by the scoped element
-	                    selector = selector.replace(/[\ ]+:root/gi, '');
-
-	                    // we can just change the selectorText for this one
-	                    if (compat.changeSelectorTextAllowed) {
-
-	                        rule.selectorText = selector;
-
-	                    } else {// or we need to remove the rule and add it back in if we cant edit the selectorText
-
-	                        /*
-	                         * IE only adds the normal rules to the array (no @imports, @page etc)
-	                         * and also does not have a type attribute so we check if that exists and execute the old IE part if it doesn't
-	                         * all other browsers have the type attribute to show the type
-	                         *  1 : normal style rules  <---- use these ones
-	                         *  2 : @charset
-	                         *  3 : @import
-	                         *  4 : @media
-	                         *  5 : @font-face
-	                         *  6 : @page rules
-	                         *
-	                         */
-	                        if (!rule.type || 1 === rule.type) {
-
-	                            styleRule = rule.style.cssText;
-	                            // IE doesn't allow inserting of '' as a styleRule
-	                            if (styleRule) {
-	                                sheet.removeRule ? sheet.removeRule(ruleIndex) : sheet.deleteRule(ruleIndex);
-	                                sheet.addRule ? sheet.addRule(selector, styleRule, ruleIndex) : sheet.insertRule(selector + '{' + styleRule + '}', ruleIndex);
-	                            }
-	                        }
-	                    }
-	                } else if (rule.cssRules) {
-	                    processCssRules(rule, ruleIndex);
-	                }
-	            }
-	            
-	        }
-	    }
-
-	    // Expose it as a jQuery function for convenience
-	    if (typeof jQuery === "function" && typeof jQuery.fn === "object") {
-	        jQuery.fn.scopedPolyFill = function () {
-	            return this.each(scopeIt);
-	        }
-	    }
-
-	    return scopeIt;
-
-	})(document);
 
 /***/ }
 /******/ ])

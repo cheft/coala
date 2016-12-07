@@ -1,22 +1,20 @@
 var morphdom = require('morphdom');
 var observable = require('./observable');
-require('./scoped');
+var scoped = require('./scoped');
 
 function Component(opts) {
-  observable(this);
   this.opts = opts || {};
-  this.data = opts.data || {};
+  observable(this);
   if ($.isFunction(opts.data)) {
     var result = opts.data.call(this);
     if (result && result.promise) {
       this.promise = result;
+      this.data = {};
     } else {
       this.data = result;
     }
-  }
-  if (this.data.$url) {
-    this.promise = $.get(this.data.$url);
-    delete this.data.$url;
+  } else {
+    this.data = opts.data || {};
   }
   this.refs = {};
   this._mixin();
@@ -45,8 +43,8 @@ Component.prototype._render = function(el) {
   this._initRefs();
   this.el.append(this.dom.children());
   this._bindEvents();
+  scoped(this);
   this.trigger('updated').trigger('mount');
-  this.$('style[scoped]').scopedPolyFill();
   return this
 }
 
@@ -57,8 +55,8 @@ Component.prototype.update = function(data) {
   var newDom = this.el[0].cloneNode(false);
   newDom.innerHTML = this.dom.html();
   morphdom(this.el[0], newDom);
+  scoped(this);
   this.trigger('updated');
-  this.$('style[scoped]').scopedPolyFill();
   this._updateRefs();
   return this
 };

@@ -4,6 +4,7 @@
 */
 var Component = require('./component');
 var observable = require('./observable');
+var Router = require('./router');
 
 var coala = {
   observable: observable,
@@ -12,22 +13,21 @@ var coala = {
     return this.component(opts).mount(el);
   },
 
-  render: function(opts) {
-    // :TODO 单独写服务端Component
-    var node = $('<div>');
-    this.mount(opts, node);
-    return node.html();
-  },
-
-  unmount: function(component) {
-    component.unmount();
-  },
-
   component: function(opts) {
     return new Component(opts);
-  }
+  },
+
+  router: function(opts) {
+    return new Router(opts).start();
+  },
+
+  // :TODO 异步数据有问题，需单独实现服务端Component
+  // render: function(opts) {
+  //   var node = $('<div>');
+  //   this.mount(opts, node);
+  //   return node.html();
+  // }
 };
 
 observable(coala);
-
 module.exports = coala;

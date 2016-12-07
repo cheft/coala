@@ -10,7 +10,7 @@
     "build": "webpack -p"
   },
   "dependencies": {
-    "morphdom": "^2.2.0"
+    "morphdom": "^2.2.1"
   },
   "devDependencies": {
     "cheerio": "^0.19.0",
