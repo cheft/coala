@@ -73,13 +73,7 @@ Component.prototype.mount = function(el) {
   } else {
     this._mount(el);
   }
-
-  if (this.refs) {
-    for (var p in this.refs) {
-      var ref = this.refs[p]
-      ref.mount(ref.refOpts.el)
-    }
-  }
+  
   return this;
 };
 
@@ -89,6 +83,11 @@ Component.prototype._mount = function(el) {
     this.el.append(this.opts.tpl(this.data));
     this._bindEvents();
     scoped(this);
+
+    for (var p in this.refs) {
+      var ref = this.refs[p]
+      ref.mount(ref.refOpts.el)
+    }
   }
   this.trigger('updated').trigger('mount');
   return this
@@ -108,40 +107,20 @@ Component.prototype.update = function(data) {
   return this;
 };
 
-Component.prototype._updated = function() {
-  if (this.refs) {
-    for (var p in this.refs) {
-      var r = this.refs[p];
-      r._updated()
-    }
-  }
-  this.trigger('updated');
-}
-
 Component.prototype._update = function() {
   this.trigger('update');
   if (!this.opts.tpl) return '';
   var dom = $('<div>' + this.opts.tpl(this.data) + '</div>')
-  if (this.refs) {
-    for (var p in this.refs) {
-      var r = this.refs[p];
-      dom.find(r.refOpts.el).html(r._update());
-    }
+  for (var p in this.refs) {
+    var r = this.refs[p];
+    dom.find(r.refOpts.el).html(r._update());
   }
   return dom.html();
 }
 
-Component.prototype._update = function() {
-  if (!this.opts.tpl) return '';
-  var dom = $('<div>' + this.opts.tpl(this.data) + '</div>')
-  if (this.refs) {
-    for (var p in this.refs) {
-      var r = this.refs[p];
-      r.trigger('update');
-      dom.find(r.refOpts.el).html(r._update());
-    }
-  }
-  return dom.html();
+Component.prototype._updated = function() {
+  for (var p in this.refs) this.refs[p]._updated()
+  this.trigger('updated');
 }
 
 Component.prototype.unmount = function() {

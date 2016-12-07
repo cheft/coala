@@ -37,10 +37,10 @@ Router.prototype._exec = function(path, e) {
       continue;
     }
     if (typeof this.routes[r] === 'function') {
-      this.routes[r].apply(e, extractParams(route, path));
+      this.routes[r].apply(this, extractParams(route, path));
     } else {
       var fn = this.opts[this.routes[r]];
-      fn ? fn.apply(e, extractParams(route, path)) : void 0;
+      fn ? fn.apply(this, extractParams(route, path)) : void 0;
     }
   }
 };

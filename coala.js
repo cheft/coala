@@ -161,13 +161,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  } else {
 	    this._mount(el);
 	  }
-
-	  if (this.refs) {
-	    for (var p in this.refs) {
-	      var ref = this.refs[p]
-	      ref.mount(ref.refOpts.el)
-	    }
-	  }
+	  
 	  return this;
 	};
 
@@ -177,6 +171,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.el.append(this.opts.tpl(this.data));
 	    this._bindEvents();
 	    scoped(this);
+
+	    for (var p in this.refs) {
+	      var ref = this.refs[p]
+	      ref.mount(ref.refOpts.el)
+	    }
 	  }
 	  this.trigger('updated').trigger('mount');
 	  return this
@@ -196,40 +195,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return this;
 	};
 
-	Component.prototype._updated = function() {
-	  if (this.refs) {
-	    for (var p in this.refs) {
-	      var r = this.refs[p];
-	      r._updated()
-	    }
-	  }
-	  this.trigger('updated');
-	}
-
 	Component.prototype._update = function() {
 	  this.trigger('update');
 	  if (!this.opts.tpl) return '';
 	  var dom = $('<div>' + this.opts.tpl(this.data) + '</div>')
-	  if (this.refs) {
-	    for (var p in this.refs) {
-	      var r = this.refs[p];
-	      dom.find(r.refOpts.el).html(r._update());
-	    }
+	  for (var p in this.refs) {
+	    var r = this.refs[p];
+	    dom.find(r.refOpts.el).html(r._update());
 	  }
 	  return dom.html();
 	}
 
-	Component.prototype._update = function() {
-	  if (!this.opts.tpl) return '';
-	  var dom = $('<div>' + this.opts.tpl(this.data) + '</div>')
-	  if (this.refs) {
-	    for (var p in this.refs) {
-	      var r = this.refs[p];
-	      r.trigger('update');
-	      dom.find(r.refOpts.el).html(r._update());
-	    }
-	  }
-	  return dom.html();
+	Component.prototype._updated = function() {
+	  for (var p in this.refs) this.refs[p]._updated()
+	  this.trigger('updated');
 	}
 
 	Component.prototype.unmount = function() {
@@ -1063,10 +1042,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      continue;
 	    }
 	    if (typeof this.routes[r] === 'function') {
-	      this.routes[r].apply(e, extractParams(route, path));
+	      this.routes[r].apply(this, extractParams(route, path));
 	    } else {
 	      var fn = this.opts[this.routes[r]];
-	      fn ? fn.apply(e, extractParams(route, path)) : void 0;
+	      fn ? fn.apply(this, extractParams(route, path)) : void 0;
 	    }
 	  }
 	};
