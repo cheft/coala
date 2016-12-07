@@ -8,9 +8,9 @@ function scoper(css, prefix) {
     if (g1.match(/:scope/)) {
       g1 = g1.replace(/([^\s]*):scope/, function(h0, h1) {
         if (h1 === '') {
-          return '> *';
+          return ' ';
         } else {
-          return '> ' + h1;
+          return ' ' + h1;
         }
       });
     }

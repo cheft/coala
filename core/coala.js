@@ -19,14 +19,7 @@ var coala = {
 
   router: function(opts) {
     return new Router(opts).start();
-  },
-
-  // :TODO 异步数据有问题，需单独实现服务端Component
-  // render: function(opts) {
-  //   var node = $('<div>');
-  //   this.mount(opts, node);
-  //   return node.html();
-  // }
+  }
 };
 
 observable(coala);
