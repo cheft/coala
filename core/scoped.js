@@ -21,11 +21,11 @@ function scoper(css, prefix) {
   return css;
 }
 
-module.exports = function (c) {
+module.exports = function (dom, prefix) {
   if ('scoped' in document.createElement('style')) return;
-  var styles = c.$('style[scoped]');
+  var styles = dom.find('style[scoped]');
   if (styles.length === 0) return;
   for (var i = 0; i < styles.length; i++) {
-    styles[i].innerHTML = scoper(styles[i].innerHTML, c.el.selector);
+    styles[i].innerHTML = scoper(styles[i].innerHTML, prefix);
   }
 }

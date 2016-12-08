@@ -104,7 +104,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  } else {
 	    this.data = opts.data || {};
 	  }
-
 	  this._mixin();
 	  this._listenTo();
 	  this.trigger('init');
@@ -168,9 +167,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	Component.prototype._mount = function(el) {
 	  if (el) this.el = $(el);
 	  if (this.opts.tpl) {
-	    this.el.append(this.opts.tpl(this.data));
+	    var dom = this.el.clone()
+	    dom.html(this.opts.tpl(this.data))
+	    scoped(dom, this.el.selector)
+	    this.el.append(dom.html());
 	    this._bindEvents();
-	    scoped(this);
 
 	    for (var p in this.refs) {
 	      var ref = this.refs[p]
@@ -182,14 +183,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	Component.prototype.update = function(data) {
-	  if (data) this.data = $.extend(false, this.data, data);
-	  var newDom = this.el[0].cloneNode(false);
-	  newDom.innerHTML = this._update();
-	  morphdom(this.el[0], newDom, {
+	  if (data) $.extend(this.data, data);
+	  morphdom(this.el[0], this._update()[0], {
 	    onBeforeElUpdated: function(fromEl, toEl) {
 	      if (fromEl.tagName === 'STYLE') return false
 	      return true;
-	    },
+	    }
 	  });
 	  this._updated();
 	  return this;
@@ -198,12 +197,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	Component.prototype._update = function() {
 	  this.trigger('update');
 	  if (!this.opts.tpl) return '';
-	  var dom = $('<div>' + this.opts.tpl(this.data) + '</div>')
+	  var dom = this.el.clone()
+	  dom.html(this.opts.tpl(this.data))
 	  for (var p in this.refs) {
 	    var r = this.refs[p];
 	    dom.find(r.refOpts.el).html(r._update());
 	  }
-	  return dom.html();
+	  return dom
 	}
 
 	Component.prototype._updated = function() {
@@ -989,12 +989,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return css;
 	}
 
-	module.exports = function (c) {
+	module.exports = function (dom, prefix) {
 	  if ('scoped' in document.createElement('style')) return;
-	  var styles = c.$('style[scoped]');
+	  var styles = dom.find('style[scoped]');
 	  if (styles.length === 0) return;
 	  for (var i = 0; i < styles.length; i++) {
-	    styles[i].innerHTML = scoper(styles[i].innerHTML, c.el.selector);
+	    styles[i].innerHTML = scoper(styles[i].innerHTML, prefix);
 	  }
 	}
 
