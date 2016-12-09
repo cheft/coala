@@ -1,0 +1,22 @@
+<div class="top-nav"></div>
+<div class="content"></div>
+
+<script>
+	var coala = require('../coala')
+
+	module.exports = {
+		refs: {
+			topnav: {
+				el: '.top-nav',
+				component: require('./components/topnav.html')
+			}
+		},
+
+		listen: {
+			mountContent: function(component) {
+				if (this.content) this.content.unmount()
+				this.content =  coala.mount(component, this.$('.content'))
+			}
+		}
+	}
+</script>

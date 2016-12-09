@@ -1,0 +1,87 @@
+<div class="intro">
+	<div class="launching">
+		<img src="docs/assets/img/logo.png">
+		<span class="slogan">Ta 是一个超级简单的 WEB 框架</span>
+	</div>
+</div>
+<div class="sample">
+	<div class="sample-code" id="sampleCode"></div>
+	<div class="sample-demo" id="sampleDemo"></div>
+</div>
+
+<div class="footer">
+  Released under the 
+  <a href="https://opensource.org/licenses/MIT">MIT License</a><br>
+  Copyright © 2015-2017 Cheft
+</div>
+<style scoped>
+.intro {
+	padding: 20px;
+  background: linear-gradient(27deg, #eee 5px, rgba(255,255,255,0) 5px) 0 5px, linear-gradient(207deg, #eee 5px, rgba(255,255,255,0) 5px) 10px 0px, linear-gradient(27deg, #f2f2f2 5px, rgba(255,255,255,0) 5px) 0px 10px, linear-gradient(207deg, #f2f2f2 5px, rgba(255,255,255,0) 5px) 10px 5px, linear-gradient(90deg, #ebebeb 10px, rgba(255,255,255,0) 10px), linear-gradient(#ededed 25%, #ccc 25%, #ccc 50%, rgba(255,255,255,0) 50%, rgba(255,255,255,0) 75%, #f4f4f4 75%, #f4f4f4);
+  background-color: #e3e3e3;
+  background-size: 20px 20px;
+}
+
+.launching {
+	max-width: 930px;
+	margin: 50px auto;
+	text-align: center;
+}
+
+.launching img {
+	width: 200px;
+	vertical-align: bottom;
+	margin-right: 60px;
+}
+
+.sample {
+	padding-top: 20px; 
+	overflow:hidden;
+	max-width: 930px;
+	margin: auto;
+}
+
+.sample-code {
+	float: left;
+	width: 500px;
+	border: 1px solid #ddd;
+	padding: 10px;
+}
+
+ .sample-demo {
+ 	margin-left: 20px;
+	float: left;
+	width: 360px;
+	border: 1px solid #ddd;
+	padding: 10px;
+}
+
+.slogan {
+	display: inline-block;
+	width: 500px;
+	font-size: 60px;
+}
+
+.footer {
+	margin-top: 40px;
+	height: 50px;
+	background: #575F6D;
+	color: #B8B0A8;
+	padding: 50px 0;
+  text-align: center;
+}
+
+.footer a {
+  font-weight: 700;
+  color: #B8B0A8;
+  text-decoration: none;
+}
+</style>
+<script>
+module.exports = {
+	refs: {
+		sample: { el: '#sampleDemo', component: require('./sample-demo.html') },
+		sampleCode: { el: '#sampleCode', component: require('./sample-code.html') },
+	}
+}
+</script>

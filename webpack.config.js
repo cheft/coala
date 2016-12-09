@@ -5,29 +5,26 @@ var webpack = require('webpack');
 module.exports = {
   devtool: 'source-map',
   entry: {
-    homepage: [
+    examples: [
       'webpack/hot/dev-server',
-      path.resolve('./app/homepage/index.js')
+      path.resolve('./examples/app.js')
     ],
-    login: [
+    docs: [
       'webpack/hot/dev-server',
-      path.resolve('./app/login/index.js')
-    ],
-    mytodo: [
-      'webpack/hot/dev-server',
-      path.resolve('./app/mytodo/index.js')
+      path.resolve('./docs/main.js')
     ]
   },
   output: {
-    path: path.resolve(__dirname, 'assets/js'),
+    path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
-    publicPath: '/assets/js/'
+    publicPath: '/dist/'
   },
   module: {
     loaders: [{
       test: /\.html$/,
-      loader: 'dot-loader'
+      loader: 'coala-dot-loader'
     },
+    { test: /\.md$/, loader: "html!markdown" },
     {
       test: /\.css$/,
       loader: 'style!css'

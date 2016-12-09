@@ -1,0 +1,21 @@
+<h3>代码</h3>
+<div>{{=it.mark}}</div>
+<style scoped>
+.hljs {
+	padding: 0;
+}
+</style>
+<script>
+module.exports = {
+	data: {
+		mark: require('../markdown/sample.md')
+	},
+	listen: {
+		mount: function() {
+			this.$('pre code').each(function(i, block) {
+		    hljs.highlightBlock(block)
+		  });
+		}
+	}
+}
+</script>

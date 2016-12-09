@@ -1,24 +1,23 @@
 {
   "name": "coala",
   "version": "1.0.0-beta",
-  "main": "coala.js",
+  "main": "coala..min.js",
   "scripts": {
     "coala": "webpack --config ./webpack.coala.js && uglifyjs coala.js -o coala.min.js -m -c --screw-ie8",
     "start": "webpack-dev-server --colors --content-base ./ --hot --host 0.0.0.0",
-    "watch": "webpack -w",
     "webpack": "webpack",
     "build": "webpack -p"
   },
   "dependencies": {
+    "coala-dot-loader": "0.0.1",
     "morphdom": "^2.2.1"
   },
   "devDependencies": {
-    "cheerio": "^0.19.0",
+    "coala-dot-loader": "^0.0.1",
     "css-loader": "^0.18.0",
-    "dot": "^1.0.3",
-    "dot-loader": "^0.1.1",
+    "html-loader": "^0.4.4",
     "jquery": "^1.11.3",
-    "lodash": "^3.10.1",
+    "markdown-loader": "^0.1.7",
     "style-loader": "^0.12.4",
     "uglifyjs": "^2.4.10",
     "webpack": "^1.12.1",

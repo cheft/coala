@@ -1,0 +1,17 @@
+<h1>Hello {{=it.name}}!</h1>
+<input id="nameText" value="{{=it.name}}">
+
+<script>
+	module.exports = {
+		data: {name: 'Cheft'},
+		events: {
+			'input #nameText': 'handleName'
+		},
+		handle: {
+			handleName: function(e) {
+				this.data.name = e.target.value
+				this.update()
+			}
+		}
+	}
+</script>

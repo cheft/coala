@@ -1,0 +1,67 @@
+<div class="catalog">
+	<ul>
+		{{~it.menus :item}}
+		<li><a href="#{{=item.anchor}}">{{=item.name}}</a></li>
+		{{~}}
+	</ul>
+</div>
+<div class="mark">{{=it.mark}}</div>
+<style scoped>
+.catalog {
+	position: fixed;
+  z-index: 10;
+  top: 61px;
+  left: 0;
+  bottom: 0;
+  padding: 40px 0 30px 60px;
+  width: 260px;
+  margin-right: 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.catalog > ul {
+	margin: 0;
+	list-style: none;
+}
+
+.catalog > ul > li {
+	margin: 20px 0;
+}
+
+.mark {
+  padding: 2.2em 0;
+  max-width: 600px;
+  margin: auto;
+	margin-left: 290px;
+}
+
+blockquote {
+	margin: 0;
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+
+</style>
+<script>
+module.exports = {
+	data: {
+		menus: [
+			{name: 'Observable', anchor: 'observable-'},
+			{name: 'Component 配置', anchor: 'component-'},
+			{name: 'Component 对象', anchor: 'component-'},
+			{name: 'Coala 框架对象', anchor: 'coala-'}
+		],
+		mark: require('../markdown/api.md')
+	},
+	listen: {
+		mount: function() {
+			this.$('pre code').each(function(i, block) {
+		    hljs.highlightBlock(block)
+		  });
+		}
+	}
+}
+</script>
