@@ -77,7 +77,7 @@ Component.prototype.mount = function(el) {
 };
 
 Component.prototype._mount = function(el) {
-  if (el) this.el = $(el);
+  if (el) this.el = (el instanceof $) ? el : $(el)
   if (this.opts.tpl) {
     var dom = this.el.clone()
     dom.html(this.opts.tpl(this.data))
@@ -113,7 +113,7 @@ Component.prototype._update = function() {
   dom.html(this.opts.tpl(this.data))
   for (var p in this.refs) {
     var r = this.refs[p];
-    dom.find(r.refOpts.el).html(r._update());
+    dom.find(r.refOpts.el).html(r._update().html());
   }
   return dom
 }

@@ -85,6 +85,95 @@ hero.trigger('fire die')
 
 
 
+## Router 路由器
+
+浏览器 hash 地址变更，路由器会相应提供了的回调函数处理这个动作。需要注意的是，路由器开启后会在浏览器 URL后加 `/#` 符号，用户所配置的地址也会同样加上这个符号。
+
+
+
+### 路由器配置
+
+```javascript
+coala.router({
+	
+  // 配置路由表，回调函数可以是动作键值，也可以是函数
+  routes: {
+    '/hello':                 'hello',      // #/help
+    '/start/:component':      'start',      // #/start/todomvc
+    '/goto/p:page':           'gotoPage'    // #/goto/p7
+    '/show/*anything': function(anything) { // #/show/xx/xx
+      ...
+    }
+  },
+
+  hello: function() {
+    ...
+  },
+
+  start: function(component) {
+    ...
+  },
+    
+  goto: function(page) {
+    ...
+  }
+
+});
+    
+```
+
+
+
+### 路由器对象方法
+
+```javascript
+var router = coala.router({
+  ...
+})
+
+router.start()
+
+router.add('/download/*path', function(path) {
+	console.log(path === 'img/123.png')
+})
+  
+router.go('/download/image/123.png')
+
+```
+
+
+
+#### start
+
+启动路由器
+
+
+#### stop
+
+停止路由器
+
+
+#### add(rule, callback)
+
+增加一条路由规则
+
+
+#### remove(rule)
+
+删除匹配路山规则
+
+
+#### go(path)
+
+路转到指定路径
+
+
+#### back
+
+后退一步
+
+
+
 ## Component 组件配置
 
 
@@ -525,3 +614,10 @@ coala.mount(component, $('body'));
 为 `obj` 对象添加 `Observable` 支持，如果参数为空，则创建一个空的观察者对象
 
 > @返回值 参数对象 或新的observable 对象
+
+
+
+### 创建路由器 router(opts)
+
+创建路由器，详细参考路由器
+

@@ -1,8 +1,46 @@
-<div>{{=it.markup}}</div>
+<div class="container">
+	<div class="mark">{{=data.markup}}</div>
+</div>
+
+<style>
+.container {
+	width: 1024px;
+	margin: auto;
+}
+
+.mark {
+  padding: 2.2em 0;
+  max-width: 600px;
+  margin: auto;
+	margin-left: 260px;
+}
+
+blockquote {
+	margin: 0;
+}
+
+.demo {
+	border: 1px solid #ddd;
+	padding: 5px;
+}
+</style>
 <script>
+var coala = require('../../coala')
+
 module.exports = {
 	data: {
 		markup: require('../markdown/guide.md')
+	},
+
+	listen: {
+		mount: function() {
+			window.demo01 =  coala.mount(require('../tutorial/demo01.html'), this.$('#demo01'))
+			window.demo02 =  coala.mount(require('../tutorial/demo02.html'), this.$('#demo02'))
+
+			this.$('pre code').each(function(i, block) {
+		    hljs.highlightBlock(block)
+		  });
+		}
 	}
 }
 </script>

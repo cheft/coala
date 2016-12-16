@@ -5,13 +5,13 @@ var webpack = require('webpack');
 module.exports = {
   devtool: 'source-map',
   entry: {
-    examples: [
-      'webpack/hot/dev-server',
-      path.resolve('./examples/app.js')
-    ],
     docs: [
       'webpack/hot/dev-server',
       path.resolve('./docs/main.js')
+    ],
+    "select2-demo": [
+      'webpack/hot/dev-server',
+      path.resolve('./examples/componments/select2/main.js')
     ]
   },
   output: {

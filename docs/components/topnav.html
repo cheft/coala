@@ -1,12 +1,29 @@
-<div class="logo">
-	<a href="#/">Coala.js</a>
+<div class="container">
+	<div class="logo">
+		<a href="#/">Coala.js</a>
+	</div>
+	<ul class="nav">
+		{{~data.items :item}}
+		<li><a href="{{=item.href}}" {{?item.href == '#/' + data.active}}class="active"{{?}}>{{=item.title}}</a></li>
+		{{~}}
+	</ul>
 </div>
-<ul class="nav">
-	<li><a href="#/">首页</a></li>
-	<li><a href="#/guide">用户手册</a></li>
-	<li><a href="#/api">API 文档</a></li>
-	<li><a href="#/examples">示例</a></li>
-	<!-- <li><a href="#/librarys">组件库</a></li> -->
-	<li><a href="https://github.com/cheft/coala-starter-kit">Github</a></li>
-</ul>
-<script>module.exports = {}</script>
+<style scoeped>
+.container {
+	width: 1024px;
+	margin: auto;
+}
+</style>
+<script>
+module.exports = {
+	data: {
+		items: [
+			{title: '用户手册', href: '#/guide'},
+			{title: 'API 文档', href: '#/api'},
+			{title: '示例', href: '#/examples'},
+			{title: 'Github', href: 'https://github.com/cheft/coala-starter-kit'}
+		],		 
+		active: 'index'
+	}
+}
+</script>

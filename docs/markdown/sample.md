@@ -1,7 +1,7 @@
 ```html
 <div class="title">那些年我们玩过的Web框架</div>
 <ul>
-	{{~it.resource :item}}
+	{{~data.resource :item}}
 	<li>
 		<a href="{{=item.url}}">{{=item.name}}</a>
 		<span>{{=item.url}}</span>

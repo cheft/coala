@@ -1,12 +1,13 @@
 core
-doc
+docs
 examples
 node_modules
 .git
 .gitignore
+.npmignore
 .jscsrc
 coala.js
-favicon.icon
+favicon.ico
 index.html
 webpack.coala.js
 webpack.config.js

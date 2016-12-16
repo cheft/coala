@@ -3,10 +3,10 @@
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
-	else {
-		var a = factory();
-		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
-	}
+	else if(typeof exports === 'object')
+		exports["Coala"] = factory();
+	else
+		root["Coala"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -55,7 +55,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
-	  Version: 1.0.0-beta
+	  Version: 1.0.0-beta.1
 	  Author: Cheft
 	*/
 	var Component = __webpack_require__(1);
@@ -165,7 +165,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	Component.prototype._mount = function(el) {
-	  if (el) this.el = $(el);
+	  if (el) this.el = (el instanceof $) ? el : $(el)
 	  if (this.opts.tpl) {
 	    var dom = this.el.clone()
 	    dom.html(this.opts.tpl(this.data))
@@ -201,7 +201,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  dom.html(this.opts.tpl(this.data))
 	  for (var p in this.refs) {
 	    var r = this.refs[p];
-	    dom.find(r.refOpts.el).html(r._update());
+	    dom.find(r.refOpts.el).html(r._update().html());
 	  }
 	  return dom
 	}
@@ -322,6 +322,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        if (fromEl.firstChild) {
+	            // Needed for IE. Apparently IE sets the placeholder as the
+	            // node value and vise versa. This ignores an empty update.
+	            if (newValue === '' && fromEl.firstChild.nodeValue === fromEl.placeholder) {
+	                return;
+	            }
+
 	            fromEl.firstChild.nodeValue = newValue;
 	        }
 	    }
@@ -695,6 +701,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                            // all lifecycle hooks are correctly invoked
 	                                            fromEl.insertBefore(matchingFromEl, curFromNodeChild);
 
+	                                            fromNextSibling = curFromNodeChild.nextSibling;
+
 	                                            if (curFromNodeKey) {
 	                                                // Since the node is keyed it might be matched up later so we defer
 	                                                // the actual removal to later
@@ -703,9 +711,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                // NOTE: we skip nested keyed nodes from being removed since there is
 	                                                //       still a chance they will be matched up later
 	                                                removeNode(curFromNodeChild, fromEl, true /* skip keyed nodes */);
-
 	                                            }
-	                                            fromNextSibling = curFromNodeChild.nextSibling;
+
 	                                            curFromNodeChild = matchingFromEl;
 	                                        }
 	                                    } else {

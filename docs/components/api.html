@@ -1,21 +1,26 @@
-<div class="catalog">
-	<ul>
-		{{~it.menus :item}}
-		<li><a href="#{{=item.anchor}}">{{=item.name}}</a></li>
-		{{~}}
-	</ul>
+<div class="container">
+	<div class="catalog">
+		<ul>
+			{{~data.menus :item}}
+			<li><a href="#{{=item.anchor}}">{{=item.name}}</a></li>
+			{{~}}
+		</ul>
+	</div>
+	<div class="mark">{{=data.mark}}</div>
 </div>
-<div class="mark">{{=it.mark}}</div>
+
 <style scoped>
+.container {
+	width: 1024px;
+	margin: auto;
+}
+
 .catalog {
 	position: fixed;
   z-index: 10;
   top: 61px;
-  left: 0;
-  bottom: 0;
-  padding: 40px 0 30px 60px;
+	padding: 20px 0 0 0;
   width: 260px;
-  margin-right: 20px;
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -34,7 +39,7 @@
   padding: 2.2em 0;
   max-width: 600px;
   margin: auto;
-	margin-left: 290px;
+	margin-left: 260px;
 }
 
 blockquote {

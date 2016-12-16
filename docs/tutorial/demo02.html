@@ -1,0 +1,27 @@
+<div class="text">{{=data.text}}</div>
+<button id="reverseText">reverseText</button>
+
+<script>
+module.exports = {
+  data: {
+    text: 'Hello Coala!'
+  },
+
+  events: {
+  	'click #reverseText': 'reverseText'
+  },
+
+  handle: {
+  	reverseText: function(e) {
+  		this.data.text = this.data.text.split('').reverse().join('')
+  		this.update()
+  	}
+  }
+}
+</script>
+
+<style scoped>
+	.text {
+		color: #d14;
+	}
+</style>

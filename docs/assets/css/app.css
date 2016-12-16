@@ -43,8 +43,8 @@ body {
 	padding: 6px 0; 
 }
 
-.nav li > a:hover {
-	border-bottom: 2px solid #575F6D;
+.nav li > a.active, .nav li > a:hover {
+	border-bottom: 2px solid #FF6A3C;
 }
 
 .content {

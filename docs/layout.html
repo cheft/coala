@@ -3,6 +3,13 @@
 
 <script>
 	var coala = require('../coala')
+	var components = {
+		index: require('./components/index.html'),
+		guide: require('./components/guide.html'),
+		api: require('./components/api.html'),
+		examples: require('./components/examples.html'),
+		librarys: require('./components/librarys.html')
+	};
 
 	module.exports = {
 		refs: {
@@ -13,9 +20,11 @@
 		},
 
 		listen: {
-			mountContent: function(component) {
+			mountContent: function(name) {
+				this.refs.topnav.data.active = name
+				this.update()
 				if (this.content) this.content.unmount()
-				this.content =  coala.mount(component, this.$('.content'))
+				this.content =  coala.mount(components[name], this.$('.content'))
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 {
   "name": "coala",
-  "version": "1.0.0-beta",
-  "main": "coala..min.js",
+  "version": "1.0.0-beta.2",
+  "main": "coala.min.js",
   "scripts": {
     "coala": "webpack --config ./webpack.coala.js && uglifyjs coala.js -o coala.min.js -m -c --screw-ie8",
     "start": "webpack-dev-server --colors --content-base ./ --hot --host 0.0.0.0",
@@ -9,14 +9,13 @@
     "build": "webpack -p"
   },
   "dependencies": {
-    "coala-dot-loader": "0.0.1",
-    "morphdom": "^2.2.1"
+    "morphdom": "^2.2.1",
+    "jquery": "^1.11.3"
   },
   "devDependencies": {
-    "coala-dot-loader": "^0.0.1",
+    "coala-dot-loader": "0.0.2",
     "css-loader": "^0.18.0",
     "html-loader": "^0.4.4",
-    "jquery": "^1.11.3",
     "markdown-loader": "^0.1.7",
     "style-loader": "^0.12.4",
     "uglifyjs": "^2.4.10",
