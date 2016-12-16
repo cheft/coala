@@ -7,7 +7,7 @@ coala.router({
 			app.trigger('mountContent', name)
 		},
 		'/': function() {
-			app.trigger('mountContent', 'guide')
+			app.trigger('mountContent', 'index')
 		}
 	}
 })

@@ -514,7 +514,8 @@ handle: {
 
 获取当前组件所挂载的 jquery 节点，不要修改。
 
-
+### 当前节点选择器字符串 es
+es 为节点 el 的上下文 selector，比如子组件是mount在 '#child' 上，它的父组件是 mount 在 '#app' 上，那么它的 es 为 '#app #child'
 
 ### 父组件 parent
 

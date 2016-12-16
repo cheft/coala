@@ -13,8 +13,15 @@ Coala 框架不算是前卫的、流行的、牛逼的，但是她是比较实�
 很多老项目基于 jQuery 实现，直接从老项目搬到新型框架非几人之力，惟有全新项目才可使用新型框架，对于一些老项目新增功能、需求改动用 Coala 最适合不过了。
 很多组件还是基于 jQuery，想要使用它们，jQuery 必须要引入，用其它框架集成感觉要费很多事，此时 Coala 就体现出它的特长了。
 
+### 可用 Zepto 完全替代 jQuery
+zepto gzip 只有10k，比起 jQuery 要小很多。如果使用 zepto 意味着你放弃旧 IE，同时 coala.mount 方法也只支持传入字符串，不支持传入 dom 或 jquery 对象.
+> zepto 的 $('#app').find('.content').selector 居然不是返回选择器字符串，还是返回 content 的 jquery 对象
+
 #### Coala 内核很小
-gzip 只有 4k，站在 jQuery 面前可以忽略不计
+gzip 只有 4k，站在 jQuery 面前可以忽略不计。
+
+##### Zepto 完全替代 jQuery
+zepto gzip 后只有10k，加上 coala 只有14k，比起 jQuery 要小太多。如果您的项目不考虑旧 IE，用 zepto 非常适合，且 zepto 可以额外提供一些功能，如果您开发移动项目的话，很多组件也依赖于它，比如 SUI。
 
 #### Coala 组件化
 有组件的理念，并且支持组件化样式，配合 webpack 也能轻松实现文件模块化。

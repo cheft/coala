@@ -9,9 +9,9 @@ module.exports = {
       'webpack/hot/dev-server',
       path.resolve('./docs/main.js')
     ],
-    "select2-demo": [
+    bootstrap: [
       'webpack/hot/dev-server',
-      path.resolve('./examples/componments/select2/main.js')
+      path.resolve('./examples/components/bootstrap/main.js')
     ]
   },
   output: {

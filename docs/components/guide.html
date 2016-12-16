@@ -34,8 +34,8 @@ module.exports = {
 
 	listen: {
 		mount: function() {
-			window.demo01 =  coala.mount(require('../tutorial/demo01.html'), this.$('#demo01'))
-			window.demo02 =  coala.mount(require('../tutorial/demo02.html'), this.$('#demo02'))
+			window.demo01 =  coala.mount(require('../tutorial/demo01.html'), this.es + ' #demo01')
+			window.demo02 =  coala.mount(require('../tutorial/demo02.html'), this.es + ' #demo02')
 
 			this.$('pre code').each(function(i, block) {
 		    hljs.highlightBlock(block)

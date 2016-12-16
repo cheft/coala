@@ -6,7 +6,8 @@
     "coala": "webpack --config ./webpack.coala.js && uglifyjs coala.js -o coala.min.js -m -c --screw-ie8",
     "start": "webpack-dev-server --colors --content-base ./ --hot --host 0.0.0.0",
     "webpack": "webpack",
-    "build": "webpack -p"
+    "build": "webpack -p",
+    "zepto": "uglifyjs zepto/zepto-coala.js -o zepto/zepto-coala.min.js -m -c && uglifyjs zepto/zepto-deferred.js -o zepto/zepto-deferred.min.js -m -c"
   },
   "dependencies": {
     "morphdom": "^2.2.1",

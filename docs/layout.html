@@ -23,8 +23,9 @@
 			mountContent: function(name) {
 				this.refs.topnav.data.active = name
 				this.update()
+				console.log(this.el, this.es)
 				if (this.content) this.content.unmount()
-				this.content =  coala.mount(components[name], this.$('.content'))
+				this.content =  coala.mount(components[name], this.es + ' .content')
 			}
 		}
 	}

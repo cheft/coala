@@ -55,7 +55,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
-	  Version: 1.0.0-beta.1
+	  Version: 1.0.0-beta.2
 	  Author: Cheft
 	*/
 	var Component = __webpack_require__(1);
@@ -115,9 +115,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.refs = {}
 	  for (var p in this.opts.refs) {
 	    var value = this.opts.refs[p];
-	    if (value.data) value.component.data = $.extend(true, value.component.data, value.data);
+	    if (value.data) value.component.data = $.extend({}, value.component.data, value.data);
 	    var c = new Component(value.component);
-	    c.refOpts = $.extend(true, {}, value);
+	    c.refOpts = value
 	    c.parent = this;
 	    this.refs[p] = c;
 	  }
@@ -165,11 +165,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	Component.prototype._mount = function(el) {
-	  if (el) this.el = (el instanceof $) ? el : $(el)
+	  if (el) {
+	    if (this.parent) {
+	      this.es = this.parent.es + ' ' + el
+	      this.el = this.parent.$(el)
+	    } else {
+	      this.es = el
+	      this.el = $(el)
+	    }
+	  }
 	  if (this.opts.tpl) {
 	    var dom = this.el.clone()
 	    dom.html(this.opts.tpl(this.data))
-	    scoped(dom, this.el.selector)
+	    scoped(dom, this.es)
 	    this.el.append(dom.html());
 	    this._bindEvents();
 
