@@ -27,7 +27,7 @@ function Router(opts) {
   _this = this
   this.opts = opts;
   this.routes = opts.routes;
-  this.go(location.pathname);
+  this._emit()
 }
 
 Router.prototype._exec = function(path, e) {

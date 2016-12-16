@@ -9,7 +9,7 @@ function Component(opts) {
     var result = opts.data.call(this);
     if (result && result.promise) {
       this.promise = result;
-      this.data = {};
+      this.data = this.data || {};
     } else {
       this.data = result;
     }
@@ -33,7 +33,7 @@ Component.prototype._initRefs = function() {
     c.parent = this;
     this.refs[p] = c;
   }
-};
+}
 
 Component.prototype._bindEvents = function() {
   if (!this.opts.events) return;
@@ -43,14 +43,14 @@ Component.prototype._bindEvents = function() {
     var selector = e.substr(index + 1, e.length);
     this.el.on(e.substr(0, index), selector, $.proxy(this.opts.handle[handleName], this));
   }
-};
+}
 
 Component.prototype._mixin = function() {
   if (!this.opts.mixins) return;
   if (!$.isArray(this.opts.mixins)) this.opts.mixins = [this.opts.mixins]
   this.opts.mixins.unshift(this);
   $.extend.apply($, this.opts.mixins);
-};
+}
 
 Component.prototype._listenTo = function() {
   if (!this.opts.listen) return;
@@ -58,7 +58,7 @@ Component.prototype._listenTo = function() {
     var fn = this.opts.listen[l];
     this.on(l, fn);
   }
-};
+}
 
 Component.prototype.mount = function(el) {
   var _this = this
@@ -74,7 +74,7 @@ Component.prototype.mount = function(el) {
   }
   
   return this;
-};
+}
 
 Component.prototype._mount = function(el) {
   if (el) {
@@ -105,14 +105,14 @@ Component.prototype._mount = function(el) {
 Component.prototype.update = function(data) {
   if (data) $.extend(this.data, data);
   morphdom(this.el[0], this._update()[0], {
-    onBeforeElUpdated: function(fromEl, toEl) {
+    onBeforeElUpdated: function(fromEl) {
       if (fromEl.tagName === 'STYLE') return false
       return true;
     }
   });
   this._updated();
   return this;
-};
+}
 
 Component.prototype._update = function() {
   this.trigger('update');
@@ -132,12 +132,17 @@ Component.prototype._updated = function() {
 }
 
 Component.prototype.unmount = function() {
+  this._unmount();
   this.el.empty().off();
+}
+
+Component.prototype._unmount = function() {
+  for (var p in this.refs) this.refs[p]._unmount()
   this.trigger('unmount').off('*');
-};
+}
 
 Component.prototype.$ = function(el) {
   return this.el.find(el);
-};
+}
 
 module.exports = Component;

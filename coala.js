@@ -97,7 +97,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var result = opts.data.call(this);
 	    if (result && result.promise) {
 	      this.promise = result;
-	      this.data = {};
+	      this.data = this.data || {};
 	    } else {
 	      this.data = result;
 	    }
@@ -121,7 +121,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    c.parent = this;
 	    this.refs[p] = c;
 	  }
-	};
+	}
 
 	Component.prototype._bindEvents = function() {
 	  if (!this.opts.events) return;
@@ -131,14 +131,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var selector = e.substr(index + 1, e.length);
 	    this.el.on(e.substr(0, index), selector, $.proxy(this.opts.handle[handleName], this));
 	  }
-	};
+	}
 
 	Component.prototype._mixin = function() {
 	  if (!this.opts.mixins) return;
 	  if (!$.isArray(this.opts.mixins)) this.opts.mixins = [this.opts.mixins]
 	  this.opts.mixins.unshift(this);
 	  $.extend.apply($, this.opts.mixins);
-	};
+	}
 
 	Component.prototype._listenTo = function() {
 	  if (!this.opts.listen) return;
@@ -146,7 +146,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var fn = this.opts.listen[l];
 	    this.on(l, fn);
 	  }
-	};
+	}
 
 	Component.prototype.mount = function(el) {
 	  var _this = this
@@ -162,7 +162,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	  
 	  return this;
-	};
+	}
 
 	Component.prototype._mount = function(el) {
 	  if (el) {
@@ -193,14 +193,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	Component.prototype.update = function(data) {
 	  if (data) $.extend(this.data, data);
 	  morphdom(this.el[0], this._update()[0], {
-	    onBeforeElUpdated: function(fromEl, toEl) {
+	    onBeforeElUpdated: function(fromEl) {
 	      if (fromEl.tagName === 'STYLE') return false
 	      return true;
 	    }
 	  });
 	  this._updated();
 	  return this;
-	};
+	}
 
 	Component.prototype._update = function() {
 	  this.trigger('update');
@@ -220,13 +220,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	Component.prototype.unmount = function() {
+	  this._unmount();
 	  this.el.empty().off();
+	}
+
+	Component.prototype._unmount = function() {
+	  for (var p in this.refs) this.refs[p]._unmount()
 	  this.trigger('unmount').off('*');
-	};
+	}
 
 	Component.prototype.$ = function(el) {
 	  return this.el.find(el);
-	};
+	}
 
 	module.exports = Component;
 
@@ -1047,7 +1052,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _this = this
 	  this.opts = opts;
 	  this.routes = opts.routes;
-	  this.go(location.pathname);
+	  this._emit()
 	}
 
 	Router.prototype._exec = function(path, e) {

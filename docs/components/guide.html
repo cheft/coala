@@ -40,6 +40,12 @@ module.exports = {
 			this.$('pre code').each(function(i, block) {
 		    hljs.highlightBlock(block)
 		  });
+		},
+
+		unmount: function() {
+			console.log('guide unmount')
+			window.aaa = this
+			console.log(this.$('#demo01'))
 		}
 	}
 }

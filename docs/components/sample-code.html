@@ -15,6 +15,9 @@ module.exports = {
 			this.$('pre code').each(function(i, block) {
 		    hljs.highlightBlock(block)
 		  });
+		},
+		unmount: function() {
+			console.log('code unmount')
 		}
 	}
 }

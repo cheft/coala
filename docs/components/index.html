@@ -1,7 +1,7 @@
 <div class="intro">
 	<div class="launching">
 		<img src="docs/assets/img/logo.png">
-		<span class="slogan">Ta 是一个超级简单的 WEB 框架</span>
+		<span class="slogan">Ta 一个是非常简单的 WEB 框架</span>
 	</div>
 </div>
 <div class="sample">
@@ -29,8 +29,9 @@
 
 .launching img {
 	width: 200px;
-	vertical-align: bottom;
+	vertical-align: middle;
 	margin-right: 60px;
+	display: inline-block;
 }
 
 .sample {
@@ -50,13 +51,15 @@
  	margin-top: 20px; 
 	float: right;
 	border: 1px solid #ddd;
-	padding: 10px 50px 100px 50px;
+	padding: 10px 50px 60px 50px;
 }
 
 .slogan {
 	display: inline-block;
 	width: 500px;
-	font-size: 60px;
+	font-size: 50px;
+	line-height: 60px;
+	vertical-align: middle;
 }
 
 .footer {
@@ -79,6 +82,12 @@ module.exports = {
 	refs: {
 		sample: { el: '#sampleDemo', component: require('./sample-demo.html') },
 		sampleCode: { el: '#sampleCode', component: require('./sample-code.html') },
+	},
+
+	listen: {
+		unmount: function() {
+			console.log('index unmount')
+		}
 	}
 }
 </script>
