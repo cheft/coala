@@ -114,7 +114,7 @@ coala.router({
     ...
   },
     
-  goto: function(page) {
+  gotoPage: function(page) {
     ...
   }
 

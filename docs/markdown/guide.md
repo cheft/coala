@@ -35,8 +35,6 @@ zepto gzip 后只有10k，加上 coala 只有14k，比起 jQuery 要小太多。
 有那么点 MVC 的概念，Coala 模范了众多框架：backbone、riot、vue，算是给用 jQuery 人的过渡框架，如果你能把 Coala 这个坑踩过了，以后在 Vue、React 等框架上会发现平顺很多，
 当然如果有条件，企业允许的话还是用大厂的框架吧，至于 Coala 嘛，练练手、看看源码（总共代码 300行，核心代码100行。）还是有好处的。
 
-
-
 ## 起步
 [jsfiddle](https://jsfiddle.net/cheft/x2o19yeu/)
 
@@ -49,6 +47,10 @@ zepto gzip 后只有10k，加上 coala 只有14k，比起 jQuery 要小太多。
 ### starter-kit
 
 集成 webpack、[doT](http://olado.github.io/doT/) 模板编译器
+
+## 组件概念
+
+## 声明一个组件
 
 ``` html
 <div class="text">{{=data.text}}</div>
@@ -83,7 +85,7 @@ demo01.update({text: 'New Content'})
 * {{~ }}
 * {{! }}
 
-### Dom 事件处理
+### 事件处理
 
 ```html
 <div class="text">{{=data.text}}</div>
@@ -116,5 +118,17 @@ module.exports = {
 
 ### 混合
 
-### 路由功能
+### 路由使用
 
+```js
+var coala = require('coala')
+coala.router({
+  routes: {
+    '/': 'goHome'
+  },
+
+  goHome: function() {
+    console.log(1111)
+  }
+})
+```

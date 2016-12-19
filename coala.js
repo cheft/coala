@@ -92,6 +92,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function Component(opts) {
 	  this.opts = opts || {};
+	  this.listen = this.opts.listen || {};
+	  this.handle = this.opts.handle || {};
 	  observable(this);
 	  if ($.isFunction(opts.data)) {
 	    var result = opts.data.call(this);
@@ -129,7 +131,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var handleName = this.opts.events[e];
 	    var index = e.indexOf(' ');
 	    var selector = e.substr(index + 1, e.length);
-	    this.el.on(e.substr(0, index), selector, $.proxy(this.opts.handle[handleName], this));
+	    this.el.on(e.substr(0, index), selector, $.proxy(this.handle[handleName], this));
 	  }
 	}
 
@@ -137,13 +139,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!this.opts.mixins) return;
 	  if (!$.isArray(this.opts.mixins)) this.opts.mixins = [this.opts.mixins]
 	  this.opts.mixins.unshift(this);
+	  this.opts.mixins.unshift(true); // 深拷贝
 	  $.extend.apply($, this.opts.mixins);
 	}
 
 	Component.prototype._listenTo = function() {
-	  if (!this.opts.listen) return;
-	  for (var l in this.opts.listen) {
-	    var fn = this.opts.listen[l];
+	  for (var l in this.listen) {
+	    var fn = this.listen[l];
 	    this.on(l, fn);
 	  }
 	}
@@ -160,7 +162,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  } else {
 	    this._mount(el);
 	  }
-	  
 	  return this;
 	}
 
@@ -1071,7 +1072,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	Router.prototype._emit = function(e) {
-	  var path = location.href.split('#')[1] || '';
+	  var path = location.href.split('#')[1] || '/';
 	  _this._exec(path, e);
 	}
 

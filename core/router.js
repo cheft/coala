@@ -46,7 +46,7 @@ Router.prototype._exec = function(path, e) {
 };
 
 Router.prototype._emit = function(e) {
-  var path = location.href.split('#')[1] || '';
+  var path = location.href.split('#')[1] || '/';
   _this._exec(path, e);
 }
 

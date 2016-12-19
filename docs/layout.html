@@ -22,7 +22,8 @@
 		listen: {
 			mountContent: function(name) {
 				this.refs.topnav.data.active = name
-				this.update()
+				this.refs.topnav.update()
+				
 				if (this.content) this.content.unmount()
 				this.content =  coala.mount(components[name], this.es + ' .content')
 			}

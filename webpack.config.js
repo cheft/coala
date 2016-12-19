@@ -11,7 +11,11 @@ module.exports = {
     ],
     bootstrap: [
       'webpack/hot/dev-server',
-      path.resolve('./examples/components/bootstrap/main.js')
+      path.resolve('./examples/integrates/bootstrap/main.js')
+    ],
+    adminlte: [
+      'webpack/hot/dev-server',
+      path.resolve('./examples/integrates/adminlte/main.js')
     ]
   },
   output: {
