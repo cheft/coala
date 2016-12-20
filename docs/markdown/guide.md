@@ -85,7 +85,7 @@ demo01.update({text: 'New Content'})
 * {{~ }}
 * {{! }}
 
-### 事件处理
+### DOM 事件处理
 
 ```html
 <div class="text">{{=data.text}}</div>
@@ -111,12 +111,14 @@ module.exports = {
 ```
 <div class="demo" id="demo02"></div>
 
-### 生命周期
+### 生命周期 / 监听事件
 
 ### 嵌入子组件
 组件通信
 
 ### 混合
+事件分两类：DOM 事件、监听事件
+
 
 ### 路由使用
 
