@@ -1,76 +1,57 @@
 module.exports = function(el) {
-  el = el || {};
-  var callbacks = {};
-  var _id = 0;
+  el = el || {}
+  var callbacks = {}
 
-  el.on = function(events, fn) {
-    if (typeof fn == 'function') {
-      if (typeof fn.id == 'undefined') {
-        fn._id = _id++;
-      }
+  el.on = function(event, fn) {
+    if (typeof fn == 'function') (callbacks[event] = callbacks[event] || []).push(fn)
+    return el
+  }
 
-      events.replace(/\S+/g, function(name, pos) {
-        (callbacks[name] = callbacks[name] || []).push(fn);
-        fn.typed = pos > 0;
-      });
-    }
-
-    return el;
-  };
-
-  el.off = function(events, fn) {
-    if (events == '*') {
-      callbacks = {};
-    }else {
-      events.replace(/\S+/g, function(name) {
-        if (fn) {
-          var arr = callbacks[name];
-          for (var i = 0, cb; (cb = arr && arr[i]); ++i) {
-            if (cb._id == fn._id) {
-              arr.splice(i--, 1);
-            }
-          }
-        } else {
-          callbacks[name] = [];
+  el.off = function(event, fn) {
+    if (event == '*' && !fn) callbacks = {}
+    else {
+      if (fn) {
+        var arr = callbacks[event]
+        for (var i = 0, cb; cb = arr && arr[i]; ++i) {
+          if (cb == fn) arr.splice(i--, 1)
         }
-      });
+      } else delete callbacks[event]
     }
-
-    return el;
-  };
+    return el
+  }
 
   // only single event supported
-  el.one = function(name, fn) {
+  el.one = function(event, fn) {
     function on() {
-      el.off(name, on);
-      fn.apply(el, arguments);
+      el.off(event, on)
+      fn.apply(el, arguments)
+    }
+    return el.on(event, on)
+  }
+
+  el.trigger = function(event) {
+    // getting the arguments
+    var arglen = arguments.length - 1,
+      args = new Array(arglen),
+      fns,
+      fn,
+      i
+
+    for (i = 0; i < arglen; i++) {
+      args[i] = arguments[i + 1] // skip first argument
     }
 
-    return el.on(name, on);
-  };
+    fns = [].slice.call(callbacks[event] || [], 0)
 
-  el.trigger = function(name) {
-    var args = [].slice.call(arguments, 1);
-    var fns = callbacks[name] || [];
-
-    for (var i = 0, fn; (fn = fns[i]); ++i) {
-      if (!fn.busy) {
-        fn.busy = 1;
-        fn.apply(el, fn.typed ? [name].concat(args) : args);
-        if (fns[i] !== fn) {
-          i--;
-        }
-
-        fn.busy = 0;
-      }
+    for (i = 0; fn = fns[i]; ++i) {
+      fn.apply(el, args)
     }
 
-    if (callbacks.all && name != 'all') {
-      el.trigger.apply(el, ['all', name].concat(args));
-    }
+    if (callbacks['*'] && event != '*')
+      el.trigger.apply(el, ['*', event].concat(args))
 
-    return el;
-  };
+    return el
+  }
 
-  return el;
-};
+  return el
+}

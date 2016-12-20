@@ -17,13 +17,12 @@ coala.observable(person)
 var hero = coala.observable()
 hero.name = '钢铁侠'
 ```
->  @返回值 参数对象 或新的observable 对象
+>  @返回值 参数对象 或新的 observable 对象
 
 
+### on(event, fn)
 
-### on(names, fn)
-
-监听用空格分隔的 names 事件列表，每次事件被触发时调用 fn
+监听 event 事件，事件被触发时调用 fn
 
 ```Javascript
 var hero = coala.observable()
@@ -33,56 +32,45 @@ hero.on('hit', function(param1, param2) {
 // param1、param2 为调用时传递的参数
 })
 
-// 监听多个事件,事件类型将作为回调函数的参数传递
-hero.on('hit fire', function(type) {
-// type 是 'hit' 或 'fire'
-})
-
 // 监听此 observable 上的所有事件
 hero.on('*', function(name) {
 // name 为调用的事件名
 })
 ```
->  @返回值 hero
+> @返回值 hero
 
 
 
-### one(names, fn)
+### one(event, fn)
 
-监听的由空格分隔的 names 事件， 但只会执行 fn 最多一次.
+监听 event 事件， 但只会执行 fn 最多一次.
 
 ```javascript
 var hero = coala.observable()
 
 // 即使 'die' 被触发多次，也只执行回调函数一次
-el.one('die', function() {
+hero.one('die', function() {
 
 })
 ```
-@返回值 hero
+> @返回值 hero
 
-### off(names)
-清除参数中指定的以空格分隔的 names 的事件
+### off(event)
+清除参数中指定的 event 事件
 
 ```javascript
-el.off('hit')
-el.off('hit fire')
-el.off('*')
+hero.off('hit')
+hero.off('*')  // 清除 hero 上所有事件
 ```
 > @返回值 hero
 
-
-
-### trigger(names, args...)
-
-触发事件。执行所有监听由空格分隔的 names 的回调函数
+### trigger(event, arg1 … argN)
+触发事件。执行所有监听 event 的回调函数，可以传递任意数量的附加参数给监听器
 
 ```javascript
 hero.trigger('hit', '坏人', '怪物')
-hero.trigger('fire die')
 ```
-@返回值 hero
-
+> @返回值 hero
 
 
 ## Router 路由器

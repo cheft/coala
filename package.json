@@ -7,6 +7,7 @@
     "start": "webpack-dev-server --colors --content-base ./ --hot --host 0.0.0.0",
     "webpack": "webpack",
     "build": "webpack -p",
+    "test": "./node_modules/mocha/bin/mocha tests/unit.test.js",
     "zepto": "uglifyjs zepto/zepto-coala.js -o zepto/zepto-coala.min.js -m -c && uglifyjs zepto/zepto-deferred.js -o zepto/zepto-deferred.min.js -m -c"
   },
   "dependencies": {
@@ -14,10 +15,12 @@
     "jquery": "^1.11.3"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "coala-dot-loader": "0.0.2",
     "css-loader": "^0.18.0",
     "html-loader": "^0.4.4",
     "markdown-loader": "^0.1.7",
+    "mocha": "^3.2.0",
     "style-loader": "^0.12.4",
     "uglifyjs": "^2.4.10",
     "webpack": "^1.12.1",

@@ -58,183 +58,185 @@ return /******/ (function(modules) { // webpackBootstrap
 	  Version: 1.0.0-beta.2
 	  Author: Cheft
 	*/
-	var Component = __webpack_require__(1);
-	var observable = __webpack_require__(3);
-	var Router = __webpack_require__(5);
+	var Component = __webpack_require__(1)
+	var observable = __webpack_require__(3)
+	var Router = __webpack_require__(5)
 
 	var coala = {
 	  observable: observable,
 
 	  mount: function(opts, el) {
-	    return this.component(opts).mount(el);
+	    return this.component(opts).mount(el)
 	  },
 
 	  component: function(opts) {
-	    return new Component(opts);
+	    return new Component(opts)
 	  },
 
 	  router: function(opts) {
-	    return new Router(opts).start();
+	    return new Router(opts).start()
 	  }
 	};
 
-	observable(coala);
-	module.exports = coala;
+	observable(coala)
+	module.exports = coala
 
 
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var morphdom = __webpack_require__(2);
-	var observable = __webpack_require__(3);
-	var scoped = __webpack_require__(4);
+	var morphdom = __webpack_require__(2)
+	var observable = __webpack_require__(3)
+	var scoped = __webpack_require__(4)
 
 	function Component(opts) {
-	  this.opts = opts || {};
-	  this.listen = this.opts.listen || {};
-	  this.handle = this.opts.handle || {};
-	  observable(this);
+	  this.opts = opts || {}
+	  this.listen = this.opts.listen || {}
+	  this.handle = this.opts.handle || {}
+	  observable(this)
 	  if ($.isFunction(opts.data)) {
-	    var result = opts.data.call(this);
+	    var result = opts.data.call(this)
 	    if (result && result.promise) {
-	      this.promise = result;
-	      this.data = this.data || {};
+	      this.promise = result
+	      this.data = this.data || {}
 	    } else {
-	      this.data = result;
+	      this.data = result
 	    }
 	  } else {
-	    this.data = opts.data || {};
+	    this.data = opts.data || {}
 	  }
-	  this._mixin();
-	  this._listenTo();
-	  this.trigger('init');
-	  this._initRefs();
+	  this._mixin()
+	  this._listenTo()
+	  this.trigger('init')
+	  this._initRefs()
 	}
 
-	Component.prototype._initRefs = function() {
-	  if (!this.opts.refs) return;
-	  this.refs = {}
-	  for (var p in this.opts.refs) {
-	    var value = this.opts.refs[p];
-	    if (value.data) value.component.data = $.extend({}, value.component.data, value.data);
-	    var c = new Component(value.component);
-	    c.refOpts = value
-	    c.parent = this;
-	    this.refs[p] = c;
-	  }
-	}
+	Component.prototype = {
+	  _initRefs: function() {
+	    if (!this.opts.refs) return
+	    this.refs = {}
+	    for (var p in this.opts.refs) {
+	      var value = this.opts.refs[p]
+	      if (value.data) value.component.data = $.extend({}, value.component.data, value.data)
+	      var c = new Component(value.component)
+	      c.refOpts = value
+	      c.parent = this
+	      this.refs[p] = c
+	    }
+	  },
 
-	Component.prototype._bindEvents = function() {
-	  if (!this.opts.events) return;
-	  for (var e in this.opts.events) {
-	    var handleName = this.opts.events[e];
-	    var index = e.indexOf(' ');
-	    var selector = e.substr(index + 1, e.length);
-	    this.el.on(e.substr(0, index), selector, $.proxy(this.handle[handleName], this));
-	  }
-	}
+	  _bindEvents: function() {
+	    if (!this.opts.events) return
+	    for (var e in this.opts.events) {
+	      var handleName = this.opts.events[e]
+	      var index = e.indexOf(' ')
+	      var selector = e.substr(index + 1, e.length)
+	      this.el.on(e.substr(0, index), selector, $.proxy(this.handle[handleName], this))
+	    }
+	  },
 
-	Component.prototype._mixin = function() {
-	  if (!this.opts.mixins) return;
-	  if (!$.isArray(this.opts.mixins)) this.opts.mixins = [this.opts.mixins]
-	  this.opts.mixins.unshift(this);
-	  this.opts.mixins.unshift(true); // 深拷贝
-	  $.extend.apply($, this.opts.mixins);
-	}
+	  _mixin: function() {
+	    if (!this.opts.mixins) return
+	    if (!$.isArray(this.opts.mixins)) this.opts.mixins = [this.opts.mixins]
+	    this.opts.mixins.unshift(this)
+	    this.opts.mixins.unshift(true) // 深拷贝
+	    $.extend.apply($, this.opts.mixins)
+	  },
 
-	Component.prototype._listenTo = function() {
-	  for (var l in this.listen) {
-	    var fn = this.listen[l];
-	    this.on(l, fn);
-	  }
-	}
+	  _listenTo: function() {
+	    for (var l in this.listen) {
+	      var fn = this.listen[l]
+	      this.on(l, fn)
+	    }
+	  },
 
-	Component.prototype.mount = function(el) {
-	  var _this = this
-	  this.trigger('update');
-	  if (this.promise) {
-	    this.promise.done(function(resource) {
-	      _this.data.resource = resource;
-	      _this._mount(el);
-	      delete _this.promise;
+	  mount: function(el) {
+	    var _this = this
+	    this.trigger('update')
+	    if (this.promise) {
+	      this.promise.done(function(resource) {
+	        _this.data.resource = resource
+	        _this._mount(el)
+	        delete _this.promise
+	      })
+	    } else {
+	      this._mount(el)
+	    }
+	    return this
+	  },
+
+	  _mount: function(el) {
+	    if (el) {
+	      if (this.parent) {
+	        this.es = this.parent.es + ' ' + el
+	        this.el = this.parent.$(el)
+	      } else {
+	        this.es = el
+	        this.el = $(el)
+	      }
+	    }
+	    if (this.opts.tpl) {
+	      var dom = this.el.clone()
+	      dom.html(this.opts.tpl(this.data))
+	      scoped(dom, this.es)
+	      this.el.append(dom.html())
+	      this._bindEvents()
+
+	      for (var p in this.refs) {
+	        var ref = this.refs[p]
+	        ref.mount(ref.refOpts.el)
+	      }
+	    }
+	    this.trigger('updated').trigger('mount')
+	    return this
+	  },
+
+	  update: function(data) {
+	    if (data) $.extend(this.data, data)
+	    morphdom(this.el[0], this._update()[0], {
+	      onBeforeElUpdated: function(fromEl) {
+	        if (fromEl.tagName === 'STYLE') return false
+	        return true
+	      }
 	    })
-	  } else {
-	    this._mount(el);
-	  }
-	  return this;
-	}
+	    this._updated()
+	    return this
+	  },
 
-	Component.prototype._mount = function(el) {
-	  if (el) {
-	    if (this.parent) {
-	      this.es = this.parent.es + ' ' + el
-	      this.el = this.parent.$(el)
-	    } else {
-	      this.es = el
-	      this.el = $(el)
-	    }
-	  }
-	  if (this.opts.tpl) {
+	  _update: function() {
+	    this.trigger('update')
+	    if (!this.opts.tpl) return ''
 	    var dom = this.el.clone()
 	    dom.html(this.opts.tpl(this.data))
-	    scoped(dom, this.es)
-	    this.el.append(dom.html());
-	    this._bindEvents();
-
 	    for (var p in this.refs) {
-	      var ref = this.refs[p]
-	      ref.mount(ref.refOpts.el)
+	      var r = this.refs[p]
+	      dom.find(r.refOpts.el).html(r._update().html())
 	    }
+	    return dom
+	  },
+
+	  _updated: function() {
+	    for (var p in this.refs) this.refs[p]._updated()
+	    this.trigger('updated')
+	  },
+
+	  unmount: function() {
+	    this._unmount()
+	    this.el.empty().off()
+	  },
+
+	  _unmount: function() {
+	    for (var p in this.refs) this.refs[p]._unmount()
+	    this.trigger('unmount').off('*')
+	  },
+
+	  $: function(el) {
+	    return this.el.find(el)
 	  }
-	  this.trigger('updated').trigger('mount');
-	  return this
 	}
 
-	Component.prototype.update = function(data) {
-	  if (data) $.extend(this.data, data);
-	  morphdom(this.el[0], this._update()[0], {
-	    onBeforeElUpdated: function(fromEl) {
-	      if (fromEl.tagName === 'STYLE') return false
-	      return true;
-	    }
-	  });
-	  this._updated();
-	  return this;
-	}
-
-	Component.prototype._update = function() {
-	  this.trigger('update');
-	  if (!this.opts.tpl) return '';
-	  var dom = this.el.clone()
-	  dom.html(this.opts.tpl(this.data))
-	  for (var p in this.refs) {
-	    var r = this.refs[p];
-	    dom.find(r.refOpts.el).html(r._update().html());
-	  }
-	  return dom
-	}
-
-	Component.prototype._updated = function() {
-	  for (var p in this.refs) this.refs[p]._updated()
-	  this.trigger('updated');
-	}
-
-	Component.prototype.unmount = function() {
-	  this._unmount();
-	  this.el.empty().off();
-	}
-
-	Component.prototype._unmount = function() {
-	  for (var p in this.refs) this.refs[p]._unmount()
-	  this.trigger('unmount').off('*');
-	}
-
-	Component.prototype.$ = function(el) {
-	  return this.el.find(el);
-	}
-
-	module.exports = Component;
+	module.exports = Component
 
 
 /***/ },
@@ -906,81 +908,62 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	module.exports = function(el) {
-	  el = el || {};
-	  var callbacks = {};
-	  var _id = 0;
+	  el = el || {}
+	  var callbacks = {}
 
-	  el.on = function(events, fn) {
-	    if (typeof fn == 'function') {
-	      if (typeof fn.id == 'undefined') {
-	        fn._id = _id++;
-	      }
+	  el.on = function(event, fn) {
+	    if (typeof fn == 'function') (callbacks[event] = callbacks[event] || []).push(fn)
+	    return el
+	  }
 
-	      events.replace(/\S+/g, function(name, pos) {
-	        (callbacks[name] = callbacks[name] || []).push(fn);
-	        fn.typed = pos > 0;
-	      });
-	    }
-
-	    return el;
-	  };
-
-	  el.off = function(events, fn) {
-	    if (events == '*') {
-	      callbacks = {};
-	    }else {
-	      events.replace(/\S+/g, function(name) {
-	        if (fn) {
-	          var arr = callbacks[name];
-	          for (var i = 0, cb; (cb = arr && arr[i]); ++i) {
-	            if (cb._id == fn._id) {
-	              arr.splice(i--, 1);
-	            }
-	          }
-	        } else {
-	          callbacks[name] = [];
+	  el.off = function(event, fn) {
+	    if (event == '*' && !fn) callbacks = {}
+	    else {
+	      if (fn) {
+	        var arr = callbacks[event]
+	        for (var i = 0, cb; cb = arr && arr[i]; ++i) {
+	          if (cb == fn) arr.splice(i--, 1)
 	        }
-	      });
+	      } else delete callbacks[event]
 	    }
-
-	    return el;
-	  };
+	    return el
+	  }
 
 	  // only single event supported
-	  el.one = function(name, fn) {
+	  el.one = function(event, fn) {
 	    function on() {
-	      el.off(name, on);
-	      fn.apply(el, arguments);
+	      el.off(event, on)
+	      fn.apply(el, arguments)
+	    }
+	    return el.on(event, on)
+	  }
+
+	  el.trigger = function(event) {
+	    // getting the arguments
+	    var arglen = arguments.length - 1,
+	      args = new Array(arglen),
+	      fns,
+	      fn,
+	      i
+
+	    for (i = 0; i < arglen; i++) {
+	      args[i] = arguments[i + 1] // skip first argument
 	    }
 
-	    return el.on(name, on);
-	  };
+	    fns = [].slice.call(callbacks[event] || [], 0)
 
-	  el.trigger = function(name) {
-	    var args = [].slice.call(arguments, 1);
-	    var fns = callbacks[name] || [];
-
-	    for (var i = 0, fn; (fn = fns[i]); ++i) {
-	      if (!fn.busy) {
-	        fn.busy = 1;
-	        fn.apply(el, fn.typed ? [name].concat(args) : args);
-	        if (fns[i] !== fn) {
-	          i--;
-	        }
-
-	        fn.busy = 0;
-	      }
+	    for (i = 0; fn = fns[i]; ++i) {
+	      fn.apply(el, args)
 	    }
 
-	    if (callbacks.all && name != 'all') {
-	      el.trigger.apply(el, ['all', name].concat(args));
-	    }
+	    if (callbacks['*'] && event != '*')
+	      el.trigger.apply(el, ['*', event].concat(args))
 
-	    return el;
-	  };
+	    return el
+	  }
 
-	  return el;
-	};
+	  return el
+	}
 
 
 /***/ },
@@ -988,34 +971,31 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	function scoper(css, prefix) {
-	  var re = new RegExp('([^\r\n,{}]+)(,(?=[^}]*{)|\s*{)', 'g');
+	  var re = new RegExp('([^\r\n,{}]+)(,(?=[^}]*{)|\s*{)', 'g')
 	  css = css.replace(re, function(g0, g1, g2) {
 	    if (g1.match(/^\s*(@media|@keyframes|to|from|@font-face)/)) {
-	      return g1 + g2;
+	      return g1 + g2
 	    }
 
 	    if (g1.match(/:scope/)) {
 	      g1 = g1.replace(/([^\s]*):scope/, function(h0, h1) {
-	        if (h1 === '') {
-	          return ' ';
-	        } else {
-	          return ' ' + h1;
-	        }
-	      });
+	        if (h1) return ' ' + h1
+	        return ' '
+	      })
 	    }
 
-	    g1 = g1.replace(/^(\s*)/, '$1' + prefix + ' ');
-	    return g1 + g2;
-	  });
-	  return css;
+	    g1 = g1.replace(/^(\s*)/, '$1' + prefix + ' ')
+	    return g1 + g2
+	  })
+	  return css
 	}
 
 	module.exports = function (dom, prefix) {
-	  if ('scoped' in document.createElement('style')) return;
-	  var styles = dom.find('style[scoped]');
-	  if (styles.length === 0) return;
+	  if ('scoped' in document.createElement('style')) return
+	  var styles = dom.find('style[scoped]')
+	  if (styles.length === 0) return
 	  for (var i = 0; i < styles.length; i++) {
-	    styles[i].innerHTML = scoper(styles[i].innerHTML, prefix);
+	    styles[i].innerHTML = scoper(styles[i].innerHTML, prefix)
 	  }
 	}
 
@@ -1029,84 +1009,86 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /[\-{}\[\]+?.,\\\^$|#\s]/g,
 	  /\((.*?)\)/g,
 	  /(\(\?)?:\w+/g,
-	  /\*\w+/g,
+	  /\*\w+/g
 	],
 	getRegExp = function(route) {
 	  route = route.replace(regexps[0], '\\$&')
 	    .replace(regexps[1], '(?:$1)?')
 	    .replace(regexps[2], function(match, optional) {
 	      return optional ? match : '([^/?]+)'
-	    }).replace(regexps[3], '([^?]*?)');
-	  return new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
+	    }).replace(regexps[3], '([^?]*?)')
+	  return new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$')
 	},
 	extractParams = function(route, fragment) {
-	  var params = route.exec(fragment).slice(1);
-	  var results = [],
-	    i;
+	  var params = route.exec(fragment).slice(1)
+	  var results = [], i
 	  for (i = 0; i < params.length; i++) {
-	    results.push(decodeURIComponent(params[i]) || null);
+	    results.push(decodeURIComponent(params[i]) || null)
 	  }
-	  return results;
-	};
+	  return results
+	}
 
 	function Router(opts) {
 	  _this = this
-	  this.opts = opts;
-	  this.routes = opts.routes;
+	  this.opts = opts
+	  this.routes = opts.routes
 	  this._emit()
 	}
 
-	Router.prototype._exec = function(path, e) {
-	  for (var r in this.routes) {
-	    var route = getRegExp(r);
-	    if (!route.test(path)) {
-	      continue;
+	Router.prototype = {
+	  _exec: function(path) {
+	    for (var r in this.routes) {
+	      var route = getRegExp(r)
+	      if (!route.test(path)) {
+	        continue
+	      }
+	      if (typeof this.routes[r] === 'function') {
+	        this.routes[r].apply(this, extractParams(route, path))
+	      } else {
+	        var fn = this.opts[this.routes[r]]
+	        fn ? fn.apply(this, extractParams(route, path)) : void 0
+	      }
 	    }
-	    if (typeof this.routes[r] === 'function') {
-	      this.routes[r].apply(this, extractParams(route, path));
-	    } else {
-	      var fn = this.opts[this.routes[r]];
-	      fn ? fn.apply(this, extractParams(route, path)) : void 0;
-	    }
-	  }
-	};
+	  },
 
-	Router.prototype._emit = function(e) {
-	  var path = location.href.split('#')[1] || '/';
-	  _this._exec(path, e);
+	  _emit: function(e) {
+	    var path = location.href.split('#')[1] || '/'
+	    _this._exec(path, e)
+	  },
+
+	  start: function() {
+	    window.addEventListener ? window.addEventListener('hashchange', this._emit, false) : window.attachEvent('onhashchange', this._emit)
+	    return this
+	  },
+
+	  stop: function() {
+	    window.removeEventListener ? window.removeEventListener('hashchange', this._emit, false) : window.detachEvent('onhashchange', this._emit)
+	    return this
+	  },
+
+	  go: function(path) {
+	    location.hash = path
+	    this._emit()
+	    return this
+	  },
+
+	  back: function() {
+	    history.back()
+	    return this
+	  },
+
+	  add: function(route, fn) {
+	    this.routes[route] = fn
+	    return this
+	  },
+
+	  remove: function(route) {
+	    delete this.routes[route]
+	    return this
+	  }
 	}
 
-	Router.prototype.start = function() {
-	  window.addEventListener ? window.addEventListener('hashchange', this._emit, false) : window.attachEvent('onhashchange', this._emit);
-	  return this;
-	};
-
-	Router.prototype.stop = function() {
-	  window.removeEventListener ? window.removeEventListener('hashchange', this._emit, false) : window.detachEvent('onhashchange', this._emit);
-	};
-
-	Router.prototype.go = function(path) {
-	  location.hash = path;
-	  this._emit();
-	  return this;
-	};
-
-	Router.prototype.back = function() {
-	  history.back();
-	  return this;
-	};
-
-	Router.prototype.add = function(route, fn) {
-	  this.routes[route] = fn
-	  return this;
-	};
-
-	Router.prototype.remove = function(route) {
-	  delete this.routes[route]
-	  return this;
-	};
-
-	module.exports = Router;
+	module.exports = Router
 
 
 /***/ }
