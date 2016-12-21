@@ -75,17 +75,17 @@ hero.one('die', function(param) {
 
 
 ## Router 路由器
-Coala 路由器是一个最小化的路由器实现，只会对 hash 地址的变更作出响应，当浏览器 URL(hash) 地址变化时，后执行相应的回调函数。它支持一些通配符，`:`  `*` ，能为我们应用提供方便。
+Coala 路由器是一个最小化的路由器实现，只会对 hash 地址的变更作出响应，当浏览器 URL(hash) 地址变化时，会执行相应的回调函数。它支持一些通配符，`:`  `*` ，能为我们应用提供方便。
 
 ### 配置路由器
 路由表 routes 将带参数的 url 映射到路由配置函数上（或直接的函数定义）。
 路由可以包含参数 `:component`，它在斜线之间匹配 URL 组件。 路由也支持通配符 `*anything`，可以匹配后面多个 URL 路径: 
 
-* 路由 "search/:query/p:page" 能匹配#search/house/p3 , 这里传入了 "house" 和 "2" 便注入到路由对应的函数参数中。
+* 路由 "search/:query/p:page" 能匹配#search/house/p3 , 这里传入了 "house" 和 "3" 便注入到路由对应的函数参数中。
 
 * 路由 "file/*path"可以匹配 #file/nested/folder/file.txt，这时传入函数的参数为 "nested/folder/file.txt"。
 
-* 路由 "docs/:section(/:subsection)"可以匹配#docs/faq 和 #docs/faq/installing，第一种情况，传入 "faq" 到路由对应的动作中去， 第二种情况，传入"faq" 和 "installing" 到路由对应的动作中去。
+* 路由 "docs/:section(/:subsection)"可以匹配#docs/faq 和 #docs/faq/installing，第一种情况，传入 "faq" 到路由对应的函数参数中去， 第二种情况，传入"faq" 和 "installing" 到路由对应的函数参数中去。
 
 ```javascript
 coala.router({
@@ -147,7 +147,7 @@ router.stop()
 
 #### start
 
-启动路由器，使用 coala.router 会自动启动路由器
+启动路由器，使用 coala.router 会自动启动路由器，所以不需要手动启动，除非重新再启动
 
 
 #### stop
@@ -347,7 +347,7 @@ refs: {
       label: '性别'
       items: ['男', '女']
     }
-    key: 'sex'
+    key: 'sex'  // 额外的自定义属性
   },
     
   eduSelect: {
@@ -357,7 +357,7 @@ refs: {
       label: '学历'
       items: ['本科', '大专', '高中']
     }
-    key: 'edu'
+    key: 'edu'  // 额外的自定义属性
   }
 },
   
@@ -365,7 +365,7 @@ listen: {
   mount: function() {
     // 访问组件
     this.refs.sexSelect              // coala-select Component
-    this.refs.eduSelect.refOpts.key  // edu
+    this.refs.eduSelect.refOpts.key  // edu  获取额外的自定义属性
   }
 }
 ```
@@ -561,9 +561,9 @@ es 为节点 el 的上下文 selector，比如当前组件是mount在 '#child' �
 
 
 
-### 组件实例化方法 Component(opts)
+### 组件构造函数 Component(opts)
 
-opts 为组件配置，一般只有最大的那个组件需要实例化，子组件都是框架负责，方法暴露在 coala 下，参考 coala 的 component 方法
+opts 是组件配置，一般只有最大的那个组件需要实例化，并且是由 coala 代理，子组件都是 coala 来实例化，详细参考 coala 的 component 方法
 
 > @返回值 组件实例
 
@@ -602,14 +602,19 @@ this.update()
 
 ## Coala 框架对象
 
-coala 对象本身也是 observable，它有 component、mount、observable、router 四个方法
-
+coala 对象本身也是 observable，除有 observable 方法外，还有 component、mount、observable、router 四个方法
 
 
 ### 创建组件 component(opts)
 
 opts 为组件配置，coala.component 方法一般用于创建一些独立的组件，再手动设置组件的关系。
-
+```javascript
+var coala = require('coala');
+var component = coala.component(require('./todomvc'));
+component.parent = xxx
+component.other = xxx
+component.mount('#content')
+```
 > @返回值 组件实例
 
 
@@ -620,8 +625,8 @@ opts 为组件配置，el 是 jquery 选择器，coala 会实例化并挂载此�
 
 ```javascript
 var coala = require('coala');
-var component = require('./todomvc');
-coala.mount(component, 'body');
+var todomvc = require('./todomvc');
+coala.mount(todomvc, 'body');
 ```
 
 > @返回值 组件实例
@@ -630,9 +635,10 @@ coala.mount(component, 'body');
 
 ### 观察者方法 observable(el)
 
-为 `obj` 对象添加 `Observable` 支持，如果参数为空，则创建一个空的观察者对象
+为 `obj` 对象添加 `Observable` 支持，如果参数为空，则创建一个空的观察者对象，详细参考观察者部分
 
-> @返回值 参数对象 或新的observable 对象
+
+> @返回值 参数对象 或新的 observable 对象
 
 
 

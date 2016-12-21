@@ -1,6 +1,6 @@
 <table class="table table-striped latest-data">
   <tbody>
-    {{~it :tr}}
+    {{~data :tr}}
     <tr>
       <td class="dbname">{{=tr.dbname}}</td>
 
@@ -23,10 +23,6 @@
     {{~}}
   </tbody>
 </table>
-
-<style scoped>
-
-</style>
 
 <script>
   var perfMonitor = require('./test')

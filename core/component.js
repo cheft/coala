@@ -30,8 +30,8 @@ Component.prototype = {
     this.refs = {}
     for (var p in this.opts.refs) {
       var value = this.opts.refs[p]
-      if (value.data) value.component.data = $.extend({}, value.component.data, value.data)
       var c = new Component(value.component)
+      if (value.data) c.data = $.isArray(value.data) ? value.data : $.extend(flase, value.component.data, value.data)
       c.refOpts = value
       c.parent = this
       this.refs[p] = c

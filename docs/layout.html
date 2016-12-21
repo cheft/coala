@@ -1,6 +1,18 @@
 <div class="top-nav"></div>
 <div class="content"></div>
 
+<style scoped>
+.content {
+	min-height: 1080px;
+}
+
+.fade-in, .fade-out {
+  transition: opacity .3s ease;
+}
+.fade-out {
+  opacity: 0;
+}
+</style>
 <script>
 	var coala = require('../coala')
 	var components = {
@@ -23,9 +35,17 @@
 			mountContent: function(name) {
 				this.refs.topnav.data.active = name
 				this.refs.topnav.update()
-				
-				if (this.content) this.content.unmount()
-				this.content =  coala.mount(components[name], this.es + ' .content')
+				NProgress.start()
+				if (this.content) {
+					this.content.el.addClass('fade-out')
+					this.content.unmount()
+				}
+				var _this = this
+				setTimeout(function() {
+					_this.$('.content').removeClass('fade-out').addClass('fade-in')
+					_this.content =  coala.mount(components[name], _this.es + ' .content')
+					NProgress.done()
+				}, 300)
 			}
 		}
 	}

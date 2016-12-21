@@ -1,0 +1,54 @@
+<div class="search">善用 ctrl(cmd) + f 搜索</div>
+<ul>
+	{{~data :item :idx}}
+	<li><a href="javascript:;" data-idx="{{=idx}}">{{=item.name}}</a></li>
+	{{~}}
+</ul>
+
+<style scoped>
+	:scope {
+		position: fixed;
+	  z-index: 10;
+	  top: 61px;
+		padding: 20px 0 0 0;
+	  width: 260px;
+	  overflow-x: hidden;
+	  overflow-y: auto;
+	  -webkit-overflow-scrolling: touch;
+	}
+
+	.search {
+	  font-size: 11px;
+	  color: #FF6A3C;
+	  margin-left: 40px;
+	  margin-top: 20px;
+	}
+
+	ul {
+		margin: 0;
+		list-style: none;
+	}
+
+	ul > li {
+		margin: 20px 0;
+	}
+</style>
+
+<script>
+module.exports = {
+	data: [],
+
+	events: {
+		'click ul > li > a': 'itemClick'
+	},
+
+	handle: {
+		itemClick: function(e) {
+			var idx = $(e.target).data('idx')
+			if (this.refOpts.itemClick) {
+				this.refOpts.itemClick.call(this, this.data[idx], e)
+			}
+		}
+	}
+}
+</script>

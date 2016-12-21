@@ -1,12 +1,5 @@
 <div class="container">
-	<div class="catalog">
-		<div class="search">善用 ctrl(cmd) + f 搜索</div>
-		<ul id="catalog">
-			{{~data.menus :item}}
-			<li><a href="javascript:;" data-pos="{{=item.scrollPos}}">{{=item.name}}</a></li>
-			{{~}}
-		</ul>
-	</div>
+	<div id="catalog"></div>
 	<div class="mark">{{=data.mark}}</div>
 </div>
 
@@ -14,33 +7,6 @@
 .container {
 	width: 1024px;
 	margin: auto;
-}
-
-.search {
-  font-size: 11px;
-  color: red;
-  margin-left: 40px;
-  margin-top: 20px;
-}
-
-.catalog {
-	position: fixed;
-  z-index: 10;
-  top: 61px;
-	padding: 20px 0 0 0;
-  width: 260px;
-  overflow-x: hidden;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.catalog > ul {
-	margin: 0;
-	list-style: none;
-}
-
-.catalog > ul > li {
-	margin: 20px 0;
 }
 
 .mark {
@@ -61,30 +27,29 @@ blockquote {
 <script>
 module.exports = {
 	data: {
-		menus: [
-			{name: 'Observable 观察者', scrollPos: 60},
-			{name: 'Router 路由器', scrollPos: 1770},
-			{name: 'Component 组件配置', scrollPos: 4196},
-			{name: 'Component 对象', scrollPos: 11130},
-			{name: 'Coala 框架对象', scrollPos: 13105}
-		],
 		mark: require('../markdown/api.md')
+	},
+	refs: {
+		catalog: {
+			component: require('./catalog.html'),
+			el: '#catalog',
+			data: [
+				{name: 'Observable 观察者', scrollPos: 60},
+				{name: 'Router 路由器', scrollPos: 1770},
+				{name: 'Component 组件配置', scrollPos: 4196},
+				{name: 'Component 对象', scrollPos: 11130},
+				{name: 'Coala 框架对象', scrollPos: 13105}
+			],
+			itemClick: function(item) {
+				$('html, body').animate({scrollTop: item.scrollPos + 'px'}, 500)
+			}
+		}
 	},
 	listen: {
 		mount: function() {
 			this.$('pre code').each(function(i, block) {
 		    hljs.highlightBlock(block)
 		  });
-		}
-	},
-	events: {
-		'click #catalog > li > a': 'position'
-	},
-
-	handle: {
-		position: function(e) {
-			var pos = $(e.target).data('pos')
-			$('html, body').animate({scrollTop: pos + 'px'}, 500);
 		}
 	}
 }

@@ -1,8 +1,9 @@
 <div class="container">
+	<div id="catalog"></div>
 	<div class="mark">{{=data.markup}}</div>
 </div>
 
-<style>
+<style scoped>
 .container {
 	width: 1024px;
 	margin: auto;
@@ -31,6 +32,22 @@ module.exports = {
 	data: {
 		markup: require('../markdown/guide.md')
 	},
+	refs: {
+		catalog: {
+			component: require('./catalog.html'),
+			el: '#catalog',
+			data: [
+				{name: '前言', scrollPos: 60},
+				{name: '起步', scrollPos: 1770},
+				{name: '组件', scrollPos: 4196},
+				{name: '嵌套', scrollPos: 11130},
+				{name: '路由', scrollPos: 13105}
+			],
+			itemClick: function(item) {
+				console.log(item, 34534)
+			}
+		}
+	},
 
 	listen: {
 		mount: function() {
@@ -44,8 +61,6 @@ module.exports = {
 
 		unmount: function() {
 			console.log('guide unmount')
-			window.aaa = this
-			console.log(this.$('#demo01'))
 		}
 	}
 }
