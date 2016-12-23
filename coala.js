@@ -131,6 +131,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    for (var e in this.opts.events) {
 	      var handleName = this.opts.events[e]
 	      var index = e.indexOf(' ')
+	      if (index === -1) throw 'The ' + handleName + ' event is not separated by whitespace.'
+	      if (!this.handle[handleName]) throw 'The ' + handleName + ' handle is not defined.'
 	      var selector = e.substr(index + 1, e.length)
 	      this.el.on(e.substr(0, index), selector, $.proxy(this.handle[handleName], this))
 	    }

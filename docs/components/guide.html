@@ -37,11 +37,17 @@ module.exports = {
 			component: require('./catalog.html'),
 			el: '#catalog',
 			data: [
-				{name: '前言', scrollPos: 60},
-				{name: '起步', scrollPos: 1770},
+				{name: '环境安装', scrollPos: 60},
+				{name: '介绍 / 入门', scrollPos: 1770},
+				{name: 'Coala 使用', scrollPos: 1770},
 				{name: '组件', scrollPos: 4196},
-				{name: '嵌套', scrollPos: 11130},
-				{name: '路由', scrollPos: 13105}
+				{name: '数据', scrollPos: 4196},
+				{name: '模板 / doT', scrollPos: 4196},
+				{name: '监听 / 生命周期', scrollPos: 4196},
+				{name: '事件 / 处理', scrollPos: 4196},
+				{name: '子组件 / 通信', scrollPos: 11130},
+				{name: '混合', scrollPos: 11130},
+				{name: '路由使用', scrollPos: 13105}
 			],
 			itemClick: function(item) {
 				console.log(item, 34534)
@@ -51,8 +57,10 @@ module.exports = {
 
 	listen: {
 		mount: function() {
+			$('html, body').animate({scrollTop: '60px'}, 0)
 			window.demo01 =  coala.mount(require('../tutorial/demo01.html'), this.es + ' #demo01')
 			window.demo02 =  coala.mount(require('../tutorial/demo02.html'), this.es + ' #demo02')
+			window.demo03 =  coala.mount(require('../tutorial/demo03.html'), this.es + ' #demo03')
 
 			this.$('pre code').each(function(i, block) {
 		    hljs.highlightBlock(block)

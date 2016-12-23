@@ -1,26 +1,45 @@
-<div class="text">{{=data.text}}</div>
-<button id="reverseText">reverseText</button>
-
-<script>
-module.exports = {
-  data: {
-    text: 'Hello Coala!'
-  },
-  events: {
-  	'click #reverseText': 'reverseText',
-  },
-
-  handle: {
-  	reverseText: function(e) {
-  		this.data.text = this.data.text.split('').reverse().join('')
-  		this.update()
-  	}
-  }
-}
-</script>
-
+<input placeholder="输入并按回车确定">
+<ol>
+  {{~data :item :idx}}
+  <li data-idx="{{=idx}}"{{?item.completed}} class="completed"{{?}}>
+    {{=item.title}}
+    <a href="javascript:;">&times;</a>
+  </li>
+  {{~}}
+</ol>
 <style scoped>
-	.text {
-		color: #d14;
-	}
+  ol { margin: 0; }
+  .completed { text-decoration:line-through; }
 </style>
+<script>
+  module.exports = {
+    data: [{title: '学习 Coala 框架！'}],
+    events: {
+      'keyup input': 'addTodo',
+      'click ol > li': 'toggleComplete',
+      'click ol > li > a': 'removeTodo'
+    },
+
+    handle: {
+      addTodo: function(e) {
+        if (e.keyCode !== 13) return
+        this.data.push({title: e.target.value})
+        this.update()
+      },
+
+      toggleComplete: function(e) {
+        var idx = $(e.target).data('idx')
+        this.data[idx].completed = !this.data[idx].completed
+        this.update()
+      },
+
+      removeTodo: function(e) {
+        var idx = $(e.target).parent().data('idx')
+        this.data.splice(idx, 1)
+        this.update()
+        // 阻止事件冒泡，防止冒泡执行 toggleComplete
+        e.stopPropagation()
+      }
+    }
+  }
+</script>

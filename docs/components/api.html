@@ -47,6 +47,7 @@ module.exports = {
 	},
 	listen: {
 		mount: function() {
+			$('html, body').animate({scrollTop: '60px'}, 0)
 			this.$('pre code').each(function(i, block) {
 		    hljs.highlightBlock(block)
 		  });

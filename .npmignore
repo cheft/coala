@@ -1,7 +1,9 @@
 core
+dist
 docs
 examples
 node_modules
+tests
 .git
 .gitignore
 .npmignore

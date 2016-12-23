@@ -11,8 +11,7 @@
     "zepto": "uglifyjs zepto/zepto-coala.js -o zepto/zepto-coala.min.js -m -c && uglifyjs zepto/zepto-deferred.js -o zepto/zepto-deferred.min.js -m -c"
   },
   "dependencies": {
-    "morphdom": "^2.2.1",
-    "jquery": "^1.11.3"
+    "morphdom": "^2.2.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",

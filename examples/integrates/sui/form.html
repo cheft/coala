@@ -11,7 +11,7 @@
           <div class="item-inner">
             <div class="item-title label">姓名</div>
             <div class="item-input">
-              <input type="text" placeholder="Your name">
+              <input name="name" value="{{=data.name}}" type="text" placeholder="Your name">
             </div>
           </div>
         </div>
@@ -22,7 +22,7 @@
           <div class="item-inner">
             <div class="item-title label">邮箱</div>
             <div class="item-input">
-              <input type="email" placeholder="E-mail">
+              <input name="email" value="{{=data.email}}" type="email" placeholder="E-mail">
             </div>
           </div>
         </div>
@@ -33,7 +33,7 @@
           <div class="item-inner">
             <div class="item-title label">密码</div>
             <div class="item-input">
-              <input type="password" placeholder="Password" class="">
+              <input name="password" value="{{=data.password}}" type="password" placeholder="Password" class="">
             </div>
           </div>
         </div>
@@ -44,9 +44,9 @@
           <div class="item-inner">
             <div class="item-title label">性别</div>
             <div class="item-input">
-              <select>
-                <option>Male</option>
-                <option>Female</option>
+              <select name="sex">
+                <option {{?data.sex==='Male'}}selected{{?}}>Male</option>
+                <option {{?data.sex==='Female'}}selected{{?}}>Female</option>
               </select>
             </div>
           </div>
@@ -59,7 +59,7 @@
           <div class="item-inner">
             <div class="item-title label">生日</div>
             <div class="item-input">
-              <input type="date" placeholder="Birth day" value="2014-04-30">
+              <input name="date" value="{{=data.date}}" type="date" placeholder="Birth day">
             </div>
           </div>
         </div>
@@ -72,7 +72,7 @@
             <div class="item-title label">开关</div>
             <div class="item-input">
               <label class="label-switch">
-                <input type="checkbox">
+                <input name="switch" {{?data.switch}}checked{{?}} type="checkbox">
                 <div class="checkbox"></div>
               </label>
             </div>
@@ -85,7 +85,7 @@
           <div class="item-inner">
             <div class="item-title label">文本域</div>
             <div class="item-input">
-              <textarea></textarea>
+              <textarea name="text">{{=data.text}}</textarea>
             </div>
           </div>
         </div>
@@ -94,10 +94,59 @@
   </div>
   <div class="content-block">
     <div class="row">
-      <div class="col-50"><a href="#" class="button button-big button-fill button-danger">取消</a></div>
-      <div class="col-50"><a href="#" class="button button-big button-fill button-success">提交</a></div>
+      <div class="col-50"><a href="#" id="setValue" class="button button-big button-fill button-danger">设值</a></div>
+      <div class="col-50"><a href="#" id="getValue" class="button button-big button-fill button-success">获取</a></div>
     </div>
   </div>
 </div>
 
-<script></script>
+<script>
+  module.exports = {
+    data: {
+      name: '',
+      email: '',
+      password: '',
+      date: '',
+      sex: '',
+      switch: false,
+      text: ''
+    },
+    events: {
+      'click #setValue': 'setValue',
+      'click #getValue': 'getValue',
+      'input input': 'watchInput',
+      'change input': 'watchInput',
+      'input textarea': 'watchInput',
+      'change select': 'watchInput'
+    },
+
+    handle: {
+      watchInput: function(e) {
+        if (e.target.type === 'checkbox' || e.target.type === 'radio') {
+          this.data[e.target.name] = e.target.checked
+        } else {
+          this.data[e.target.name] = e.target.value
+        }
+      },
+
+      // 获取使用 jquery 方法值
+      setValue: function() {
+        this.data = {
+          name: 'cheft',
+          email: 'm@cheft.cn',
+          password: '123456',
+          date: '2015-02-03',
+          sex: 'Female',
+          switch: true,
+          text: 'hello textarea !'
+        }
+        this.update()
+      },
+
+      getValue: function() {
+        console.log(this.data)
+        alert(JSON.stringify(this.data))
+      }
+    }
+  }
+</script>

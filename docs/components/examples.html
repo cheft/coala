@@ -47,13 +47,17 @@ module.exports = {
 			el: '#catalog',
 			data: [
 				{name: 'TodoMVC', url: '/examples/todomvc.html'},
-				{name: 'Bootstrap', url: '/examples/bootstrap.html'},
-				{name: 'SUI Mobile', url: '/examples/sui.html'},
-				{name: 'DBmonster', url: '/examples/dbmonster.html'}
+				{name: '集成 Bootstrap', url: '/examples/bootstrap.html'},
+				{name: '集成 SUI Mobile', url: '/examples/sui.html'}
 			],
 			itemClick: function(item) {
 				this.parent.$('#iframe').attr('src', item.url)
 			}
+		}
+	},
+	listen: {
+		mount: function() {
+			$('html, body').animate({scrollTop: '0px'}, 0)
 		}
 	}
 }
