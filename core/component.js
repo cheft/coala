@@ -4,9 +4,9 @@ var observable = require('./observable');
 function Component(opts) {
   this.opts = opts;
   this.tpl = opts.tpl || function() {};
-
   this.el = opts.el ? $(opts.el) : undefined;
   this.data = opts.data || {};
+  this.data = $.extend($.isArray(opts.data) ? [] : {}, opts.data)
   this.listen = opts.listen || {};
   this.events = opts.events || {};
   this.handle = opts.handle || {};
@@ -15,10 +15,10 @@ function Component(opts) {
   observable(this);
   this._mixin(opts.mixins);
   this._listenTo();
-  this.trigger('init');
 }
 
 Component.prototype.mount = function(el) {
+  this.trigger('init');
   this.el = typeof el === 'string' ? $(el) : this.el;
   this.update();
   this.trigger('mount');
@@ -73,14 +73,10 @@ Component.prototype._mountRefs = function(parent) {
   for (var p in this.opts.refs) {
     var value = this.opts.refs[p];
     value.component.el = this.$(value.el);
-    var c = new Component(value.component);
-    c.refOpts = $.extend(true, {}, value);
-    delete c.refOpts.component;
-    delete c.refOpts.el;
-    if (value.data) {
-      c.data = $.extend(true, c.data, value.data);
-      delete c.refOpts.data;
-    }
+
+    var c = new Component(value.component)
+    if (value.data) c.data = $.isArray(value.data) ? value.data : $.extend(false, value.component.data, value.data)
+    c.refOpts = value
 
     if (value.rid) {
       c.rid = value.rid;
@@ -97,10 +93,8 @@ Component.prototype._bindEvents = function() {
   for (var e in this.events) {
     var handleName = this.events[e];
     var index = e.indexOf(' ');
-    if (index === -1) {
-      throw 'Event separated by a space.';
-    }
-
+    if (index === -1) throw 'The ' + handleName + ' event is not separated by whitespace.';
+    if (!this.handle[handleName]) throw 'The ' + handleName + ' handle is not defined.';
     var selector = e.substr(index + 1, e.length);
     this.el.on(e.substr(0, index), selector, $.proxy(this.handle[handleName], this));
   }

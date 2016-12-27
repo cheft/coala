@@ -55,7 +55,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
-	  Version: 0.0.9
+	  Version: 0.0.10
 	  Author: Cheft
 	*/
 	var Component = __webpack_require__(1);
@@ -92,9 +92,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	function Component(opts) {
 	  this.opts = opts;
 	  this.tpl = opts.tpl || function() {};
-
 	  this.el = opts.el ? $(opts.el) : undefined;
 	  this.data = opts.data || {};
+	  this.data = $.extend($.isArray(opts.data) ? [] : {}, opts.data)
 	  this.listen = opts.listen || {};
 	  this.events = opts.events || {};
 	  this.handle = opts.handle || {};
@@ -103,10 +103,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  observable(this);
 	  this._mixin(opts.mixins);
 	  this._listenTo();
-	  this.trigger('init');
 	}
 
 	Component.prototype.mount = function(el) {
+	  this.trigger('init');
 	  this.el = typeof el === 'string' ? $(el) : this.el;
 	  this.update();
 	  this.trigger('mount');
@@ -161,14 +161,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  for (var p in this.opts.refs) {
 	    var value = this.opts.refs[p];
 	    value.component.el = this.$(value.el);
-	    var c = new Component(value.component);
-	    c.refOpts = $.extend(true, {}, value);
-	    delete c.refOpts.component;
-	    delete c.refOpts.el;
-	    if (value.data) {
-	      c.data = $.extend(true, c.data, value.data);
-	      delete c.refOpts.data;
-	    }
+
+	    var c = new Component(value.component)
+	    if (value.data) c.data = $.isArray(value.data) ? value.data : $.extend(false, value.component.data, value.data)
+	    c.refOpts = value
 
 	    if (value.rid) {
 	      c.rid = value.rid;
@@ -185,10 +181,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  for (var e in this.events) {
 	    var handleName = this.events[e];
 	    var index = e.indexOf(' ');
-	    if (index === -1) {
-	      throw 'Event separated by a space.';
-	    }
-
+	    if (index === -1) throw 'The ' + handleName + ' event is not separated by whitespace.';
+	    if (!this.handle[handleName]) throw 'The ' + handleName + ' handle is not defined.';
 	    var selector = e.substr(index + 1, e.length);
 	    this.el.on(e.substr(0, index), selector, $.proxy(this.handle[handleName], this));
 	  }

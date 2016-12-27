@@ -1,6 +1,6 @@
 {
   "name": "coala",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "main": "coala.js",
   "scripts": {
     "coala": "webpack --config ./webpack.coala.js && uglifyjs coala.js -o coala.min.js -m -c --screw-ie8",
