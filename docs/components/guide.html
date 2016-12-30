@@ -42,8 +42,8 @@ module.exports = {
 			el: '#catalog',
 			data: [
 				{name: '介绍', scrollPos: 60},
-				{name: '环境安装', scrollPos: 60},
-				{name: '入门', scrollPos: 1770},
+				{name: '环境安装', scrollPos: 2677},
+				{name: '入门', scrollPos: 4110},
 				{name: 'Coala 使用', scrollPos: 1770},
 				{name: '组件', scrollPos: 4196},
 				{name: '数据', scrollPos: 4196},
@@ -56,13 +56,14 @@ module.exports = {
 			],
 			itemClick: function(item) {
 				console.log(item, 34534)
+				$('html, body').animate({scrollTop: item.scrollPos + 'px'}, 500)
 			}
 		}
 	},
 
 	listen: {
 		mount: function() {
-			$('html, body').animate({scrollTop: '60px'}, 0)
+			$('html, body').animate({scrollTop: '2677px'}, 0)
 			window.demo01 =  coala.mount(require('../tutorial/demo01.html'), this.es + ' #demo01')
 			window.demo02 =  coala.mount(require('../tutorial/demo02.html'), this.es + ' #demo02')
 			window.demo03 =  coala.mount(require('../tutorial/demo03.html'), this.es + ' #demo03')

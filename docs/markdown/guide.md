@@ -49,9 +49,9 @@ gzip 后只有 4k，站在 jQuery 面前可以忽略不计。当然你会说 jQu
 采用 [morphdom](https://github.com/patrick-steele-idem/morphdom) 开源库 对比更新DOM，减少人工操作 DOM 的复杂度，并且组件更新得更快。
 
 #### Coala 模板自选
-自己可任意选用 doT.js、artTemplate、Handlerbars、Marko 等
+框架默认使用 doT.js 模板，有需要可自己可选用 artTemplate、Handlerbars、Marko 等模板
 
-> 当你掌握了此框架，说明前端面象对象编程、组件化开发有了一定的认识，这时再去尝试 vue、react 等框架时，你会发现变得很容易
+_你如果掌握了此框架，说明你对前端面象对象编程、组件化开发有了一定的认识，这时尝试 vue、react 等框架时，会发现变得非常容易；赶紧开始搭建环境开始学习吧_
 
 ## 环境安装
 
@@ -109,7 +109,7 @@ npm install coala
 
 ## 入门
 
-### 最简 hello world 组件
+### 最简组件 hello world
 
 ``` html
 <div class="text">{{=data.text}}</div>
@@ -138,9 +138,9 @@ demo01.update({text: 'New Content'})
 ```
 <div class="demo" id="demo01"></div>
 
-你所看到的是 coala 最简单的一个 hello world 示例，我相信有点前端基础的人都能看懂，就是将一个字符串通过模板渲染到 dom 中，但 coala 使代码变得更清晰，并且提供一些 API 来处理这个组件。接下来通过另一个例子来感受一下：
+你所看到的是 coala 最简单的一个 hello world 示例，我相信大家能看懂，就是将一个字符串通过模板渲染到 dom 中；coala 在其中的作用是使代码变得更清晰规范，并且提供一系列的 API 来处理这个组件。接下来通过另一个例子来感受一下：
 
-### 相比复杂的 todo 组件
+### 相较复杂的组件 todo
 ```html
 <input placeholder="输入并按回车确定">
 <ol>
@@ -195,10 +195,12 @@ demo01.update({text: 'New Content'})
 看到上面例子是不是感觉事件绑定和处理跟 jQuery 实现方式很相似，没错，这就是 coala 的特点，接下来让我们更深入的学习 Coala 的使用吧。
 
 ## Coala 使用
+所有功能都是从 coala 这个对象开始，如果
+
 ```js
 var coala = require('coala')
 
-
+coala.observable
 coala.mount
 coala.component
 coala.router
@@ -260,7 +262,7 @@ coala.trigger('test')
   }
 ```
 
-组件配置
+组件完整配置
 ```js
   // component.js
   module.exports = {
@@ -309,7 +311,7 @@ module.exports = {
 }
 
 module.exports = {
-  [{title: '1234', desc: '1111'}, {title: '5678', desc: '2222'}]
+  data: [{title: '1234', desc: '1111'}, {title: '5678', desc: '2222'}]
 }
 ```
 
@@ -353,7 +355,7 @@ module.exports = {
 模板中可以嵌入脚本作为单文件组件，也可以作为模板供 js 组件引入
 
 ### doT 语法
-> 框架默认采用 doT 模板来实现 Demo，因此着重讲一下 doT 的语法，其它模与之对照
+> 框架默认采用 doT 模板来实现 Demo，因此着重讲一下 doT 的语法，其它模板引擎与之类似
 
 * JS 执行表达式  {{ }}
 * 数据输出表达式 {{= }}
@@ -362,7 +364,19 @@ module.exports = {
 * 数据编码输出表达式 {{! }}
 
 ### 局部样式
-采用 HTML5 标准，目前只有 firefox 默认支持，如果不支持就采用框架内键的 polyfill 实现
+采用 HTML5 标准，目前只有 firefox 默认支持，如果不支持就采用框架内键的 polyfill 实现，语法
+
+```
+<style scoped>
+  :scope {
+    color: red;
+  }
+
+  a {
+    text-decoration: none;
+  }
+</style>
+```
 
 
 ## 监听 / 生命周期
@@ -409,8 +423,41 @@ module.exports = {
 组件通信
 
 ## 混合
-listen
-handle
+
+```
+  // common.js
+module.exports = {
+  mixins: {
+    hello: function() {
+      ...
+    },
+
+    listen: {
+      toggleStatus: function() {
+        this.hello()
+        ...
+      }
+    },
+
+    handle: {
+      toggle: function() {
+        this.trigger('toggleStatus')
+      }
+    }
+  }
+}
+  // component.js
+module.exports = {
+  ...
+
+  mixins: require('./common.js'),
+
+  events: {
+    'click #toggerBtn': 'toggle'
+  }
+}
+
+```
 
 ## 路由使用
 
