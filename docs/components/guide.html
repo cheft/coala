@@ -24,6 +24,10 @@ blockquote {
 	border: 1px solid #ddd;
 	padding: 5px;
 }
+
+ul, ol {
+	margin: 0;
+}
 </style>
 <script>
 var coala = require('../../coala')
@@ -37,8 +41,9 @@ module.exports = {
 			component: require('./catalog.html'),
 			el: '#catalog',
 			data: [
+				{name: '介绍', scrollPos: 60},
 				{name: '环境安装', scrollPos: 60},
-				{name: '介绍 / 入门', scrollPos: 1770},
+				{name: '入门', scrollPos: 1770},
 				{name: 'Coala 使用', scrollPos: 1770},
 				{name: '组件', scrollPos: 4196},
 				{name: '数据', scrollPos: 4196},

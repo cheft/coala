@@ -16,7 +16,7 @@ function Component(opts) {
       this.data = result
     }
   } else {
-    this.data = opts.data || {}
+    this.data = $.extend(true, $.isArray(opts.data) ? [] : {}, opts.data);
   }
   this._mixin()
   this._listenTo()
@@ -31,7 +31,7 @@ Component.prototype = {
     for (var p in this.opts.refs) {
       var value = this.opts.refs[p]
       var c = new Component(value.component)
-      if (value.data) c.data = $.isArray(value.data) ? value.data : $.extend(flase, value.component.data, value.data)
+      if (value.data) c.data = $.isArray(value.data) ? value.data : $.extend(false, value.component.data, value.data)
       c.refOpts = value
       c.parent = this
       this.refs[p] = c

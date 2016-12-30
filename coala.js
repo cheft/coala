@@ -104,7 +104,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.data = result
 	    }
 	  } else {
-	    this.data = opts.data || {}
+	    this.data = $.extend(true, $.isArray(opts.data) ? [] : {}, opts.data);
 	  }
 	  this._mixin()
 	  this._listenTo()
@@ -119,7 +119,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    for (var p in this.opts.refs) {
 	      var value = this.opts.refs[p]
 	      var c = new Component(value.component)
-	      if (value.data) c.data = $.isArray(value.data) ? value.data : $.extend(flase, value.component.data, value.data)
+	      if (value.data) c.data = $.isArray(value.data) ? value.data : $.extend(false, value.component.data, value.data)
 	      c.refOpts = value
 	      c.parent = this
 	      this.refs[p] = c
@@ -347,6 +347,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 
 	            fromEl.firstChild.nodeValue = newValue;
+	        }
+	    },
+	    SELECT: function(fromEl, toEl) {
+	        if (!hasAttributeNS(toEl, null, 'multiple')) {
+	            var selectedIndex = -1;
+	            var i = 0;
+	            var curChild = toEl.firstChild;
+	            while(curChild) {
+	                var nodeName = curChild.nodeName;
+	                if (nodeName && nodeName.toUpperCase() === 'OPTION') {
+	                    if (hasAttributeNS(curChild, null, 'selected')) {
+	                        selectedIndex = i;
+	                        break;
+	                    }
+	                    i++;
+	                }
+	                curChild = curChild.nextSibling;
+	            }
+
+	            fromEl.selectedIndex = i;
 	        }
 	    }
 	};
