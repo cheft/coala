@@ -62,7 +62,6 @@ Router.prototype = {
 
   go: function(path) {
     location.hash = path
-    this._emit()
     return this
   },
 

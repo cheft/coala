@@ -20,7 +20,6 @@ function Component(opts) {
   }
   this._mixin()
   this._listenTo()
-  this.trigger('init')
   this._initRefs()
 }
 
@@ -67,7 +66,7 @@ Component.prototype = {
 
   mount: function(el) {
     var _this = this
-    this.trigger('update')
+    this.trigger('init')
     if (this.promise) {
       this.promise.done(function(resource) {
         _this.data.resource = resource
@@ -81,6 +80,7 @@ Component.prototype = {
   },
 
   _mount: function(el) {
+    this.trigger('update')
     if (el) {
       if (this.parent) {
         this.es = this.parent.es + ' ' + el
@@ -137,7 +137,7 @@ Component.prototype = {
 
   unmount: function() {
     this._unmount()
-    this.el.empty().off()
+    if (this.el) this.el.empty().off()
   },
 
   _unmount: function() {

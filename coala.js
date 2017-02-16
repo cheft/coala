@@ -55,7 +55,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
-	  Version: 1.0.0-beta.2
+	  Version: 1.0.0-beta.3
 	  Author: Cheft
 	*/
 	var Component = __webpack_require__(1)
@@ -108,7 +108,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	  this._mixin()
 	  this._listenTo()
-	  this.trigger('init')
 	  this._initRefs()
 	}
 
@@ -155,7 +154,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  mount: function(el) {
 	    var _this = this
-	    this.trigger('update')
+	    this.trigger('init')
 	    if (this.promise) {
 	      this.promise.done(function(resource) {
 	        _this.data.resource = resource
@@ -169,6 +168,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  _mount: function(el) {
+	    this.trigger('update')
 	    if (el) {
 	      if (this.parent) {
 	        this.es = this.parent.es + ' ' + el
@@ -225,7 +225,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  unmount: function() {
 	    this._unmount()
-	    this.el.empty().off()
+	    if (this.el) this.el.empty().off()
 	  },
 
 	  _unmount: function() {
@@ -1090,7 +1090,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  go: function(path) {
 	    location.hash = path
-	    this._emit()
 	    return this
 	  },
 
