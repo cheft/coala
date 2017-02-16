@@ -1,5 +1,5 @@
 ```html
-<div class="title">那些年我们玩过的Web框架</div>
+<div class="title">那些年我们一起玩过的Web框架</div>
 <ul>
 	{{~data.resource :item}}
 	<li>

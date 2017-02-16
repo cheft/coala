@@ -28,6 +28,10 @@ module.exports = {
     adminlte: [
       // 'webpack/hot/dev-server',
       path.resolve('./examples/integrates/adminlte/main.js')
+    ],
+    qfang: [
+      // 'webpack/hot/dev-server',
+      path.resolve('./examples/components/qfang/main.js')
     ]
   },
   output: {

@@ -1,6 +1,7 @@
 <div class="container">
 	<div id="catalog"></div>
 	<div class="mark">
+		<a class="source" href="http://git.qfang.com/qfang-frontend/coala/tree/diff/examples/components/todomvc">SOURCE</a>
 		<iframe id="iframe" src="/examples/todomvc.html"></iframe>
 	</div>
 </div>
@@ -28,6 +29,16 @@ blockquote {
 	padding: 5px;
 }
 
+.source {
+	display: inline-block;
+  font-size: 12px;
+  color: #FF6A3C;
+  padding: 1px 5px 1px 5px;
+  border: 1px solid #FF6A3C;
+  text-decoration: none;
+  margin-bottom: 10px;
+}
+
 iframe {
 	border: none;
 	width: 100%;
@@ -46,11 +57,13 @@ module.exports = {
 			component: require('./catalog.html'),
 			el: '#catalog',
 			data: [
-				{name: 'TodoMVC', url: '/examples/todomvc.html'},
-				{name: '集成 Bootstrap', url: '/examples/bootstrap.html'},
-				{name: '集成 SUI Mobile', url: '/examples/sui.html'}
+				{name: 'TodoMVC', url: '/examples/todomvc.html', source: 'http://git.qfang.com/qfang-frontend/coala/tree/diff/examples/components/todomvc'},
+				{name: 'Qfang Mobile', url: '/examples/qfang.html', source: 'http://git.qfang.com/qfang-frontend/coala/tree/diff/examples/components/qfang'},
+				{name: '集成 Bootstrap', url: '/examples/bootstrap.html', source: 'http://git.qfang.com/qfang-frontend/coala/tree/diff/examples/integrates/bootstrap'},
+				{name: '集成 SUI Mobile', url: '/examples/sui.html', source: 'http://git.qfang.com/qfang-frontend/coala/tree/diff/examples/integrates/sui'}
 			],
 			itemClick: function(item) {
+				this.parent.$('.source').attr('href', item.source)
 				this.parent.$('#iframe').attr('src', item.url)
 			}
 		}

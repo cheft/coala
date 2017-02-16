@@ -3,7 +3,7 @@
 		<img src="docs/assets/img/logo.png">
 		<div class="logo-text">
 			<div class="slogan">Ta 一个是非常简单的 WEB 框架</div>
-			<div><a href="#/guide" class="getstarted">GET STARTED</a><a href="http://git.qfang.com/qfang-frontend/coala.git" class="github">GITLAB</a></div>
+			<div><a href="#/guide" class="getstarted">GET STARTED</a><a href="https://github.com/cheft/coala-starter-kit" class="github">STARTER KIT</a></div>
 		</div>
 	</div>
 </div>
@@ -19,7 +19,7 @@
 		</div>
 		<div class="feature-item">
 			<h3>组件化</h3>
-			<p>组件化开发并支持组件样式，组件间既能保持独立亦能互相通信；组件既能被多次复用，也能让使它们个性化。</p>
+			<p>组件化开发并支持组件样式，组件间能保持独立亦能互相通信；组件既能被多次复用，也能使它们个性化。</p>
 		</div>
 	</div>
 </div>
@@ -154,6 +154,8 @@ module.exports = {
 	listen: {
 		mount: function() {
 			$('html, body').animate({scrollTop: '0px'}, 0)
+			// $(".intro").hover3d({ selector: '.launching' })
+			window.sample = this.refs.sample
 		},
 		unmount: function() {
 			console.log('index unmount')

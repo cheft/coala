@@ -1,0 +1,18 @@
+<div class="container">
+  <h1>租房详情 {{=data.id}}</h1>
+</div>
+<style scoped>
+  .container {
+    height: 100%;
+  }
+</style>
+<script>
+  module.exports = {
+    listen: {
+      init: function() {
+        this.data.id = this.opts.id
+        console.log(this.opts)
+      }
+    }
+  }
+</script>

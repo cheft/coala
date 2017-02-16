@@ -1,0 +1,52 @@
+<div class="container">
+  <h1>租房列表</h1>
+  {{~data.resource.result.list: item}}
+  <div class="room-item" data-id="{{=item.id}}">
+    <img src="{{=item.livingRoomPictrue.replace('{size}', '150x100')}}">
+    <p>{{=item.title}}</p>
+  </div>
+  {{~}}
+</div>
+<style scoped>
+  h1 {
+    position: fixed;
+    top: 0;
+    font-size: 1.2rem;
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin-bottom: 1.2rem;
+  }
+</style>
+<script>
+var coala = require('../../../coala')
+
+  module.exports = {
+    data: function() {
+      return $.ajax({
+        url: '/qpi/room/list',
+        data: {
+          dataSource: 'SHENZHEN',
+          bizType: 'RENT',
+          currentPage: 1,
+          pageSize: 20
+        }
+      })
+    },
+
+    events: {
+      'click .room-item': 'openDetail'
+    },
+
+    handle: {
+      openDetail: function(e) {
+        var id = $(e.currentTarget).data('id')
+        coala.cr.go('/rent-detail/' + id)
+      }
+    }
+  }
+</script>

@@ -1,0 +1,233 @@
+<div class="container">
+  <img src="{{=data.room.livingRoomPictrue ? data.room.livingRoomPictrue.replace('{size}', '400x300') : ''}}">
+  <div class="article-body">
+    <div class="base-title">
+      <div class="title">
+        <h3>{{=data.room.title}}</h3>
+      </div>
+      <div class="box price-info">
+        <div class="items flex">
+          <p>
+            <label>总价</label>
+          </p>
+          <p><em>{{=data.room.price / 10000}}万</em></p>
+        </div>
+        <div class="items flex">
+          <p>
+            <label>房型</label>
+          </p>
+          <p><span>{{=data.room.bedRoom}}室{{=data.room.livingRoom}}厅{{?data.room.bathRoom}}{{=data.room.bathRoom}}卫{{?}}</span></p>
+        </div>
+        <div class="items flex">
+          <p>
+            <label>面积</label>
+          </p>
+          <p><span>{{=data.room.area}}㎡</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="base-items">
+      <div class="box-middel items">
+        <label>单<i class="units"></i><i class="units"></i>价：</label>
+        <p class="flex ellips">{{=Math.round(data.room.price/data.room.area)}}元/㎡</p>
+      </div>
+      <div class="box-middel items">
+        <label>参考首付：</label>
+        <p class="flex ellips">{{=data.room.price / 10000 * 0.3}}万</p>
+      </div>
+      <div class="box-middel items">
+        <label>朝<i class="units"></i><i class="units"></i>向：</label>
+        <p class="flex ellips">{{=data.room.direction}}</p>
+      </div>
+      <div class="box-middel items">
+        <label>楼<i class="units"></i><i class="units"></i>层：</label>
+        <p class="flex ellips">{{=data.room.floor}}层/{{=data.room.totalFloor}}层</p>
+      </div>
+      <div class="box-middel items">
+        <label>装<i class="units"></i><i class="units"></i>修：</label>
+        <p class="flex ellips">{{=data.room.decoration}}</p>
+      </div>
+      <div class="box-middel items">
+        <label>特<i class="units"></i><i class="units"></i>色：</label>
+        <p class="flex ellips tag">
+        {{?data.room.labelDesc}}
+        {{~([].slice.call(data.room.labelDesc.split('|'), 0, 3)) :label :idx}}
+        {{?label}}<span class="label{{=idx+1}}">{{=label}}</span>{{?}}
+        {{~}}
+        {{?}}
+        </p>
+      </div>
+      <div class="box-middel items">
+        <label>房源编号：</label>
+        <p class="flex ellips">{{=data.room.number}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  module.exports = {
+    data: function () {
+      var _this = this
+      this.room = {}
+      return $.ajax({
+        url: '/qpi/room/wxDetail',
+        data: {
+          dataSource: 'SHENZHEN',
+          bizType: 'SALE',
+          id: _this.opts.id
+        }
+      })
+    },
+
+    listen: {
+      update: function () {
+        this.data.room = this.data.resource.result
+      },
+
+      mount: function() {
+        document.title = this.data.room.title
+      }
+    }
+  }
+</script>
+
+<style scoped>
+  * {
+    padding: 0;
+    margin: 0;
+  }
+  
+  .container {
+    height: 100%;
+  }
+  
+  .container img {
+    width: 100%;
+  }
+
+  .box, .box-middel {
+    display: -webkit-box;
+    -webkit-box-align: center;
+  }
+  .flex {
+    -webkit-box-flex: 1;
+  }
+
+  .base-items, .base-title {
+    background-color: #fff;
+    margin-bottom: 12px
+  }
+  
+  .base-title .title {
+    padding: 10px 15px
+  }
+  
+  .base-title .title h3 {
+    position: relative;
+    font-size: 16px;
+    font-weight: 700;
+    color: #333;
+    line-height: 1.5
+  }
+  
+  .base-title .title h3 span {
+    display: block;
+    text-indent: 35px
+  }
+  
+  .base-title .certification {
+    position: absolute;
+    top: 3px;
+    right: auto;
+    bottom: auto;
+    left: 0;
+    z-index: 100;
+    padding: 1px 3px;
+    font-size: 10px;
+    font-weight: 500;
+    color: #ff8102;
+    border: 1px solid #ff8102;
+    border-radius: 3px
+  }
+  
+  .base-title .price-info {
+    padding: 0 15px 20px
+  }
+  
+  .base-title .price-info .items {
+    width: 30%
+  }
+  
+  .base-title .price-info p {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+    text-align: center
+  }
+  
+  .base-title .price-info p label {
+    color: #999
+  }
+  
+  .base-title .price-info p span {
+    font-size: 15px
+  }
+  
+  .base-title .price-info p em {
+    font-size: 15px;
+    font-weight: 700;
+    color: #ff8102
+  }
+  
+  .base-items {
+    position: relative;
+    padding: 10px 15px
+  }
+  
+  .base-items .items {
+    padding: 5px 0
+  }
+
+  .base-items .items label {
+    display: block;
+    margin-right: 5px;
+    font-size: 14px;
+    color: #999;
+    line-height: 1.5
+  }
+  
+  .base-items .items p {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+  }
+  
+  .base-items .items em {
+    font-weight: 700;
+    color: #ff8102;
+  }
+  
+  .base-items .items .tag span {
+    display: inline-block;
+    margin-right: 5px;
+    padding: 0 5px;
+    font-size: 10px;
+  }
+  
+  .base-items .items .label1 {
+    color: #5792ca;
+    border: 1px solid #5792ca;
+  }
+  
+  .base-items .items .label2 {
+    color: #ff8102;
+    border: 1px solid #ff8102;
+  }
+  
+  .base-items .items .label3 {
+    color: #69ae00;
+    border: 1px solid #69ae00;
+  }
+  
+</style>

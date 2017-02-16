@@ -1,0 +1,177 @@
+<div class="header">
+  <img class="logo" src="http://m.qfang.com/themes/default/images/img-new/qfang_logo.png">
+  <img class="menu" src="http://m.qfang.com/themes/default/images/img-new/meun.png">
+  <div class="title">二手房 | 深圳</div>
+</div>
+<div class="container">
+  {{~data.resource.result.list: item}}
+  <div class="room-item clearfix" data-id="{{=item.id}}">
+    <img src="{{=item.livingRoomPictrue.replace('{size}', '180x135')}}">
+    <div class="text">
+      <div class="title">{{=item.title}}</div>
+      <div class="position">{{=item.garden.region && item.garden.region.parent ? item.garden.region.parent.name : ''}}
+        {{=item.garden.region ? item.garden.region.name : ''}} {{=item.garden.name || ''}}</div>
+      <div class="size">{{=item.bedRoom}}室{{=item.livingRoom}}厅 {{=item.area}}㎡ <span class="price"><b>{{=item.price/10000}}</b>万</span></div>
+      <div>
+        {{?item.labelDesc}}
+        {{~([].slice.call(item.labelDesc.split('|'), 0, 3)) :label :idx}}
+        {{?label}}<span class="label label{{=idx+1}}">{{=label}}</span>{{?}}
+        {{~}}
+        {{?}}
+        </div>
+    </div>
+  </div>
+  {{~}}
+</div>
+
+<script>
+var coala = require('../../../coala')
+
+  module.exports = {
+    data: function() {
+      return $.ajax({
+        url: '/qpi/room/list',
+        data: {
+          dataSource: 'SHENZHEN',
+          bizType: 'SALE',
+          currentPage: 1,
+          pageSize: 20
+        }
+      })
+    },
+
+    listen: {
+      //[v1.0.0-beta.2]  update 事件中拿不到异步的 data 数据
+      update: function() {
+        // if (this.data.resource) this.data.resource = this.data.resource.result.list
+      },
+
+      mount: function() {
+        document.title = '深圳最新二手房,房价多少,房产信息网- 深圳Q房网'
+      }
+    },
+
+    events: {
+      'click .room-item': 'openDetail'
+    },
+
+    handle: {
+      openDetail: function(e) {
+        var id = $(e.currentTarget).data('id')
+        coala.cr.go('/sale-detail/' + id)
+      }
+    }
+  }
+</script>
+
+<style scoped>
+  .header {
+    font-weight: 400;
+    border-bottom: 4px solid #fabe00;
+    background: #1c1c1c;
+  }
+
+  .header .logo {
+    position: absolute;
+    width: 70px;
+    top: 12px;
+    left: 12px;
+  }
+  
+  .header .menu {
+    position: absolute;
+    width: 24px;
+    top: 12px;
+    right: 12px;
+  }
+
+  .header .title {
+    text-align: center;
+    padding: 16px 0;
+    font-size: 16px;
+    color: #fff;
+    line-height: 1.2;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .room-item {
+    display: -webkit-box;
+    padding: 15px 10px;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .clearfix {
+    clear: both;
+  }
+
+  .room-item img {
+    width: 110px;
+    height: 82px;
+    margin-right: 10px;
+  }
+
+  .room-item .text {
+    -webkit-box-flex: 1;
+  }
+
+  .room-item .text .title {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .room-item .text .position {
+    color: #333;
+    margin-bottom: 4px;
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  .room-item .text .size {
+    color: #666;
+    margin-bottom: 4px;
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  .room-item .price {
+    color: #333;
+    float: right;
+  }
+
+  .room-item .price b {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #ff8102;
+    margin-right: 2px;
+  }
+
+  .room-item .text .label {
+    padding: 2px 5px;
+    font-size: 10px;
+  }
+
+  .room-item .text .label1 {
+    color: #5792ca;
+    border: 1px solid #5792ca;
+  }
+
+  .room-item .text .label2 {
+    color: #ff8102;
+    border: 1px solid #ff8102;
+  }
+
+  .room-item .text .label3 {
+    color: #69ae00;
+    border: 1px solid #69ae00;
+  }
+
+</style>

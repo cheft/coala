@@ -73,7 +73,7 @@ _`提示`：如果你掌握了此框架，说明你对前端面象对象、组�
 > 因为框架使用了 deferred(promise) API，因此需要把 zepto 的 callbacks、deferred 模块引入，如果嫌麻烦，请用 coala 提供的 zepto 包可一次引入：
 
 ```html
-<script src="https://unpkg.com/coala@1.0.0-beta.2/zepto-deferred.js"></script>
+<script src="https://unpkg.com/coala@1.0.0-beta.2/zepto/zepto-deferred.js"></script>
 ```
 
 ##### 或引入 jQuery
