@@ -95,6 +95,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.listen = this.opts.listen || {}
 	  this.handle = this.opts.handle || {}
 	  observable(this)
+	  this._mixin()
+		this._listenTo()
 	  if ($.isFunction(opts.data)) {
 	    var result = opts.data.call(this)
 	    if (result && result.promise) {
@@ -106,8 +108,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  } else {
 	    this.data = $.extend(true, $.isArray(opts.data) ? [] : {}, opts.data);
 	  }
-	  this._mixin()
-	  this._listenTo()
 	  this._initRefs()
 	}
 
