@@ -582,22 +582,20 @@ this.refs.sampleCode.trigger('test')
 ```
   // common.js
 module.exports = {
-  mixins: {
-    hello: function() {
+  hello: function() {
+    ...
+  },
+
+  listen: {
+    toggleStatus: function() {
+      this.hello()
       ...
-    },
+    }
+  },
 
-    listen: {
-      toggleStatus: function() {
-        this.hello()
-        ...
-      }
-    },
-
-    handle: {
-      toggle: function() {
-        this.trigger('toggleStatus')
-      }
+  handle: {
+    toggle: function() {
+      this.trigger('toggleStatus')
     }
   }
 }

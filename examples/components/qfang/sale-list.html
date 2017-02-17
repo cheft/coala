@@ -22,43 +22,65 @@
     </div>
   </div>
   {{~}}
+  <div class="loadmore">点击加载更多</div>
 </div>
 
 <script>
-var coala = require('../../../coala')
+  var coala = require('../../../coala')
+  var loading = require('./loading.html')
 
   module.exports = {
     data: function() {
-      return $.ajax({
-        url: '/qpi/room/list',
-        data: {
-          dataSource: 'SHENZHEN',
-          bizType: 'SALE',
-          currentPage: 1,
-          pageSize: 20
-        }
-      })
+      return this.fetch()
+    },
+
+    mixins: {
+      fetchParams: {
+        dataSource: 'SHENZHEN',
+        bizType: 'SALE',
+        currentPage: 1,
+        pageSize: 20
+      },
+
+      fetch: function() {
+        var _this = this
+        return $.ajax({
+          url: '/qpi/room/list',
+          data: _this.fetchParams
+        })
+      },
     },
 
     listen: {
-      //[v1.0.0-beta.2]  update 事件中拿不到异步的 data 数据
-      update: function() {
-        // if (this.data.resource) this.data.resource = this.data.resource.result.list
-      },
-
       mount: function() {
         document.title = '深圳最新二手房,房价多少,房产信息网- 深圳Q房网'
       }
     },
 
     events: {
-      'click .room-item': 'openDetail'
+      'click .room-item': 'openDetail',
+      'click .loadmore': 'loadMore',
+      'click .menu': 'openMenu'
     },
 
     handle: {
       openDetail: function(e) {
         var id = $(e.currentTarget).data('id')
         coala.cr.go('/sale-detail/' + id)
+      },
+
+      loadMore: function() {
+        var _this = this
+        this.$('.loadmore').html(loading())
+        this.fetchParams.currentPage++
+        this.fetch().done(function(d) {
+          _this.data.resource.result.list = _this.data.resource.result.list.concat(d.result.list)
+          _this.update()
+        })
+      },
+
+      openMenu: function() {
+        alert('尚未开发')
       }
     }
   }
@@ -172,6 +194,16 @@ var coala = require('../../../coala')
   .room-item .text .label3 {
     color: #69ae00;
     border: 1px solid #69ae00;
+  }
+
+  .loadmore {
+    margin: 10px;
+    border: 1px solid #e5e5e5;
+    border-radius: 3px;
+    padding: 5px 0;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
   }
 
 </style>
