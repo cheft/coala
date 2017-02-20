@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <title>深圳Q房网</title>
   <style>
@@ -26,7 +28,13 @@
 </head>
 <body>
   <div id="app"></div>
+  <script type="text/javascript" src="http://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
   <script src="/zepto/zepto-deferred.min.js"></script>
   <script type="text/javascript" src="/dist/qfang.js"></script>
+  <script>
+    $(function() {
+      FastClick.attach(document.body);
+    });
+  </script>
 </body>
 </html>
