@@ -55,7 +55,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
-	  Version: 1.0.0-beta.3
+	  Version: 1.0.0-beta.4
 	  Author: Cheft
 	*/
 	var Component = __webpack_require__(1)
@@ -96,7 +96,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.handle = this.opts.handle || {}
 	  observable(this)
 	  this._mixin()
-		this._listenTo()
+	  this._listenTo()
 	  if ($.isFunction(opts.data)) {
 	    var result = opts.data.call(this)
 	    if (result && result.promise) {

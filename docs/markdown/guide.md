@@ -59,7 +59,7 @@ _`提示`：如果你掌握了此框架，说明你对前端面象对象、组�
 ## 环境安装
 
 ### Coala 当前版本
-`v1.0-beta2`  [gitlab 仓库](http://git.qfang.com/qfang-frontend/coala.git)
+`v1.0-beta.4`  [gitlab 仓库](http://git.qfang.com/qfang-frontend/coala.git)
 
 ### 本地普通环境
 框架依赖 jquery 或 zepto；jquery 有1、2、3 版本，API 和 支持浏览器会有不同；zepto 库文件较小，但只支持现代浏览器；请根据需求在 html 中引入依赖：

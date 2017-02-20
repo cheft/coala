@@ -19,7 +19,7 @@
 		</div>
 		<div class="feature-item">
 			<h3>组件化</h3>
-			<p>组件化开发并支持组件样式，组件间能保持独立亦能互相通信；组件既能被多次复用，也能使它们个性化。</p>
+			<p>组件化开发并支持Scoped CSS；组件间能保持独立亦能互相通信，既能被多次复用，也能使它们个性化。</p>
 		</div>
 	</div>
 </div>
@@ -36,12 +36,21 @@
 <style scoped>
 .intro {
 	padding: 20px;
-	background: 
+	/*background: 
 	  linear-gradient(-180deg, #F04F37 0%, #D8A57B 98%),
 	  radial-gradient(at top left, rgba(255,255,255,0.30) 0%, rgba(0,0,0,0.30) 100%);
-  background-blend-mode: screen;
-
-}
+  background-blend-mode: screen;*/
+	background:
+		-webkit-linear-gradient(45deg, hsla(47, 49%, 56%, 1) 0%, hsla(47, 49%, 56%, 0) 70%),
+		-webkit-linear-gradient(315deg, hsla(40, 92%, 53%, 1) 10%, hsla(40, 92%, 53%, 0) 80%),
+		-webkit-linear-gradient(225deg, hsla(23, 63%, 50%, 1) 10%, hsla(23, 63%, 50%, 0) 80%),
+		-webkit-linear-gradient(135deg, hsla(0, 67%, 50%, 1) 100%, hsla(0, 67%, 50%, 0) 70%);
+	background:
+		linear-gradient(45deg, hsla(47, 49%, 56%, 1) 0%, hsla(47, 49%, 56%, 0) 70%),
+		linear-gradient(135deg, hsla(40, 92%, 53%, 1) 10%, hsla(40, 92%, 53%, 0) 80%),
+		linear-gradient(225deg, hsla(23, 63%, 50%, 1) 10%, hsla(23, 63%, 50%, 0) 80%),
+		linear-gradient(315deg, hsla(0, 67%, 50%, 1) 100%, hsla(0, 67%, 50%, 0) 70%);
+	}
 
 .launching {
 	max-width: 1024px;
