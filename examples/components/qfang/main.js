@@ -1,35 +1,64 @@
 var coala = require('../../../coala')
-// var app = require('./index.html')
 var loading = require('./loading.html')
-var cps = {
-	'sale-list': require('./sale-list.html'),
-	'sale-detail': require('./sale-detail.html'),
-	// 'rent-list': require('./rent-list.html'),
-	// 'rent-detail': require('./rent-detail.html')
-}
 
-var mount = function(component) {
-	if (coala.cp) coala.cp.unmount()
-	$('#app').html('<div class="loading">' + loading() + '</div>')
+function asyncMount (component) {
 	coala.cp = coala.mount(component, '#app')
 	coala.cp.on('mount', function() {
 		coala.cp.$('.loading').remove()
 	})
 }
 
+var mount = function(name, id) {
+	if (coala.cp) coala.cp.unmount()
+	$('#app').html('<div class="loading">' + loading() + '</div>')
+	switch(name) {
+		case 'app':
+			require.ensure([], function(require) {
+				var component = require('./index.html')
+				asyncMount(component)
+			})
+			break
+		case 'sale-list': 
+			require.ensure([], function(require) {
+				var component = require('./sale-list.html')
+				asyncMount(component)
+			})
+			break
+		case 'sale-detail': 
+			require.ensure([], function(require) {
+			var component = require('./sale-detail.html')
+				component.id = id
+				asyncMount(component)
+			})
+			break
+		case 'rent-list': 
+			require.ensure([], function(require) {
+				var component = require('./rent-list.html')
+				asyncMount(component)
+			})
+			break
+		case 'rent-detail': 
+			require.ensure([], function(require) {
+				var component = require('./rent-detail.html')
+				component.id = id
+				asyncMount(component)
+			})
+			break
+	}
+}
+
 coala.cr = coala.router({
 	routes: {
 		'/': function() {
-			mount(cps['sale-list'])
+			mount('sale-list')
 		},
 
 		'/:name': function (name) {
-			mount(cps[name])
+			mount(name)
 		},
 
 		'/:name/:id': function (name, id) {
-			cps[name].id = id
-			mount(cps[name])
+			mount(name, id)
 		}
 	}
 })
