@@ -1,0 +1,52 @@
+body {
+	margin: 0;
+	font-family: "PingFang SC", "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Microsoft Yahei", 微软雅黑, STHeiti, 华文细黑, sans-serif;
+	color: #373D48;
+}
+.top-nav {
+	height: 80px;
+	box-shadow: 1px 0px 2px #575F6D;
+	position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.logo {
+	display: inline-block;
+}
+
+.logo a {
+	line-height: 80px;
+	margin-left: 20px;
+	font-size: 40px;
+	text-decoration: none;
+	color: #373D48;
+}
+
+.nav {
+	float: right;
+	list-style: none;
+	margin: 0;
+	line-height: 80px; 
+}
+
+.nav li {
+	display: inline-block;
+	margin-right: 20px;
+}
+
+.nav li > a {
+	text-decoration: none;
+	color: #373D48;
+	padding: 6px 0; 
+}
+
+.nav li > a.active, .nav li > a:hover {
+	border-bottom: 2px solid #FF6A3C;
+}
+
+.content {
+	margin-top: 80px;
+}

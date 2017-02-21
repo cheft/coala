@@ -1,0 +1,42 @@
+<div class="device">
+	<div class="device-content"></div>
+</div>
+
+<style scoped>
+	.device {
+		position: relative;
+	  top: 0;
+	  left: 100px;
+	  display: block;
+	  width: 395px;
+	  height: 813px;
+	  font-family: "Helvetica Neue", sans-serif;
+	  background-image: url(http://m.sui.taobao.org/assets/img/device-sprite.png);
+	  background-size: 300%;
+	  background-repeat: no-repeat;
+	  background-position: -395px 0;
+	}	
+
+	.device-content {
+		position: absolute;
+    top: 117px;
+    left: 37px;
+    width: 321px;
+    height: 569px;
+    overflow: hidden;
+    font-size: 0.85rem;
+    line-height: 1.05rem;
+    background: #eeeeee;
+	}
+</style>
+
+<script>
+	module.exports = {
+		refs: {
+			content: {
+				el: '.device-content',
+				component: require('./form.html')
+			}
+		}
+	}
+</script>

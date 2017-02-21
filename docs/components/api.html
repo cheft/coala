@@ -1,0 +1,57 @@
+<div class="container">
+	<div id="catalog"></div>
+	<div class="mark">{{=data.mark}}</div>
+</div>
+
+<style scoped>
+.container {
+	width: 1024px;
+	margin: auto;
+}
+
+.mark {
+  padding: 2.2em 0;
+  max-width: 600px;
+  margin: auto;
+	margin-left: 260px;
+}
+
+blockquote {
+	margin: 0;
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+
+</style>
+<script>
+module.exports = {
+	data: {
+		mark: require('../markdown/api.md')
+	},
+	refs: {
+		catalog: {
+			component: require('./catalog.html'),
+			el: '#catalog',
+			data: [
+				{name: 'Observable 观察者', scrollPos: 60},
+				{name: 'Router 路由器', scrollPos: 1770},
+				{name: 'Component 组件配置', scrollPos: 4220},
+				{name: 'Component 对象', scrollPos: 11165},
+				{name: 'Coala 框架对象', scrollPos: 13140}
+			],
+			itemClick: function(item) {
+				$('html, body').animate({scrollTop: item.scrollPos + 'px'}, 500)
+			}
+		}
+	},
+	listen: {
+		mount: function() {
+			$('html, body').animate({scrollTop: '60px'}, 0)
+			this.$('pre code').each(function(i, block) {
+		    hljs.highlightBlock(block)
+		  });
+		}
+	}
+}
+</script>

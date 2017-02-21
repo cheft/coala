@@ -1,4 +1,9 @@
 bower_components
 node_modules
 dist
+<<<<<<< HEAD
 .vscode
+=======
+.vscode
+npm-debug.log
+>>>>>>> v1

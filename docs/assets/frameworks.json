@@ -1,0 +1,46 @@
+[
+	{
+		"name": "Vue",
+		"url": "https://github.com/vuejs/vue"
+	},
+	{
+		"name": "React",
+		"url": "https://github.com/facebook/react"
+	},
+	{
+		"name": "Angular",
+		"url": "https://github.com/angular/angular"
+	},
+	{
+		"name": "Ember",
+		"url": "https://github.com/emberjs/ember.js"
+	},
+	{
+		"name": "Backbonne",
+		"url": "https://github.com/jashkenas/backbone"
+	},
+	{
+		"name": "Coala",
+		"url": "https://github.com/cheft/coala-starter-kit"
+	},
+	{
+		"name": "Riot",
+		"url": "https://github.com/riot/riot"
+	},
+	{
+		"name": "Mithril",
+		"url": "https://github.com/lhorie/mithril.js"
+	},
+	{
+		"name": "Inferno",
+		"url": "https://github.com/trueadm/inferno"
+	},
+	{
+		"name": "Avalon",
+		"url": "https://github.com/RubyLouvre/avalon"
+	},
+	{
+		"name": "Imba",
+		"url": "https://github.com/somebee/imba"
+	}
+]

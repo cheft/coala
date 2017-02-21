@@ -1,0 +1,75 @@
+<div class="container">
+	<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+	  <!-- Indicators -->
+	  <ol class="carousel-indicators">
+	  	{{~data.items :item:idx}}
+	    <li data-target="#carousel-example-generic" data-slide-to="{{=idx}}" {{?idx==0}}class="active"{{?}}></li>
+	    {{~}}
+	  </ol>
+	  <!-- Wrapper for slides -->
+	  <div class="carousel-inner" role="listbox">
+	  	{{~data.items :item:idx}}
+	    <div class="item{{?idx==0}} active{{?}}">
+	      <img src="{{=item.url}}" alt="{{=item.name}}">
+	      <div class="carousel-caption">
+	        {{=item.name}}
+	      </div>
+	    </div>	
+	    {{~}}    
+	  </div>
+	  <!-- Controls -->
+	  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+	    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+	    <span class="sr-only">Previous</span>
+	  </a>
+	  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+	    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+	    <span class="sr-only">Next</span>
+	  </a>
+	</div>
+
+	<button id="changeData" type="button" class="btn btn-primary">修一下图片</button>
+</div>
+<style scoped>
+#changeData {
+	margin-top: 10px;
+}
+</style>
+<script>
+	module.exports = {
+		data: function() {
+			var len = 10, start = 330, items = []
+			for (var i = 0; i < len; i++) {
+				var curr = start + i
+				items.push({name: 'it picture ' + curr, url: 'http://www.gratisography.com/pictures/' + curr + '_1.jpg'})
+			}
+			return {items: items}
+		},
+
+		listen: {
+			mount: function() {
+				$('#changeData').tooltip({
+					title: '此 tooltip 只会生成一次，上面的 carousel 数据可在任意修改'
+				})
+			}
+		},
+
+		events: {
+			'click #changeData': 'changeData'
+		},
+
+		handle: {
+			changeData: function() {
+				$.map(this.data.items, function(item) {return item.name += '，这是后期加上去的；'})
+				this.update()
+			}
+		}
+	}
+</script>
+
+<style scoped>
+	.container {
+		max-width: 900px;
+		margin: auto;
+	}
+</style>

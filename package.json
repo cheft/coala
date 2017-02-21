@@ -1,0 +1,36 @@
+{
+  "name": "coala",
+  "version": "1.0.0-beta.4",
+  "main": "coala.min.js",
+  "scripts": {
+    "coala": "webpack --config ./webpack.coala.js && uglifyjs coala.js -o coala.min.js -m -c --screw-ie8",
+    "start": "webpack-dev-server --colors --content-base ./ --hot --host 0.0.0.0",
+    "webpack": "webpack",
+    "build": "webpack -p",
+    "test": "./node_modules/mocha/bin/mocha tests/unit.test.js",
+    "zepto": "uglifyjs zepto/zepto-coala.js -o zepto/zepto-coala.min.js -m -c && uglifyjs zepto/zepto-deferred.js -o zepto/zepto-deferred.min.js -m -c"
+  },
+  "dependencies": {
+    "morphdom": "^2.2.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "coala-dot-loader": "0.0.2",
+    "css-loader": "^0.18.0",
+    "html-loader": "^0.4.4",
+    "markdown-loader": "^0.1.7",
+    "mocha": "^3.2.0",
+    "style-loader": "^0.12.4",
+    "uglifyjs": "^2.4.10",
+    "webpack": "^1.12.1",
+    "webpack-dev-server": "^1.10.1"
+  },
+  "keywords": [
+    "coala",
+    "jquery",
+    "morphdom",
+    "qfang"
+  ],
+  "author": "cheft",
+  "license": "ISC"
+}

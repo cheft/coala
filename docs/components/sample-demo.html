@@ -1,0 +1,36 @@
+<h3>效果</h3>
+<div class="title">那些年我们一起玩过的Web框架</div>
+<ul>
+	{{~data.resource :item}}
+	<li>
+		<a href="{{=item.url}}">{{=item.name}}</a><span>{{=item.url}}</span>
+	</li>
+	{{~}}
+</ul>
+<button class="rotate-btn" id="rotate">猛点瞅一瞅</button>
+
+<script>
+module.exports = {
+	data: function() {
+		return $.get('docs/assets/frameworks.json')
+	},
+	events: {
+		'click #rotate': 'rotateLinks'
+	},
+	handle: {
+		rotateLinks: function() {
+			this.data.resource = this.data.resource.reverse()
+			this.update()
+		}
+	}
+}
+</script>
+
+<style scoped>
+	:scope { color: #373D48; }
+	.title {margin: 0 0 18px 0;}
+	ul { list-style: none; margin: 0; padding: 0; }
+	ul > li  { font-size: 16px; margin: 10px 0; }
+	ul > li > span  { margin-left: 10px; font-size: 12px;}
+	.rotate-btn {cursor: pointer; background: #FF6A3C; color: #FFFFFF; padding: 10px 20px; margin-top: 30px; border: none;}
+</style>

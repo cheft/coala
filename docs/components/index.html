@@ -1,0 +1,174 @@
+<div class="intro">
+	<div class="launching">
+		<img src="docs/assets/img/logo.png">
+		<div class="logo-text">
+			<div class="slogan">Ta 一个是非常简单的 WEB 框架</div>
+			<div><a href="#/guide" class="getstarted">GET STARTED</a><a href="https://github.com/cheft/coala-starter-kit" class="github">STARTER KIT</a></div>
+		</div>
+	</div>
+</div>
+<div class="feature">
+	<div class="feature-content">
+		<div class="feature-item">
+			<h3>易上手</h3>
+			<p>书写原生 HTML，CSS、JavaScript，对 jQuery(zepto) 使用者非常友好；框架代码极少，极易读懂源码。</p>
+		</div>
+		<div class="feature-item">
+			<h3>灵活性</h3>
+			<p>对模板引擎没有限制，使用者可选择自己熟悉模板引擎；同时仍可以使用传统操作 DOM 的方式编写应用。</p>
+		</div>
+		<div class="feature-item">
+			<h3>组件化</h3>
+			<p>组件化开发并支持Scoped CSS；组件间能保持独立亦能互相通信，既能被多次复用，也能使它们个性化。</p>
+		</div>
+	</div>
+</div>
+<div class="sample">
+	<div class="sample-code" id="sampleCode"></div>
+	<div class="sample-demo" id="sampleDemo"></div>
+</div>
+
+<div class="footer">
+  Released under the 
+  <a href="https://opensource.org/licenses/MIT">MIT License</a><br>
+  Copyright © 2015-2017 Cheft
+</div>
+<style scoped>
+.intro {
+	padding: 20px;
+	/*background: 
+	  linear-gradient(-180deg, #F04F37 0%, #D8A57B 98%),
+	  radial-gradient(at top left, rgba(255,255,255,0.30) 0%, rgba(0,0,0,0.30) 100%);
+  background-blend-mode: screen;*/
+	background:
+		-webkit-linear-gradient(45deg, hsla(47, 49%, 56%, 1) 0%, hsla(47, 49%, 56%, 0) 70%),
+		-webkit-linear-gradient(315deg, hsla(40, 92%, 53%, 1) 10%, hsla(40, 92%, 53%, 0) 80%),
+		-webkit-linear-gradient(225deg, hsla(23, 63%, 50%, 1) 10%, hsla(23, 63%, 50%, 0) 80%),
+		-webkit-linear-gradient(135deg, hsla(0, 67%, 50%, 1) 100%, hsla(0, 67%, 50%, 0) 70%);
+	background:
+		linear-gradient(45deg, hsla(47, 49%, 56%, 1) 0%, hsla(47, 49%, 56%, 0) 70%),
+		linear-gradient(135deg, hsla(40, 92%, 53%, 1) 10%, hsla(40, 92%, 53%, 0) 80%),
+		linear-gradient(225deg, hsla(23, 63%, 50%, 1) 10%, hsla(23, 63%, 50%, 0) 80%),
+		linear-gradient(315deg, hsla(0, 67%, 50%, 1) 100%, hsla(0, 67%, 50%, 0) 70%);
+	}
+
+.launching {
+	max-width: 1024px;
+	margin: 50px auto;
+	text-align: center;
+	color: white;
+}
+
+.launching img {
+	width: 200px;
+	vertical-align: middle;
+	margin-right: 60px;
+	display: inline-block;
+}
+
+.sample {
+	overflow:hidden;
+	max-width: 1024px;
+	margin: auto;
+}
+
+.feature {
+	margin-top: 20px;
+	background: #fff;
+	height: 200px;
+}
+
+.feature-content {
+	max-width: 1024px;
+	margin: 0 auto;
+  text-align: center;
+} 
+
+.feature-item {
+	width: 33%;
+	display: inline-block;
+  vertical-align: top;
+  box-sizing: border-box;
+  padding: 0 2em;
+}
+
+.sample-code {
+	margin-top: 20px; 
+	float: left;
+	/*border: 1px solid #ddd;*/
+	padding: 10px 40px;
+}
+
+ .sample-demo {
+ 	margin-top: 20px; 
+	float: right;
+	/*border: 1px solid #ddd;*/
+	padding: 10px 50px 60px 50px;
+}
+
+.logo-text {
+	display: inline-block;
+	width: 500px;
+	vertical-align: middle;
+}
+.logo-text .slogan {
+	font-size: 30px;
+	line-height: 60px;
+	margin-bottom: 30px;
+}
+
+.logo-text a {
+	font-size: 16px;
+  padding: 10px 24px;
+	margin-right: 20px;
+  border-radius: 30px;
+  text-decoration: none;
+}
+
+.logo-text a.getstarted {
+	border: 2px solid #FFFFFF;
+	color: #FF6E3E;
+	background: #FFFFFF;
+}
+
+.logo-text a.github {
+	border: 2px solid #FFFFFF;
+	color: #FFFFFF;
+}
+
+
+.footer {
+	margin-top: 20px;
+	height: 50px;
+	background: #373D48;
+	color: #FFF;
+	padding: 50px 0;
+  text-align: center;
+}
+
+.footer a {
+  font-weight: 700;
+  color: #FFF;
+  text-decoration: none;
+}
+</style>
+
+<script>
+module.exports = {
+	refs: {
+		sample: { el: '#sampleDemo', component: require('./sample-demo.html') },
+		sampleCode: { el: '#sampleCode', component: require('./sample-code.html') },
+	},
+
+	listen: {
+		mount: function() {
+			$('html, body').animate({scrollTop: '0px'}, 0)
+			// $(".intro").hover3d({ selector: '.launching' })
+			window.sample = this.refs.sample
+		},
+		unmount: function() {
+			console.log('index unmount')
+		}
+	}
+}
+</script>

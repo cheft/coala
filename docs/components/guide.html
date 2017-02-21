@@ -1,0 +1,79 @@
+<div class="container">
+	<div id="catalog"></div>
+	<div class="mark">{{=data.markup}}</div>
+</div>
+
+<style scoped>
+.container {
+	width: 1024px;
+	margin: auto;
+}
+
+.mark {
+  padding: 2.2em 0;
+  max-width: 600px;
+  margin: auto;
+	margin-left: 260px;
+}
+
+blockquote {
+	margin: 0;
+}
+
+.demo {
+	border: 1px solid #ddd;
+	padding: 5px;
+}
+
+ul, ol {
+	margin: 0;
+}
+</style>
+<script>
+var coala = require('../../coala')
+
+module.exports = {
+	data: {
+		markup: require('../markdown/guide.md')
+	},
+	refs: {
+		catalog: {
+			component: require('./catalog.html'),
+			el: '#catalog',
+			data: [
+				{name: '介绍', scrollPos: 60},
+				{name: '环境安装', scrollPos: 2815},
+				{name: '入门', scrollPos: 4290},
+				{name: 'Coala 使用', scrollPos: 6180},
+				{name: '组件', scrollPos: 7580},
+				{name: '模板 / doT', scrollPos: 9625},
+				{name: '数据', scrollPos: 11090},
+				{name: '监听 / 生命周期', scrollPos: 12065},
+				{name: '事件 / 处理', scrollPos: 15200},
+				{name: '子组件 / 通信', scrollPos: 15834},
+				{name: '混合', scrollPos: 16186}
+			],
+			itemClick: function(item) {
+				$('html, body').animate({scrollTop: item.scrollPos + 'px'}, 500)
+			}
+		}
+	},
+
+	listen: {
+		mount: function() {
+			$('html, body').animate({scrollTop: '50px'}, 0)
+			window.demo01 =  coala.mount(require('../tutorial/demo01.html'), this.es + ' #demo01')
+			window.demo02 =  coala.mount(require('../tutorial/demo02.html'), this.es + ' #demo02')
+			window.demo03 =  coala.mount(require('../tutorial/demo03.html'), this.es + ' #demo03')
+
+			this.$('pre code').each(function(i, block) {
+		    hljs.highlightBlock(block)
+		  });
+		},
+
+		unmount: function() {
+			console.log('guide unmount')
+		}
+	}
+}
+</script>

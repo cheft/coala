@@ -1,0 +1,58 @@
+<table class="table table-striped latest-data">
+  <tbody>
+    {{~data :tr}}
+    <tr>
+      <td class="dbname">{{=tr.dbname}}</td>
+
+      <td class="query-count">
+        <span>
+          {{= tr.lastSample.nbQueries }}
+        </span>
+      </td>
+
+      {{~ tr.lastSample.topFiveQueries :td}}
+      <td>
+        {{= td.formatElapsed }}
+        <div class="popover left">
+          <div class="popover-content">{{= td.query }}</div>
+          <div class="arrow"></div>
+        </div>
+      </td>
+      {{~}}
+    </tr>
+    {{~}}
+  </tbody>
+</table>
+
+<script>
+  var perfMonitor = require('./test')
+
+  module.exports = {
+    data: ENV.generateData().toArray(),
+    listen: {
+      updated: function() {
+        var _this = this;
+        setTimeout(function() {
+          perfMonitor.startProfile('view update');
+          _this.update(ENV.generateData().toArray());
+          perfMonitor.endProfile('view update');
+        }, ENV.timeout);
+      },
+
+      mount: function() {
+        // this.redraw();
+      }
+    },
+    mixins: {
+      redraw: function() {
+        var _this = this
+        perfMonitor.startProfile('view update');
+        _this.update(ENV.generateData().toArray());
+        perfMonitor.endProfile('view update');
+        setTimeout(function() {
+          _this.redraw()
+        }, ENV.timeout);
+      }
+    }
+  }
+</script>
