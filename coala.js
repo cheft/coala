@@ -55,7 +55,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
-	  Version: 0.0.10
+	  Version: 0.0.11
 	  Author: Cheft
 	*/
 	var Component = __webpack_require__(1);
@@ -140,9 +140,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	Component.prototype.unmount = function() {
-	  this.el.empty().off();
 	  this.trigger('unmount');
 	  this.off('*');
+	  this.el.empty().off();
 	};
 
 	Component.prototype.$ = function(el) {

@@ -52,9 +52,9 @@ Component.prototype.update = function(data) {
 };
 
 Component.prototype.unmount = function() {
-  this.el.empty().off();
   this.trigger('unmount');
   this.off('*');
+  this.el.empty().off();
 };
 
 Component.prototype.$ = function(el) {
