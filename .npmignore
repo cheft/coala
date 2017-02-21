@@ -15,3 +15,6 @@ todo.html
 webpack.coala.js
 webpack.config.js
 .vscode
+ref-test.html
+dist
+coala.js
