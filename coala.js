@@ -140,9 +140,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _mixin: function() {
 	    if (!this.opts.mixins) return
 	    if (!$.isArray(this.opts.mixins)) this.opts.mixins = [this.opts.mixins]
-	    this.opts.mixins.unshift(this)
-	    this.opts.mixins.unshift(true) // 深拷贝
-	    $.extend.apply($, this.opts.mixins)
+	    $.extend.apply($, [true, this].concat(this.opts.mixins)) // 深拷贝
 	  },
 
 	  _listenTo: function() {
