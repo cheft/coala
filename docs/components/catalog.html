@@ -38,6 +38,12 @@
 module.exports = {
 	data: [],
 
+	listen: {
+		update: function() {
+			console.log(this.refOpts, 999)
+		},
+	},
+
 	events: {
 		'click ul > li > a': 'itemClick'
 	},

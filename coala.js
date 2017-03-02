@@ -109,6 +109,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.data = $.extend(true, $.isArray(opts.data) ? [] : {}, opts.data);
 	  }
 	  this._initRefs()
+	  this.trigger('init')
 	}
 
 	Component.prototype = {
@@ -152,7 +153,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  mount: function(el) {
 	    var _this = this
-	    this.trigger('init')
 	    if (this.promise) {
 	      this.promise.done(function(resource) {
 	        _this.data.resource = resource
