@@ -244,7 +244,7 @@ coala.router({
 ```
 
 ### 观察者对象
-coala 本身是一个观察者对象，因此它有 on triggr one off 四个方法，coala 相当于一个全局对象，他在任何组件中是可以直接拿到，一些关系复杂或者功能需要通信时，可以借助 coala 来响应，比如：
+coala 本身是一个观察者对象，因此它有 on trigger one off 四个方法，coala 相当于一个全局对象，他在任何组件中是可以直接拿到，一些关系复杂或者功能需要通信时，可以借助 coala 来响应，比如：
 
 ```js
 // a_component.js 监听错误弹出层关闭事件

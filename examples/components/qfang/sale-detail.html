@@ -1,57 +1,57 @@
 <div class="container">
-  <img src="{{=data.room.livingRoomPictrue ? data.room.livingRoomPictrue.replace('{size}', '400x300') : ''}}">
+  <img src="{{=data.livingRoomPictrue ? data.livingRoomPictrue.replace('{size}', '400x300') : ''}}">
   <div class="article-body">
     <div class="base-title">
       <div class="title">
-        <h3>{{=data.room.title}}</h3>
+        <h3>{{=data.title}}</h3>
       </div>
       <div class="box price-info">
         <div class="items flex">
           <p>
             <label>总价</label>
           </p>
-          <p><em>{{=data.room.price / 10000}}万</em></p>
+          <p><em>{{=data.price / 10000}}万</em></p>
         </div>
         <div class="items flex">
           <p>
             <label>房型</label>
           </p>
-          <p><span>{{=data.room.bedRoom}}室{{=data.room.livingRoom}}厅{{?data.room.bathRoom}}{{=data.room.bathRoom}}卫{{?}}</span></p>
+          <p><span>{{=data.bedRoom}}室{{=data.livingRoom}}厅{{?data.bathRoom}}{{=data.bathRoom}}卫{{?}}</span></p>
         </div>
         <div class="items flex">
           <p>
             <label>面积</label>
           </p>
-          <p><span>{{=data.room.area}}㎡</span></p>
+          <p><span>{{=data.area}}㎡</span></p>
         </div>
       </div>
     </div>
     <div class="base-items">
       <div class="box-middel items">
         <label>单<i class="units"></i><i class="units"></i>价：</label>
-        <p class="flex ellips">{{=Math.round(data.room.price/data.room.area)}}元/㎡</p>
+        <p class="flex ellips">{{=Math.round(data.price/data.area)}}元/㎡</p>
       </div>
       <div class="box-middel items">
         <label>参考首付：</label>
-        <p class="flex ellips">{{=data.room.price / 10000 * 0.3}}万</p>
+        <p class="flex ellips">{{=data.price / 10000 * 0.3}}万</p>
       </div>
       <div class="box-middel items">
         <label>朝<i class="units"></i><i class="units"></i>向：</label>
-        <p class="flex ellips">{{=data.room.direction}}</p>
+        <p class="flex ellips">{{=data.direction}}</p>
       </div>
       <div class="box-middel items">
         <label>楼<i class="units"></i><i class="units"></i>层：</label>
-        <p class="flex ellips">{{=data.room.floor}}层/{{=data.room.totalFloor}}层</p>
+        <p class="flex ellips">{{=data.floor}}层/{{=data.totalFloor}}层</p>
       </div>
       <div class="box-middel items">
         <label>装<i class="units"></i><i class="units"></i>修：</label>
-        <p class="flex ellips">{{=data.room.decoration}}</p>
+        <p class="flex ellips">{{=data.decoration}}</p>
       </div>
       <div class="box-middel items">
         <label>特<i class="units"></i><i class="units"></i>色：</label>
         <p class="flex ellips tag">
-        {{?data.room.labelDesc}}
-        {{~([].slice.call(data.room.labelDesc.split('|'), 0, 3)) :label :idx}}
+        {{?data.labelDesc}}
+        {{~([].slice.call(data.labelDesc.split('|'), 0, 3)) :label :idx}}
         {{?label}}<span class="label{{=idx+1}}">{{=label}}</span>{{?}}
         {{~}}
         {{?}}
@@ -59,7 +59,7 @@
       </div>
       <div class="box-middel items">
         <label>房源编号：</label>
-        <p class="flex ellips">{{=data.room.number}}</p>
+        <p class="flex ellips">{{=data.number}}</p>
       </div>
     </div>
   </div>
@@ -69,7 +69,6 @@
   module.exports = {
     data: function () {
       var _this = this
-      this.room = {}
       return $.ajax({
         url: '/qpi/room/wxDetail',
         data: {
@@ -82,11 +81,11 @@
 
     listen: {
       update: function () {
-        this.data.room = this.data.resource.result
+        this.data = this.data.resource.result
       },
 
       mount: function() {
-        document.title = this.data.room.title
+        document.title = this.data.title
       }
     }
   }
