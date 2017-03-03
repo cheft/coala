@@ -28,6 +28,7 @@
   "keywords": [
     "coala",
     "jquery",
+    "zepto",
     "morphdom",
     "qfang"
   ],

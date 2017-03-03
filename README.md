@@ -1,4 +1,6 @@
-## coala
+## Coala - 非常简单的框架
+
+### [在线文档](http://192.168.0.246:9001/)
 
 ### 特点
 
@@ -7,14 +9,19 @@
 * 默认采用 [doT](http://olado.github.io/doT/) 模板引擎；随时可以替换
 * API简单，容易上手
 
-### run
 
-  cd coala
+### 运行
 
-  npm install
+``` shell
+cd coala
 
-  npm start
+npm install
 
-## build
+npm start
+```
 
-	npm run coala
+## 构建
+
+``` shell
+npm run coala
+```
