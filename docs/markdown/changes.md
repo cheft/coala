@@ -1,12 +1,12 @@
 ## V1.0.0
-* 采用 morphdom 实现对比更新 dom
-* 支持组件内样式，使用 scoped css 语法
+* 增加对比更新 dom，采用 morphdom 实现
+* 增加组件内样式功能，采用 scoped css 语法
 * 增加 hash 路由功能，通过 `coala.router` 使用
-* data 属性支持函数形式；支持返回 promise 对象，promise 方式返回的数据会自动绑定在 `this.data.resource` 上，并且加载数据后再渲染
-* mixins 支持数组和对象两种方式，并且支持直接 mixin `listen` 、`handle`
-* 兼容 IE7+；若开发现代应用或移动应用建议使用 zepto，体积更小
-* 通过 coala-dot-loader 实现单文件组件
-* 其它：`init` 事件中可拿到子组件 `refOpts`，`unmount` 事件变更等
+* data 属性支持函数形式；返回 promise 对象时自动绑定在 `this.data.resource` 上，且先加载数据后渲染
+* mixins 属性支持数组和对象两种方式，并支持直接合并 `listen` 和 `handle`
+* 兼容 IE7+，若开发现代应用或移动应用建议使用 zepto，体积更小
+* 默认采用 dot 模板渲染, 通过 coala-dot-loader webpack插件可实现单文件组件
+* 其它：增加 `this.es` api， `update` 事件中可拿到子组件 `refOpts`，`unmount` 事件变更，`coala` 方法变更等等
 
 
 ## V0.0.11
