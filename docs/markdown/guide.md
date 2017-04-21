@@ -59,7 +59,7 @@ _`提示`：如果你掌握了此框架，说明你对前端面象对象、组�
 ## 环境安装
 
 ### Coala 当前版本
-`v1.0-beta.4`  [gitlab 仓库](http://git.qfang.com/qfang-frontend/coala.git)
+`v1.0.0`  [gitlab 仓库](http://git.qfang.com/qfang-frontend/coala.git)
 
 ### 本地普通环境
 框架依赖 jquery 或 zepto；jquery 有1、2、3 版本，API 和 支持浏览器会有不同；zepto 库文件较小，但只支持现代浏览器；请根据需求在 html 中引入依赖：
@@ -197,7 +197,7 @@ demo01.update({text: 'New Content'})
 
 看到上面例子是不是感觉事件绑定和处理跟 jQuery 实现方式很相似，没错，这就是 coala 的特点，接下来让我们更深入的学习 Coala 的使用吧。
 
-## Coala 使用(路由)
+## Coala 使用
 
 coala 对象是框架的入口，所有功能都是从 coala 这个对象开始，它代理了所有的功能：组件、路由、观察者对象等
 

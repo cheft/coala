@@ -55,7 +55,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
-	  Version: 1.0.0-beta.6
+	  Version: 1.0.0
 	  Author: Cheft
 	*/
 	var Component = __webpack_require__(1)
