@@ -1,5 +1,5 @@
 /*
-  Version: 1.0.0-beta.5
+  Version: 1.0.0-beta.6
   Author: Cheft
 */
 var Component = require('./component')

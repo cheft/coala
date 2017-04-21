@@ -31,7 +31,7 @@ Component.prototype = {
     for (var p in this.opts.refs) {
       var value = this.opts.refs[p]
       var c = new Component(value.component)
-      if (value.data) c.data = $.extend({}, value.component.data, value.data)
+      if (value.data) c.data = $.extend($.isArray(value.data) ? [] : {}, value.component.data, value.data)
       c.refOpts = value
       c.parent = this
       this.refs[p] = c
