@@ -222,6 +222,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  unmount: function() {
+	    if (this.promise) this.promise.abort()
 	    this._unmount()
 	    if (this.el) this.el.empty().off()
 	  },
