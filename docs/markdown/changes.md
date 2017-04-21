@@ -6,7 +6,7 @@
 * mixins 属性支持数组和对象两种方式，并支持直接合并 `listen` 和 `handle`
 * 兼容 IE7+，若开发现代应用或移动应用建议使用 zepto，体积更小
 * 默认采用 dot 模板渲染, 通过 coala-dot-loader webpack插件可实现单文件组件
-* 其它：增加 `this.es` api， `update` 事件中可拿到子组件 `refOpts`，`unmount` 事件变更，`coala` 方法变更等等
+* 其它：增加 `this.es` api， `update` 事件中可拿到子组件 `refOpts`，`unmount` 事件变更，`coala` 对象中方法变更及很多细节等
 
 
 ## V0.0.11
