@@ -1,0 +1,34 @@
+<div class="header">
+  <h1>待办项</h1>
+  <input class="new-todo" placeholder="计划你所想？">
+</div>
+<ul class="main todo-list">
+  {{~data: todo}}
+  <li class="todo view">
+    <input class="toggle" type="checkbox">
+    <label>{{=todo}}</label>
+  </li>
+  {{~}}
+</ul>
+<script>
+module.exports = {
+  data: [],
+  events: {
+    'keydown .new-todo': 'addTodo',
+    'click .toggle': 'toggleTodo'
+  },
+  handle: {
+    addTodo: function(e) {
+      if (e.keyCode !== 13) return
+      this.data.push(e.target.value)
+      this.update()
+    },
+    toggleTodo: function(e) {
+      $(e.target).closest('li').toggleClass('completed')
+    }
+  }
+}
+</script>
+
+
+

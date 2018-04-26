@@ -13,6 +13,10 @@ module.exports = {
       // 'webpack/hot/dev-server',
       path.resolve('./examples/components/todomvc/main.js')
     ],
+    todo: [
+      // 'webpack/hot/dev-server',
+      path.resolve('./examples/components/todo/main.js')
+    ],
     dbmonster: [
       // 'webpack/hot/dev-server',
       path.resolve('./examples/components/dbmonster/main.js')
